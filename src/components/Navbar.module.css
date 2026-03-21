@@ -1,0 +1,272 @@
+/* Navbar styles */
+
+.homeNavbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  background-color: transparent;
+  color: var(--mainColorLight);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+  transition: color 0.8s ease-in-out;
+}
+
+.homeBrand {
+  padding: 5px 10px;
+  margin: 0;
+  font-size: 1.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--mainColorLight);
+  flex-shrink: 0;
+}
+
+.homeNavIconsWrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 1.5rem;
+}
+
+.homeNavIcons {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.homeNavIcons a {
+  color: var(--mainColorLight);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: opacity 0.3s ease-out;
+}
+
+.homeNavIcons a:hover {
+  opacity: 0.8;
+}
+
+.homeEnterButton {
+  font-weight: 400;
+  font-style: italic;
+  font-size: 1rem;
+  padding: 8px 20px;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--mainColorLight);
+  color: #090909;
+  cursor: pointer;
+  transition: opacity 0.3s ease-out;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.homeEnterButton:hover {
+  opacity: 0.8;
+}
+
+.navbar {
+  display: flex;
+  align-items: center;
+  padding: 5px 10px;
+  background-color: var(--mainColorLight);
+  color: var(--mainColorDark);
+  position: relative;
+}
+
+.brand {
+  padding: 5px 10px;
+  margin: 5px 10px;
+  font-size: 1.8rem;
+  text-decoration: none;
+  white-space: nowrap;
+  color: var(--mainColorDark);
+}
+
+/* Hamburger toggle — hidden on desktop */
+.toggle {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  margin-left: auto;
+  color: var(--mainColorDark);
+}
+
+.toggle:hover {
+  opacity: 0.8;
+}
+
+/* Nav links — inline on desktop */
+.navContainer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-left: auto;
+}
+
+.navItem {
+  margin: 0 10px;
+  font-size: 1.3rem;
+  color: var(--accentColor1);
+  text-decoration: none;
+}
+
+.navItem:hover {
+  color: var(--accentColor3);
+}
+
+.activeNavLink {
+  color: var(--mainColorDark);
+  text-decoration: underline;
+}
+
+/* Mobile menu dropdown */
+.mobileMenu {
+  display: none;
+  background-color: var(--mainColorLight);
+}
+
+.mobileMenuOpen {
+  display: flex;
+}
+
+.mobileMenuInner {
+  display: flex;
+  flex-direction: column;
+  transform: translateY(-100%);
+  opacity: 0;
+  transition: transform 0.25s ease-in-out, opacity 0.15s ease-in-out;
+}
+
+.mobileMenuInner.mobileMenuExpanded {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.mobileNavItem {
+  display: block;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  color: var(--accentColor1);
+  text-decoration: none;
+}
+
+.mobileNavItem:hover {
+  color: var(--accentColor3);
+}
+
+/* Mobile: collapse nav links, show hamburger and dropdown */
+@media only screen and (max-width: 668px) {
+  .toggle {
+    display: block;
+  }
+
+  .navContainer {
+    display: none;
+  }
+
+  .mobileMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--mainColorLight);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 100;
+    overflow: hidden;
+  }
+
+  .mobileMenuOpen {
+    display: block;
+  }
+
+  .homeNavbar {
+    padding: 12px 15px;
+  }
+
+  .homeBrand {
+    font-size: 1.4rem;
+  }
+
+  .homeNavIconsWrapper {
+    margin-right: 0.8rem;
+  }
+
+  .homeNavIcons {
+    gap: 0.8rem;
+  }
+
+  .homeNavIcons a {
+    font-size: 0.8rem;
+  }
+
+  .homeEnterButton {
+    font-size: 0.9rem;
+    padding: 6px 16px;
+  }
+}
+
+@media only screen and (max-width: 470px) {
+  .homeNavbar {
+    padding: 10px 12px;
+  }
+
+  .homeBrand {
+    font-size: 1.2rem;
+  }
+
+  .homeNavIconsWrapper {
+    margin-right: 0.6rem;
+  }
+
+  .homeNavIcons {
+    gap: 0.6rem;
+  }
+
+  .homeNavIcons a {
+    font-size: 0.7rem;
+  }
+
+  .homeEnterButton {
+    font-size: 0.8rem;
+    padding: 5px 12px;
+  }
+}
+
+/* Hero tone: light image → dark navbar text */
+:global(.hero-tone-light) .homeBrand,
+:global(.hero-tone-light) .homeNavIcons a {
+  color: #0a0a0a;
+  transition: color 0.8s ease-in-out;
+}
+
+:global(.hero-tone-light) .homeEnterButton {
+  background-color: #0a0a0a;
+  color: #f5f5f5;
+  transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
+}
+
+/* Hero tone: dark image → light navbar text (default look) */
+:global(.hero-tone-dark) .homeBrand,
+:global(.hero-tone-dark) .homeNavIcons a {
+  color: #f5f5f5;
+  transition: color 0.8s ease-in-out;
+}
+
+:global(.hero-tone-dark) .homeEnterButton {
+  background-color: #f5f5f5;
+  color: #090909;
+  transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
+}

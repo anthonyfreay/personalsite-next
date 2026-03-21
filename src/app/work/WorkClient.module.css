@@ -1,0 +1,97 @@
+/* WorkClient styles */
+
+@keyframes fadeInOpacity {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animateFadeInOpacity {
+  animation: fadeInOpacity 0.6s ease-in forwards;
+}
+
+/* Desktop: 3 columns, clamped container, breathing room */
+.mainContent {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  align-items: start;
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 20px;
+  margin-bottom: 1rem;
+  gap: 20px;
+}
+
+.categoryLink {
+  display: block;
+  width: 100%;
+  max-width: 400 px;
+}
+
+.figure {
+  margin: 0;
+  text-align: center;
+}
+
+.categoryImage {
+  width: 100%;
+  height: auto;
+  max-width: 400px;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+
+.figcaption {
+  color: var(--mainColorDark);
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 5px;
+}
+
+/* Tablet: 2 columns */
+@media only screen and (max-width: 999px) {
+  .mainContent {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 16px;
+    gap: 16px;
+  }
+
+  .categoryLink {
+    max-width: 300px;
+  }
+
+  .categoryImage {
+    max-width: 300px;
+  }
+
+  .figcaption {
+    font-size: 1rem;
+  }
+}
+
+/* Small mobile: 2 columns, tighter */
+@media only screen and (max-width: 470px) {
+  .mainContent {
+    grid-template-columns: repeat(2, 1fr);
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .categoryLink {
+    max-width: 200px;
+  }
+
+  .categoryImage {
+    max-width: 200px;
+  }
+
+  .figcaption {
+    font-size: 0.9rem;
+  }
+}

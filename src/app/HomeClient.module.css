@@ -1,0 +1,53 @@
+/* HomeClient styles */
+
+.main {
+  min-height: 100vh;
+  min-height: 100dvh;
+  position: relative;
+}
+
+.bgLayer {
+  pointer-events: none;
+  z-index: 0;
+}
+
+.gradientOverlay {
+  background: linear-gradient(135deg, rgba(14, 14, 14, 0.4) 0%, rgba(20, 20, 20, 0.3) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.overlay {
+  position: relative;
+  z-index: 2;
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animateFadeInDown {
+  animation: fadeInDown 1s ease-out forwards;
+}
+
+@keyframes fadeInPage {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animateFadeInPage {
+  animation: fadeInPage 0.8s ease-out forwards;
+}

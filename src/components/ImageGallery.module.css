@@ -1,0 +1,46 @@
+/* ImageGallery styles */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animateFadeIn {
+  animation: fadeIn 0.6s ease-in forwards;
+}
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  max-width: 1830px;
+  margin: auto;
+  padding: 0 10px;
+}
+
+.lightbox {
+  --yarl__color_backdrop: rgba(14, 14, 14, 0.5);
+}
+
+.lightbox :global(img) {
+  border: 50px solid white !important;
+}
+
+@media (max-width: 640px) {
+  .gallery>div {
+    width: calc(50% - 5px);
+    max-width: none;
+  }
+}
+
+@media (max-width: 470px) {
+  .lightbox :global(img) {
+    border: 30px solid white !important;
+  }
+}
