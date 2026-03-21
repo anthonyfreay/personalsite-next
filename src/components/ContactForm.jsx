@@ -1,22 +1,12 @@
 'use client';
 
-import { useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 import styles from './ContactForm.module.css';
 
 export default function ContactForm() {
-  const [formKey, setFormKey] = useState(Date.now());
-  const [showThankYou, setShowThankYou] = useState(false);
   const [formState, submit] = useForm('mzdadlpl');
   const formRef = useRef();
-
-  useEffect(() => {
-    if (formState.succeeded) {
-      setShowThankYou(true);
-      formRef.current?.reset();
-      setFormKey(Date.now());
-    }
-  }, [formState.succeeded]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +15,6 @@ export default function ContactForm() {
 
   return (
     <form
-      key={formKey}
       ref={formRef}
       onSubmit={handleOnSubmit}
       className={styles.contactForm}
@@ -61,8 +50,8 @@ export default function ContactForm() {
         Submit
       </button>
 
-      {showThankYou && (
-        <p className={`${styles.thankYouMessage} ${showThankYou ? styles.thankYouMessageActive : ''}`}>
+      {formState.succeeded && (
+        <p className={`${styles.thankYouMessage} ${styles.thankYouMessageActive}`}>
           Thanks for reaching out! <br />
           Please refresh to send a new message.
         </p>

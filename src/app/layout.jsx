@@ -3,6 +3,8 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, DEFAULT_IMAGE_ABS } from '@/lib/constants';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 export const metadata = {
   title: SITE_TITLE,
@@ -50,29 +52,16 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="https://use.typekit.net/waf4zxp.css" />
         <link rel="manifest" href="/site.webmanifest" />
         <meta name="theme-color" content="#F5F5F5" />
-        <script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-5RYLFVDX71"
-        ></script>
-        <script
-          suppressHydrationWarning
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-5RYLFVDX71');
-            `,
-          }}
-        />
       </head>
       <body className="bg-brand-light text-brand-text font-sans">
+        <GoogleAnalytics gaId="G-5RYLFVDX71" />
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-1">{children}</main>
           <Footer />
         </div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

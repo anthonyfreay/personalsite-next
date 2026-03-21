@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import Icons from '@/components/Icons';
 import styles from './HomeClient.module.css';
@@ -51,9 +52,11 @@ const buildPlaylist = (width) =>
   });
 
 export default function HomeClient() {
-  const [currentTone, setCurrentTone] = useState('dark');
-  const [isLoaded, setIsLoaded] = useState(false);
-  const layerRefs = [useRef(null), useRef(null), useRef(null)];
+  const [currentTone, setCurrentTone] = useState(HERO_IMAGES[0]?.tone || 'dark');
+  const initialSrc = getImageUrl(HERO_IMAGES[0].id, 'compressed');
+  const topLayerRef = useRef(null);
+  const middleLayerRef = useRef(null);
+  const bottomLayerRef = useRef(null);
   const indexRef = useRef(0);
   const sizeRef = useRef('compressed');
   const widthRef = useRef(1024);
@@ -84,8 +87,6 @@ export default function HomeClient() {
     document.body.style.width = '100%';
     document.body.style.height = '100%';
 
-    setIsLoaded(true);
-
     return () => {
       root.classList.remove('home-dark');
       if (metaThemeColor) {
@@ -113,7 +114,7 @@ export default function HomeClient() {
   // Current image is always ring[0]. Next image is pre-loaded in ring[1].
   // Crossfade = fade out ring[0], revealing ring[1]. Then rotate: [1,2,0] and load next into new ring[1].
   useEffect(() => {
-    const layers = layerRefs.map((r) => r.current);
+    const layers = [topLayerRef.current, middleLayerRef.current, bottomLayerRef.current];
     if (layers.some((l) => !l)) return;
 
     // ring[i] = index into layers array. ring[0] is the topmost visible layer.
@@ -140,7 +141,6 @@ export default function HomeClient() {
     if (pl.length) {
       layers[ring[0]].src = getImageUrl(pl[0].id, sz);
       indexRef.current = 0;
-      setCurrentTone(pl[0]?.tone || 'dark');
       // Pre-load next image into ring[1]
       if (pl.length > 1) {
         layers[ring[1]].src = getImageUrl(pl[1].id, sz);
@@ -262,27 +262,36 @@ export default function HomeClient() {
 
   return (
     <div
-      className={`relative w-screen h-screen bg-brand-dark flex flex-col overflow-hidden ${styles.main} ${isLoaded ? styles.animateFadeInPage : 'opacity-0'}`}
+      className={`relative w-screen h-screen bg-brand-dark flex flex-col overflow-hidden ${styles.main} ${styles.animateFadeInPage}`}
       onClick={handleClick}
       role="presentation"
     >
-      <img
-        ref={layerRefs[0]}
+      <Image
+        ref={topLayerRef}
+        src={initialSrc}
         alt=""
+        fill
+        sizes="100vw"
+        className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
+        priority
+        decoding="async"
+      />
+      <Image
+        ref={middleLayerRef}
+        src={initialSrc}
+        alt=""
+        fill
+        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"
       />
-      <img
-        ref={layerRefs[1]}
+      <Image
+        ref={bottomLayerRef}
+        src={initialSrc}
         alt=""
-        className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
-        loading="eager"
-        decoding="async"
-      />
-      <img
-        ref={layerRefs[2]}
-        alt=""
+        fill
+        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"
