@@ -1,62 +1,861 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.anthonyfreay.com/</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/work</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/live</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC05584-music.webp</image:loc>
+      <image:title>Tyler, the Creator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7206554-music.webp</image:loc>
+      <image:title>Anik Khan</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC02184-music.webp</image:loc>
+      <image:title>Daniel Caesar</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7400207-Edit-music.webp</image:loc>
+      <image:title>Alexa Porat</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704864-music.webp</image:loc>
+      <image:title>Cautious Clay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX709066-Edit-music.webp</image:loc>
+      <image:title>J Balvin</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704131-music.webp</image:loc>
+      <image:title>Lizzie McAlpine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX701806-music.webp</image:loc>
+      <image:title>Gracie Abrams</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX701741-Enhanced-NR-music.webp</image:loc>
+      <image:title>Gracie Abrams</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7400474-music.webp</image:loc>
+      <image:title>Tiffany Day</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX708483-music.webp</image:loc>
+      <image:title>Tai Verdes</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704917-music.webp</image:loc>
+      <image:title>Cautious Clay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7400244-music.webp</image:loc>
+      <image:title>Alexa Porat</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704049-Enhanced-NR-Edit-music.webp</image:loc>
+      <image:title>Lizie McAlpine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX703010-Enhanced-NR-Edit-music.webp</image:loc>
+      <image:title>WowGr8</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC05554-Enhanced-NR-music.webp</image:loc>
+      <image:title>Tyler, The Creator singing sad</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704104-Edit-2-music.webp</image:loc>
+      <image:title>Gracie Abrams</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC08431-Edit-music.webp</image:loc>
+      <image:title>Jack Harlow</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7400058-music.webp</image:loc>
+      <image:title>JUNO</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC02629-music.webp</image:loc>
+      <image:title>New Politics</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX702447-music.webp</image:loc>
+      <image:title>Olu</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC05693-Enhanced-NR-music.webp</image:loc>
+      <image:title>Tyler, The Creator sillouette</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7207787-music.webp</image:loc>
+      <image:title>Alexander23</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC04170-music.webp</image:loc>
+      <image:title>Jaden Smith</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC05678-Enhanced-NR-music.webp</image:loc>
+      <image:title>Tyler, The Creator on Stage</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7207540-music.webp</image:loc>
+      <image:title>X Lovers</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7208496-music.webp</image:loc>
+      <image:title>Chelsea Cutler</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/A7206805-music.webp</image:loc>
+      <image:title>Sango</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX704229-Enhanced-NR-Edit-music.webp</image:loc>
+      <image:title>Lizzie McAlpine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/DSC06611-music.webp</image:loc>
+      <image:title>Lauv</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX703590-music.webp</image:loc>
+      <image:title>Olu</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/live/RX709090-music.webp</image:loc>
+      <image:title>Nicki Minaj</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/bw</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC05585-bw.webp</image:loc>
+      <image:title>Tyler, the Creator</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7202360-bw.webp</image:loc>
+      <image:title>City from on High</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC01524-bw.webp</image:loc>
+      <image:title>Exhausted</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7202339-bw.webp</image:loc>
+      <image:title>Chrysler Building</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC02678-bw.webp</image:loc>
+      <image:title>Goldlink</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC01358-bw.webp</image:loc>
+      <image:title>10th Ave</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7202347-bw.webp</image:loc>
+      <image:title>Empire State Building</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC02466-bw.webp</image:loc>
+      <image:title>Defund the Police</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC01930-bw.webp</image:loc>
+      <image:title>Daniel Caesar</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7406794-bw.webp</image:loc>
+      <image:title>Biking</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7406787-bw.webp</image:loc>
+      <image:title>Gently Trash in NYC</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC08655-bw.webp</image:loc>
+      <image:title>Jack Harlow</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC07973-bw.webp</image:loc>
+      <image:title>Save the kids</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/RX709059-Edit-bw.webp</image:loc>
+      <image:title>J Balvin</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC01515-bw.webp</image:loc>
+      <image:title>Over-looked</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7207520-bw.webp</image:loc>
+      <image:title>Saron Crenshaw</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7201582-Edit-portrait.webp</image:loc>
+      <image:title>Arize in Brooklyn</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7208259-Edit-bw.webp</image:loc>
+      <image:title>Chelsea Cutler</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC02743-bw.webp</image:loc>
+      <image:title>Ice in my Veins</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/DSC08988-bw.webp</image:loc>
+      <image:title>Taxi Driver</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7204510-bw.webp</image:loc>
+      <image:title>Harbour along Oregon Coast</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7204635-bw.webp</image:loc>
+      <image:title>Scary reflection in a window of an Oregon house</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7405342-bw.webp</image:loc>
+      <image:title>Skating sideways</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7405350-bw.webp</image:loc>
+      <image:title>Crash landing</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7406217-bw.webp</image:loc>
+      <image:title>Mexico City Square</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/RX702300-bw.webp</image:loc>
+      <image:title>Family on a Motorcycle</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/bw/A7208874-bw.webp</image:loc>
+      <image:title>Alone in the parking lot</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/people</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/DSC01179-Edit-portrait.webp</image:loc>
+      <image:title>Em in Williamsburg</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/DSC06349-portrait.webp</image:loc>
+      <image:title>Kal looking over a fire escape</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7404306-portrait.webp</image:loc>
+      <image:title>Natalie Freay celebrating her enagement</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7205925-portrait.webp</image:loc>
+      <image:title>Dajee at Untermyer Gardens</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7207181-portrait.webp</image:loc>
+      <image:title>Dajee in Grand Central</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7201581-Edit-portrait.webp</image:loc>
+      <image:title>Arize in Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7205508-HDR-Edit-portrait.webp</image:loc>
+      <image:title>Dajee at the MET Cloisters</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7201742-Edit-portrait.webp</image:loc>
+      <image:title>Camille in Studio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7204813-Edit-portrait.webp</image:loc>
+      <image:title>Richard in his favorite green shirt</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/DSC00436-Edit-portrait.webp</image:loc>
+      <image:title>Em in Bryant Park</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7209214-Edit-portrait.webp</image:loc>
+      <image:title>Jenn in an alley</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7404298-portrait.webp</image:loc>
+      <image:title>Michael</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/DSC07716-Edit-portrait.webp</image:loc>
+      <image:title>Ben over Rio Grande</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/people/A7200334-portrait.webp</image:loc>
+      <image:title>Natalie at Liberty State Park</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/places</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407286-scapes.webp</image:loc>
+      <image:title>Landscape photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7405233-scapes.webp</image:loc>
+      <image:title>Travel photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407228-scapes.webp</image:loc>
+      <image:title>Scenic landscape</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX703948-scapes.webp</image:loc>
+      <image:title>Nature photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204930-scapes.webp</image:loc>
+      <image:title>Landscape detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX703316-scapes.webp</image:loc>
+      <image:title>Travel moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702154-scapes.webp</image:loc>
+      <image:title>Street photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7205360-color.webp</image:loc>
+      <image:title>Colorful landscape</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX706732-color.webp</image:loc>
+      <image:title>Travel photography by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7405906-color.webp</image:loc>
+      <image:title>Scenic photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407432-scapes.webp</image:loc>
+      <image:title>Landscape composition</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7206508-Edit-scapes.webp</image:loc>
+      <image:title>Travel destination</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702886-scapes.webp</image:loc>
+      <image:title>Nature landscape</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407357-scapes.webp</image:loc>
+      <image:title>Scenic view</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702276-scapes.webp</image:loc>
+      <image:title>Street scene</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7406572-scapes.webp</image:loc>
+      <image:title>Landscape photography detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204586-HDR-scapes.webp</image:loc>
+      <image:title>HDR landscape</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7401638-scapes.webp</image:loc>
+      <image:title>Travel photography moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7405944-color.webp</image:loc>
+      <image:title>Colorful travel scene</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407519-scapes.webp</image:loc>
+      <image:title>Scenic landscape photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702351-scapes.webp</image:loc>
+      <image:title>Street photography detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7405591-color.webp</image:loc>
+      <image:title>Travel destination photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7406556-Edit-scapes.webp</image:loc>
+      <image:title>Landscape edit</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7202190-scapes.webp</image:loc>
+      <image:title>Beams</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7406558-scapes.webp</image:loc>
+      <image:title>Tree</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX706719-color.webp</image:loc>
+      <image:title>Coney Island Rollercoaster</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7406615-scapes.webp</image:loc>
+      <image:title>Charleston</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7202338-scapes.webp</image:loc>
+      <image:title>Queens</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7401731-Enhanced-NR-color.webp</image:loc>
+      <image:title>Galapagos Summer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204120-scapes.webp</image:loc>
+      <image:title>Multnomah Falls</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7205351-color.webp</image:loc>
+      <image:title>San Francisco Summer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7206286-scapes.webp</image:loc>
+      <image:title>Catskills Lake</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7202369-scapes.webp</image:loc>
+      <image:title>Ice Rink</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407416-scapes.webp</image:loc>
+      <image:title>Paradise</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/DSC09254-scapes.webp</image:loc>
+      <image:title>Columbus Circle on a Rainy Weekday</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204896-scapes.webp</image:loc>
+      <image:title>Pigeon Guillemot on Oregon Coast</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7202361-scapes.webp</image:loc>
+      <image:title>City Stacks</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702292-scapes.webp</image:loc>
+      <image:title>Mom's Apartment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407477-scapes.webp</image:loc>
+      <image:title>JETski</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7205014-color.webp</image:loc>
+      <image:title>San Francisco street sign</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX703340-scapes.webp</image:loc>
+      <image:title>Teleferico Quito</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407441-scapes.webp</image:loc>
+      <image:title>Sitting in the Sun</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7205161-color.webp</image:loc>
+      <image:title>Muir Woods</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7205308-color.webp</image:loc>
+      <image:title>San Francisco Sunset</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7401603-scapes.webp</image:loc>
+      <image:title>Kids in Galapagos</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204601-HDR-scapes.webp</image:loc>
+      <image:title>Pretty Oregon Coast line</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7407388-scapes.webp</image:loc>
+      <image:title>Kids playing in the Sand</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7204910-scapes.webp</image:loc>
+      <image:title>Sea Lions on the Oregon Coast</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7209983-Edit-scapes.webp</image:loc>
+      <image:title>Garret Mountain Basketball Court</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7402155-HDR-scapes.webp</image:loc>
+      <image:title>Volcano in Ecuador</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/RX702346-scapes.webp</image:loc>
+      <image:title>Guayaquil Highway</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/places/A7401732-Enhanced-NR-color.webp</image:loc>
+      <image:title>Tropical landscape</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/cars</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406517-Enhanced-NR-color.webp</image:loc>
+      <image:title>Luxury car detail shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7405676-color.webp</image:loc>
+      <image:title>Classic automobile photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7204618-color.webp</image:loc>
+      <image:title>Automotive photography by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406721-bw.webp</image:loc>
+      <image:title>Black and white car portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7409382-color.webp</image:loc>
+      <image:title>Sports car in color</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7409342-color.webp</image:loc>
+      <image:title>Modern automobile design</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/DSC04341-bw.webp</image:loc>
+      <image:title>Classic car in black and white</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200465-color.webp</image:loc>
+      <image:title>Vintage car photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200477-color.webp</image:loc>
+      <image:title>Luxury vehicle detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200475-color.webp</image:loc>
+      <image:title>Automotive photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406716-bw.webp</image:loc>
+      <image:title>Car in monochrome</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200462-color.webp</image:loc>
+      <image:title>Classic automobile portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200488-color.webp</image:loc>
+      <image:title>Vehicle detail shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7408915-color.webp</image:loc>
+      <image:title>Modern car photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406778-color.webp</image:loc>
+      <image:title>Automotive detail by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406726-bw.webp</image:loc>
+      <image:title>Black and white automotive</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406734-color.webp</image:loc>
+      <image:title>Car in natural light</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7406717-bw.webp</image:loc>
+      <image:title>Monochrome car portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7209958-color.webp</image:loc>
+      <image:title>Automotive photography detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/cars/A7200461-color.webp</image:loc>
+      <image:title>Classic car in color</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/events</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://www.anthonyfreay.com/resume</loc>
-    <lastmod>2026-02-21</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7401031-color.webp</image:loc>
+      <image:title>Event celebration moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207716-color.webp</image:loc>
+      <image:title>Party gathering photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7400919-color.webp</image:loc>
+      <image:title>Event attendees by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206906-color.webp</image:loc>
+      <image:title>Celebration moment captured</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7400937-color.webp</image:loc>
+      <image:title>Event photography detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402659-color.webp</image:loc>
+      <image:title>Party moment by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207820-color.webp</image:loc>
+      <image:title>Event gathering candid shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7208176-color.webp</image:loc>
+      <image:title>Celebration photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7407714-color.webp</image:loc>
+      <image:title>Event attendees moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402648-color.webp</image:loc>
+      <image:title>Party celebration captured</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207973-color.webp</image:loc>
+      <image:title>Event moment photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7208096-color.webp</image:loc>
+      <image:title>Gathering candid shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7208033-color.webp</image:loc>
+      <image:title>Event celebration detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207913-color.webp</image:loc>
+      <image:title>Party moment by photographer</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207907-color.webp</image:loc>
+      <image:title>Event attendees candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7407589-color.webp</image:loc>
+      <image:title>Maddie Miller Bday Cake</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402701-color.webp</image:loc>
+      <image:title>Event celebration photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7401049-color.webp</image:loc>
+      <image:title>Party gathering moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402526-color.webp</image:loc>
+      <image:title>Event candid shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206966-color.webp</image:loc>
+      <image:title>Abuela and Candeladia</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207859-color.webp</image:loc>
+      <image:title>Event moment captured</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7400963-color.webp</image:loc>
+      <image:title>Celebration gathering photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206546-color.webp</image:loc>
+      <image:title>Party attendees candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207942-color.webp</image:loc>
+      <image:title>Event celebration moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404835-color.webp</image:loc>
+      <image:title>Event celebration portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404355-color.webp</image:loc>
+      <image:title>Party attendee moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7401037-color.webp</image:loc>
+      <image:title>Event photography by Anthony Freay</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404555-color.webp</image:loc>
+      <image:title>Celebration attendee portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404514-color.webp</image:loc>
+      <image:title>Event moment captured</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404632-color.webp</image:loc>
+      <image:title>Party gathering portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7407621-color.webp</image:loc>
+      <image:title>Event attendee candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207607-color.webp</image:loc>
+      <image:title>Celebration moment portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206591-color.webp</image:loc>
+      <image:title>Mom, Cita, and Tio</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206528-color.webp</image:loc>
+      <image:title>Event celebration detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404780-color.webp</image:loc>
+      <image:title>Party moment portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402521-color.webp</image:loc>
+      <image:title>Event attendee photograph</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404479-color.webp</image:loc>
+      <image:title>Celebration gathering portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206559-color.webp</image:loc>
+      <image:title>Event moment candid shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7401130-color.webp</image:loc>
+      <image:title>Jill and Kendall</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7401014-color.webp</image:loc>
+      <image:title>Event attendee portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7407559-color.webp</image:loc>
+      <image:title>Party celebration candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206551-color.webp</image:loc>
+      <image:title>DJ Bolivar</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206574-color.webp</image:loc>
+      <image:title>Event moment photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404717-color.webp</image:loc>
+      <image:title>Celebration attendee candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207740-color.webp</image:loc>
+      <image:title>All The Way Down</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7405071-color.webp</image:loc>
+      <image:title>Event gathering moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206542-color.webp</image:loc>
+      <image:title>Party attendee portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7207884-color.webp</image:loc>
+      <image:title>Event celebration candid</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7402743-color.webp</image:loc>
+      <image:title>Celebration moment captured</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206535-color.webp</image:loc>
+      <image:title>Event attendee moment</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7405908-Enhanced-NR-color.webp</image:loc>
+      <image:title>Party gathering photography</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7404868-color.webp</image:loc>
+      <image:title>Event moment portrait</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206529-color.webp</image:loc>
+      <image:title>Cake</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7206604-Enhanced-NR-color.webp</image:loc>
+      <image:title>Event celebration detail</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7405960-color.webp</image:loc>
+      <image:title>Party moment candid shot</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.anthonyfreay.com/events/A7405730-Enhanced-NR-color.webp</image:loc>
+      <image:title>Celebration gathering candid</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/contact</loc>
-    <lastmod>2026-02-21</lastmod>
+    <lastmod>2026-03-21</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
