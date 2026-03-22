@@ -1,36 +1,101 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Anthony Freay Personal Site (Next.js)
 
-## Getting Started
+Portfolio site for [anthonyfreay.com](https://www.anthonyfreay.com), built with the Next.js App Router.
 
-First, run the development server:
+The site showcases photography work across multiple galleries (live, black & white, people, places, cars, events), plus a contact page with Formspree integration.
+
+## Stack
+
+- `next` 16 (App Router)
+- `react` 19
+- Tailwind CSS 4 + CSS modules
+- `yet-another-react-lightbox` for gallery fullscreen views
+- `react-masonry-css` for masonry layouts
+- `@formspree/react` for contact form submissions
+- `@vercel/analytics` + `@vercel/speed-insights`
+
+## Project Structure
+
+- `src/app` - route pages, route-level metadata, and client route components
+- `src/components` - shared UI components (`Navbar`, `Footer`, galleries, contact form)
+- `src/lib/constants.js` - site-level metadata/constants
+- `public` - static assets (gallery images, covers, favicon, resume, sitemap)
+- `scripts/generate-sitemap.js` - builds `public/sitemap.xml` with image entries
+
+## Route Map
+
+- `/` - hero slideshow landing page
+- `/work` - category index page
+- `/live` - live music gallery
+- `/bw` - black & white gallery
+- `/people` - portrait gallery
+- `/places` - travel/street gallery (masonry)
+- `/cars` - automotive gallery (masonry)
+- `/events` - event gallery (masonry)
+- `/contact` - bio + contact form
+
+Additional redirect:
+
+- `/resume` -> `/resume_anthony_freay.pdf` (see `next.config.js`)
+
+## Local Development
+
+### Prerequisites
+
+- Node.js 20+
+- npm
+
+### Install
+
+```bash
+npm install
+```
+
+### Run
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` - start local dev server
+- `npm run build` - production build, then generate sitemap
+- `npm run start` - start built app
+- `npm run lint` - run ESLint
+- `npm run generate-sitemap` - manually generate `public/sitemap.xml`
 
-## Learn More
+## SEO & Analytics
 
-To learn more about Next.js, take a look at the following resources:
+- Global metadata is configured in `src/app/layout.jsx` and `src/lib/constants.js`.
+- Route-level metadata is defined in each route's `page.jsx`.
+- JSON-LD is embedded on the home and gallery pages.
+- Google Analytics is added via `GoogleAnalytics` in `src/app/layout.jsx`.
+- Vercel Analytics and Speed Insights are enabled in `src/app/layout.jsx`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Contact Form
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Contact form uses Formspree in `src/components/ContactForm.jsx`.
+- The Formspree form ID is currently hardcoded in `useForm('mzdadlpl')`.
 
-## Deploy on Vercel
+If you change Formspree projects, update that ID before deploying.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Content Maintenance Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+When adding/removing gallery images, keep these in sync:
+
+1. Route/client image arrays under `src/app/**` (used by the UI).
+2. `scripts/generate-sitemap.js` gallery image lists (used for image sitemap entries).
+
+Most galleries expect a regular image and an `-hd` variant for lightbox display.
+
+## Deployment
+
+This repo is configured for Vercel (`vercel.json`):
+
+- Build command: `npm run build`
+- Output directory: `.next`
+
+On each production build, the sitemap is regenerated and written to `public/sitemap.xml`.
