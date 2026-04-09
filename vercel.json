@@ -1,4 +1,17 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": ".next"
+  "outputDirectory": ".next",
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "anthonyfreay.com"
+        }
+      ],
+      "destination": "https://www.anthonyfreay.com/:path*",
+      "permanent": true
+    }
+  ]
 }
