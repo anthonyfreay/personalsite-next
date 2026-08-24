@@ -16,12 +16,18 @@ The tiers actually served from `public/home/` are generated from these:
 
 | Tier | Width | Typical size | Used when |
 |---|---|---|---|
-| `large` | 1367px | ~0.12MB | viewport <= 1368px, and first paint |
+| `large` | 1367px | ~0.12MB | viewport <= 1368px (incl. mobile), and first paint |
 | `compressed` | 2560px | ~0.35MB | viewport > 1368px |
-| `medium` | 825px | ~0.17MB | currently unused |
-| `small` | 668px | ~0.11MB | currently unused |
 
 Tier selection lives in `getResponsiveSize()` in `src/app/HomeClient.jsx`.
+
+Two narrower tiers, `small` (668px) and `medium` (825px), were also generated
+but never referenced by any code path, and were deleted. Note that after
+re-encoding, `large` is both **higher resolution and smaller on disk** than
+`medium` was (0.12MB vs 0.17MB), so there is no payload argument for a
+narrower mobile tier — and at DPR 2-3 a phone wants roughly 1200px anyway.
+`large` is the correct mobile tier; do not reintroduce narrower ones without
+measuring first.
 
 ### Regenerating the served tiers
 

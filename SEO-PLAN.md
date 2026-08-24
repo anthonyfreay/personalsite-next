@@ -23,8 +23,8 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | Duplicate manifest | **Done** |
 | P2 redirect URLs | **Resolved** — URLs supplied; 5 of 6 are correct canonicalization, no defect. `/index.html` → `/` redirect added |
 | `public/home/originals/` (350 M) | **Done** — moved to `assets/home-originals/`, excluded from deploys via `.vercelignore`. `public/` 843 M → 154 M |
-| Gallery manifest refactor | **Not started** — P3 |
-| Mobile tier path / unused `small`+`medium` | **Open** — to reassess (open question 6) |
+| Mobile tier path / unused `small`+`medium` | **Done** — `large` confirmed as mobile tier; `small`/`medium` deleted. `public/home/` 612 M → 12 M |
+| Gallery manifest refactor | **Not started** — P3, the only item left |
 
 Verified: `npm run lint` clean, `npm run build` succeeds, all 11 routes prerender, every referenced image and every sitemap image still resolves, and no `full`-tier reference remains in the build output.
 
@@ -331,4 +331,8 @@ The site is 9 pages competing for generic, high-competition photography terms ("
 
 5. ~~**`public/home/originals/` — 350 MB of source JPEGs, publicly deployed.**~~ **Resolved 2026-08-24.** Confirmed to be the full-size masters for the hero slideshow. Moved to `assets/home-originals/` — still version-controlled, no longer inside `public/`, so no longer deployed or publicly downloadable. Added `.vercelignore` excluding `assets/` so the 350 MB is not uploaded on every Vercel build, and `assets/README.md` documenting the tier ladder and the `cwebp` commands to regenerate the served tiers. `public/` is now **154 MB**, down from 843 MB. No runtime performance cost — nothing referenced the path.
 
-6. **Unused `small` (668px) and `medium` (825px) hero tiers — still open.** 52 files, ~7.2 MB. `getResponsiveSize()` never returns either. The function also has a dead branch: `width > 842` and the final fallback both return `'large'`, so phones receive 1367px images even though an 825px tier exists. Resolving this properly means reasoning about device pixel ratio — a 400px-wide phone at DPR 3 wants ~1200px, so the 825px tier may be too soft to simply switch on, and `large` may already be the right call for mobile. **Next up for reassessment**, along with whether `small`/`medium` should be wired in or deleted.
+6. ~~**Unused `small` (668px) and `medium` (825px) hero tiers.**~~ **Resolved 2026-08-24.** `large` (1367px) is confirmed as the mobile tier and the two narrower tiers were deleted (52 files, ~7.2 MB).
+
+   The reasoning is worth keeping, because it inverts the usual instinct to add a narrower tier for phones. After the P0 re-encode, `large` is **both higher resolution and smaller on disk** than `medium` was — 0.12 MB at 1367px vs 0.17 MB at 825px — so switching phones to `medium` would have cost bytes *and* lost resolution. Device pixel ratio points the same way: a 400px-wide phone at DPR 3 wants roughly 1200px, which `large` supplies and `medium` does not. The dead branch in `getResponsiveSize()` (`width > 842` and the fallback both returning `'large'`) was already removed as part of the P0 rewrite, so mobile behavior is unchanged — the tier it was always effectively using is now the tier it explicitly uses.
+
+   `public/home/` is now **12 MB** across two tiers, down from 612 MB.
