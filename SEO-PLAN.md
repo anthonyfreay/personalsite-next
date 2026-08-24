@@ -21,9 +21,10 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | `lastmod` | **Done** — git-derived per route, omitted when unknown |
 | Asset cleanup | **Done** — posters/, 2 covers, 101 orphaned photos + `-hd`; `public/` 843 M → 504 M |
 | Duplicate manifest | **Done** |
-| P2 redirect URLs | **Deferred** — needs the 6 URLs from GSC (open question 1) |
+| P2 redirect URLs | **Resolved** — URLs supplied; 5 of 6 are correct canonicalization, no defect. `/index.html` → `/` redirect added |
+| `public/home/originals/` (350 M) | **Done** — moved to `assets/home-originals/`, excluded from deploys via `.vercelignore`. `public/` 843 M → 154 M |
 | Gallery manifest refactor | **Not started** — P3 |
-| `public/home/originals/` (350 M) | **Blocked** — see open question 5 |
+| Mobile tier path / unused `small`+`medium` | **Open** — to reassess (open question 6) |
 
 Verified: `npm run lint` clean, `npm run build` succeeds, all 11 routes prerender, every referenced image and every sitemap image still resolves, and no `full`-tier reference remains in the build output.
 
@@ -178,24 +179,35 @@ Also consider enriching the `Person` node with `address` (NYC), `email`, and `im
 
 ---
 
-### P2 — "Page with redirect" (6 pages, validation Failed)
+### P2 — "Page with redirect" (6 pages, validation Failed) — RESOLVED, no defect
 
-Two redirect layers are configured and both look correct:
+The 6 URLs, supplied from the GSC UI on 2026-08-24 (validation started 6/8/26, failed 6/13/26):
 
-- `vercel.json` — 301 apex → `www` for `anthonyfreay.com`.
-- `next.config.js` — `/resume` and `/resume/` → `/resume_anthony_freay.pdf` (currently `permanent: false` = 307).
+| URL | Last crawled | What it is |
+|---|---|---|
+| `http://anthonyfreay.com/` | Aug 18, 2026 | apex + http → www https |
+| `https://anthonyfreay.com/` | Aug 18, 2026 | apex → www |
+| `https://anthonyfreay.com/index.html` | Aug 15, 2026 | apex + the retired CRA template |
+| `https://anthonyfreay.com/work` | Jul 28, 2026 | apex → www |
+| `https://www.anthonyfreay.com/resume` | Jul 26, 2026 | intentional → résumé PDF |
+| `http://www.anthonyfreay.com/` | Jul 12, 2026 | http → https |
 
-Six pages sitting in this state with **Failed** validation is most likely Google re-crawling legacy apex-host or old-stack URLs; that normally clears on its own. It is flagged Failed, though, so it needs verification rather than assumption.
+**Five of the six are the site's own canonicalization redirects behaving exactly as designed** (apex → `www`, http → https, per `vercel.json`). The sixth is the deliberate `/resume` → PDF redirect. There is no defect here.
 
-**Actions**
+Critically: **this validation will never pass.** Google re-crawls each URL, correctly finds a permanent redirect that is supposed to exist, and marks validation failed. "Page with redirect" is an informational state for intentionally redirecting URLs, not an error to fix. The affected-pages count dropping 8 → 6 on ~7/8/26 reflects normal consolidation, not a regression.
 
-1. In GSC, open the "Page with redirect" report and export the actual 6 URLs. **Do not act before seeing them** — the fix differs entirely depending on whether they are apex URLs, old CRA hash routes, or `/resume` variants.
-2. If they are `/resume` and `/resume/`: those are intentional, and a redirect to a PDF is expected to be non-indexable — consider whether `permanent: true` (308) better communicates intent.
-3. If they are apex-host URLs: no code change; re-run validation and let re-crawl complete.
-4. If they are legacy CRA routes: add explicit redirects to their App Router equivalents.
-5. Confirm `public/CNAME` removal (P1) so nothing continues to advertise the apex host.
+**Action taken** — one genuine gap: `/index.html` had been crawled while the CRA template was still served. With that file now deleted (P1), the URL would begin returning 404. Added a permanent redirect to consolidate it instead:
 
-**Files:** `next.config.js`, `vercel.json`
+```js
+{ source: '/index.html', destination: '/', permanent: true }
+```
+
+**Deliberately not changed:**
+
+- **Apex and protocol redirects** — correct as-is; no code change.
+- **`/resume` left at `permanent: false` (307).** A 308 would signal permanence more strongly, but a redirect to a PDF is non-indexable either way, so there is no ranking gain — and 307 avoids browsers hard-caching the mapping if `/resume` ever becomes a real page. Not worth the one-way door.
+
+**Files:** `next.config.js`
 
 ---
 
@@ -241,12 +253,15 @@ The audit found these currently in sync, so this is a latent maintenance hazard 
 
 `public/` is **843 MB** and `.git` is **843 MB**. Contributors:
 
-| Item | Finding |
-|---|---|
-| `public/home/` | 612 MB — the `full` tier alone is 205 MB and (per P0) should not be served at all |
-| `public/posters/` | 37 files, **not referenced anywhere in `src/`** |
-| `covers/apparel_cover.jpg`, `covers/poster_cover.jpg` | orphaned — no apparel or poster route exists |
-| Orphaned gallery images | ~91 unreferenced non-`-hd` files: bw 28, live 32, people 14, places 10, events 14, cars 3 |
+| Item | Finding | Status |
+|---|---|---|
+| `public/home/` | 612 MB — `full` tier alone 205 MB | **Done** — now 20 MB |
+| `public/home/originals/` | 350 MB of masters, deployed publicly | **Done** — moved to `assets/`, excluded from deploys |
+| `public/posters/` | 37 files, not referenced anywhere in `src/` | **Done** — removed |
+| `covers/apparel_cover.jpg`, `covers/poster_cover.jpg` | orphaned — no such routes | **Done** — removed |
+| Orphaned gallery images | 101 unreferenced non-`-hd` files + `-hd` variants | **Done** — removed |
+
+**Result: `public/` 843 MB → 154 MB.**
 
 Spot-checked and confirmed genuinely unreferenced (e.g. `/cars/A7206342-color.webp` appears in neither `src/` nor `scripts/`).
 
@@ -314,6 +329,6 @@ The site is 9 pages competing for generic, high-competition photography terms ("
 3. **Are `posters/` and `apparel_cover.jpg` abandoned, or planned routes?** Decides delete vs. build.
 4. **What is the goal — bookings, or portfolio credibility?** Bookings would justify `LocalBusiness` schema, a services page, and local SEO work that is otherwise not worth the effort.
 
-5. **`public/home/originals/` — 350 MB of source JPEGs, publicly deployed.** Discovered during implementation, not in the original audit. 26 files averaging ~13 MB (largest 23.9 MB), referenced nowhere in `src/`, but inside `public/` and therefore **served in production** at `https://www.anthonyfreay.com/home/originals/<name>.jpg`. This is now the single largest item in the repo and the reason `public/` is still 504 MB. Deleting is not safe to assume — these may be the only copies of the masters. Options: (a) delete from the repo, (b) move outside `public/` so they stay version-controlled but are no longer deployed, (c) keep as-is.
+5. ~~**`public/home/originals/` — 350 MB of source JPEGs, publicly deployed.**~~ **Resolved 2026-08-24.** Confirmed to be the full-size masters for the hero slideshow. Moved to `assets/home-originals/` — still version-controlled, no longer inside `public/`, so no longer deployed or publicly downloadable. Added `.vercelignore` excluding `assets/` so the 350 MB is not uploaded on every Vercel build, and `assets/README.md` documenting the tier ladder and the `cwebp` commands to regenerate the served tiers. `public/` is now **154 MB**, down from 843 MB. No runtime performance cost — nothing referenced the path.
 
-6. **Unused `small` (668px) and `medium` (825px) hero tiers.** 52 files, ~7.2 MB. `getResponsiveSize()` never returns either. Note the current function has a dead branch — `width > 842` and the final fallback both return `'large'` — so viewports under 842px receive 1367px images when an 825px tier already exists. Worth wiring up as a genuine mobile tier (accounting for device pixel ratio) or deleting; left untouched pending a decision.
+6. **Unused `small` (668px) and `medium` (825px) hero tiers — still open.** 52 files, ~7.2 MB. `getResponsiveSize()` never returns either. The function also has a dead branch: `width > 842` and the final fallback both return `'large'`, so phones receive 1367px images even though an 825px tier exists. Resolving this properly means reasoning about device pixel ratio — a 400px-wide phone at DPR 3 wants ~1200px, so the 825px tier may be too soft to simply switch on, and `large` may already be the right call for mobile. **Next up for reassessment**, along with whether `small`/`medium` should be wired in or deleted.

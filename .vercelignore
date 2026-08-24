@@ -1,0 +1,4 @@
+# Source masters for the home page hero slideshow. Version-controlled, but
+# never deployed: the shipped tiers in public/home/ are generated from these.
+# Excluding them keeps ~350MB out of every Vercel build upload.
+assets/
