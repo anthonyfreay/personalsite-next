@@ -13,6 +13,8 @@ The site showcases photography work across multiple galleries (live, black & whi
 - `react-masonry-css` for masonry layouts
 - `@formspree/react` for contact form submissions
 - `@vercel/analytics` + `@vercel/speed-insights`
+- `@next/third-parties` for Google Analytics
+- `lucide-react` + `react-icons` for icons
 
 ## Project Structure
 
