@@ -5,6 +5,30 @@
 
 ---
 
+## Status
+
+Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
+
+| Item | Status |
+|---|---|
+| P0 hero image payload | **Done** — `full` tier retired; 2560px tier re-encoded at q80 (rotation 93.9 MB → 3.5 MB, 96% smaller); `large` tier re-encoded (11.0 → 3.1 MB) |
+| Next image optimization | **Done** — `unoptimized` removed; AVIF/WebP enabled; all `sizes` attributes now functional |
+| `public/index.html` + `CNAME` | **Done** — deleted |
+| `/` and `/work` thin content | **Done** — `sr-only` copy added; home `metadata` export added |
+| `sameAs` / `Person` schema | **Done** — populated + address/image |
+| `/work` alt text | **Done** |
+| Custom 404 | **Done** — `src/app/not-found.jsx` |
+| `lastmod` | **Done** — git-derived per route, omitted when unknown |
+| Asset cleanup | **Done** — posters/, 2 covers, 101 orphaned photos + `-hd`; `public/` 843 M → 504 M |
+| Duplicate manifest | **Done** |
+| P2 redirect URLs | **Deferred** — needs the 6 URLs from GSC (open question 1) |
+| Gallery manifest refactor | **Not started** — P3 |
+| `public/home/originals/` (350 M) | **Blocked** — see open question 5 |
+
+Verified: `npm run lint` clean, `npm run build` succeeds, all 11 routes prerender, every referenced image and every sitemap image still resolves, and no `full`-tier reference remains in the build output.
+
+---
+
 ## 1. Where the site stands
 
 From the GSC Coverage export (`All known pages`):
@@ -57,10 +81,11 @@ Measured hero payloads in `public/home/` (26 images × 3 tiers):
 | `large` | 26 | 11.0 MB | 0.42 MB | 0.96 MB |
 | `full` | 26 | 205.5 MB | **7.90 MB** | **18.69 MB** |
 
-`src/app/HomeClient.jsx` compounds this in two ways:
+`src/app/HomeClient.jsx` compounds this:
 
-1. **Three stacked `<Image>` layers all mount with `initialSrc` = the `compressed` tier** (`getResponsiveSize()` returns `'compressed'` only during SSR). For the first hero (`A7401065`, 1.21 MB) that is ~3.6 MB before the slideshow effect runs.
-2. **On mount, `getResponsiveSize()` returns `'full'` for any viewport wider than 1368px**, swapping in 1.8–16 MB files, and pre-loading the next one into the middle layer on every transition.
+- **On mount, `getResponsiveSize()` returns `'full'` for any viewport wider than 1368px**, swapping in 1.8–16 MB files, and pre-loading the next one into the middle layer on every transition.
+
+> **Correction (2026-08-24):** an earlier draft of this document claimed the three stacked `<Image>` layers each mount with the `compressed` tier for "~3.6 MB before the slideshow effect runs." That was wrong. All three layers share an identical `initialSrc`, and browsers cache by URL, so the initial paint costs **one** fetch, not three. The `full`-tier swap below was the real defect.
 
 Worked example — desktop visitor, first 10 seconds on `/`:
 
@@ -288,3 +313,7 @@ The site is 9 pages competing for generic, high-competition photography terms ("
 2. **Is Vercel image optimization acceptable?** Determines whether `images.unoptimized` can be flipped or the manual tiers must carry P0 alone.
 3. **Are `posters/` and `apparel_cover.jpg` abandoned, or planned routes?** Decides delete vs. build.
 4. **What is the goal — bookings, or portfolio credibility?** Bookings would justify `LocalBusiness` schema, a services page, and local SEO work that is otherwise not worth the effort.
+
+5. **`public/home/originals/` — 350 MB of source JPEGs, publicly deployed.** Discovered during implementation, not in the original audit. 26 files averaging ~13 MB (largest 23.9 MB), referenced nowhere in `src/`, but inside `public/` and therefore **served in production** at `https://www.anthonyfreay.com/home/originals/<name>.jpg`. This is now the single largest item in the repo and the reason `public/` is still 504 MB. Deleting is not safe to assume — these may be the only copies of the masters. Options: (a) delete from the repo, (b) move outside `public/` so they stay version-controlled but are no longer deployed, (c) keep as-is.
+
+6. **Unused `small` (668px) and `medium` (825px) hero tiers.** 52 files, ~7.2 MB. `getResponsiveSize()` never returns either. Note the current function has a dead branch — `width > 842` and the final fallback both return `'large'` — so viewports under 842px receive 1367px images when an 825px tier already exists. Worth wiring up as a genuine mobile tier (accounting for device pixel ratio) or deleting; left untouched pending a decision.
