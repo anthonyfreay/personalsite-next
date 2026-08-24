@@ -34,12 +34,12 @@ const getImageUrl = (imageId, size) => {
   return `/home/${size}-wallpaper-${imageId}-20260213.webp`;
 };
 
+// Tier widths: large = 1367px, compressed = 2560px.
+// Nothing wider is served: the retired 'full' tier was 5400-6900px (up to 16MB),
+// which is far beyond any display and wrecked LCP on the home page.
 const getResponsiveSize = () => {
-  if (typeof window === 'undefined') return 'compressed';
-  const width = window.innerWidth;
-  if (width > 1368) return 'full';
-  if (width > 842) return 'large';
-  return 'large';
+  if (typeof window === 'undefined') return 'large';
+  return window.innerWidth > 1368 ? 'compressed' : 'large';
 };
 
 const isMobile = (width) => width <= 842;
@@ -53,7 +53,10 @@ const buildPlaylist = (width) =>
 
 export default function HomeClient() {
   const [currentTone, setCurrentTone] = useState(HERO_IMAGES[0]?.tone || 'dark');
-  const initialSrc = getImageUrl(HERO_IMAGES[0].id, 'compressed');
+  // First paint uses the lighter 1367px tier; the slideshow effect immediately
+  // swaps in the viewport-appropriate tier. All three layers share this URL, so
+  // the browser issues a single request for it.
+  const initialSrc = getImageUrl(HERO_IMAGES[0].id, 'large');
   const topLayerRef = useRef(null);
   const middleLayerRef = useRef(null);
   const bottomLayerRef = useRef(null);

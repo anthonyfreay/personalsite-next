@@ -1,7 +1,41 @@
 const fs = require('fs');
 const path = require('path');
+const { execFileSync } = require('child_process');
 
 const SITE_URL = 'https://www.anthonyfreay.com';
+
+// Map each route to the source directory that determines its content.
+const routeSources = {
+  '/': 'src/app/page.jsx',
+  '/work': 'src/app/work',
+  '/live': 'src/app/live',
+  '/bw': 'src/app/bw',
+  '/people': 'src/app/people',
+  '/places': 'src/app/places',
+  '/cars': 'src/app/cars',
+  '/events': 'src/app/events',
+  '/contact': 'src/app/contact',
+};
+
+const repoRoot = path.join(__dirname, '..');
+
+// Real last-modified date per route, from the last commit touching its source.
+// A build-date stamp on every URL is a signal Google learns to ignore, so fall
+// back to omitting <lastmod> rather than asserting something untrue.
+function getLastMod(route) {
+  const source = routeSources[route];
+  if (!source) return null;
+  try {
+    const out = execFileSync(
+      'git',
+      ['log', '-1', '--format=%cs', '--', source],
+      { cwd: repoRoot, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }
+    ).trim();
+    return /^\d{4}-\d{2}-\d{2}$/.test(out) ? out : null;
+  } catch {
+    return null;
+  }
+}
 
 const routes = [
   '/',
@@ -250,10 +284,10 @@ const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 ${routes
     .map((route) => {
       const imageEntries = buildImageEntries(route);
+      const lastMod = getLastMod(route);
       return `  <url>
     <loc>${SITE_URL}${route}</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <changefreq>${route === '/' ? 'weekly' : 'monthly'}</changefreq>
+${lastMod ? `    <lastmod>${lastMod}</lastmod>\n` : ''}    <changefreq>${route === '/' ? 'weekly' : 'monthly'}</changefreq>
     <priority>${route === '/' ? '1.0' : '0.8'}</priority>
 ${imageEntries ? imageEntries + '\n' : ''}  </url>`;
     })

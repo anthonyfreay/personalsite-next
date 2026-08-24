@@ -5,12 +5,12 @@ import Image from 'next/image';
 import styles from './WorkClient.module.css';
 
 const categories = [
-  { path: '/live', image: 'live/A7400474-music.webp', label: 'Live' },
-  { path: '/bw', image: 'covers/bw_cover.jpg', label: 'B & W' },
-  { path: '/people', image: 'covers/people_cover.jpg', label: 'People' },
-  { path: '/places', image: 'places/A7406615-scapes.webp', label: 'Places' },
-  { path: '/cars', image: 'covers/cars_cover.jpg', label: 'Cars' },
-  { path: '/events', image: 'events/A7404835-color.webp', label: 'Events' },
+  { path: '/live', image: 'live/A7400474-music.webp', label: 'Live', alt: 'Live music and concert photography' },
+  { path: '/bw', image: 'covers/bw_cover.jpg', label: 'B & W', alt: 'Black and white photography' },
+  { path: '/people', image: 'covers/people_cover.jpg', label: 'People', alt: 'Portrait and lifestyle photography' },
+  { path: '/places', image: 'places/A7406615-scapes.webp', label: 'Places', alt: 'Travel and landscape photography' },
+  { path: '/cars', image: 'covers/cars_cover.jpg', label: 'Cars', alt: 'Automotive photography' },
+  { path: '/events', image: 'events/A7404835-color.webp', label: 'Events', alt: 'Event and celebration photography' },
 ];
 
 export default function WorkClient() {
@@ -26,7 +26,7 @@ export default function WorkClient() {
             <figure className={styles.figure}>
               <Image
                 src={`/${category.image}`}
-                alt={category.label}
+                alt={category.alt}
                 width={400}
                 height={400}
                 className={`${styles.categoryImage} ${styles.animateFadeInOpacity}`}
