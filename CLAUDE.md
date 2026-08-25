@@ -63,7 +63,11 @@ Two rules that are easy to get wrong here:
 - **Theme values live in `@theme` in `src/app/globals.css`.** There is no `tailwind.config.js` — v4 does not auto-load one, and the old config sat dead for a long time with every class it defined (`bg-brand-light`, `text-accent-1`, …) emitting no CSS.
 - **Any global CSS must go inside `@layer base`.** v4 emits utilities into `@layer utilities`, and an *unlayered* rule beats a layered one regardless of specificity. An unlayered `* { margin: 0 }` silently overrides every margin utility on the site. `globals.css` already wraps its resets accordingly.
 
+- **Gallery wrappers use `w-full`, not `max-w-full mx-auto`.** `mx-auto` on a flex child sets auto cross-axis margins, which suppresses `align-items: stretch` — the wrapper then shrink-to-fits and the gallery's width ends up driven by image intrinsic widths instead of the viewport. Centering belongs on the grid itself (`max-width` + `margin: 0 auto`).
+
 Most layout is done in CSS Modules rather than utilities; when in doubt, follow the surrounding component.
+
+When changing gallery layout, check at several viewport widths (2560 / 2000 / 1440 / 900 / 412). Several bugs here only appear above ~1800px, where `max-width` caps start to bind.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

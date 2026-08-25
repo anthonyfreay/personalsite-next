@@ -2,7 +2,7 @@
 
 Deferred work. Each item is scoped to be a separate branch/PR. Ordered by value.
 
-**Status as of 2026-08-25.** Items 1, 2 and 7 are **done and deployed to production**. Items 3-6 remain: 3 is a standing practice, 4 and 5 are not code, 6 is small deferred work.
+**Status as of 2026-08-25.** Items 1, 2, 7 and 8 are **done and deployed to production**. Items 3-6 remain: 3 is a standing practice, 4 and 5 are not code, 6 is small deferred work.
 
 ---
 
@@ -99,3 +99,34 @@ Measured on `/events` (mobile, production, 4 runs per side, medians):
 | CSS columns | **70.0** | **6.54s** | **0.000** |
 
 **Methodology note worth keeping:** a 2-run comparison of this change appeared to show LCP regressing by 0.6s. It had not — `main`'s LCP varies **1.58s** run to run, wider than the effect being measured. Two Lighthouse runs are not enough to compare anything on this site; use medians of four or more, on the same machine, with nothing else competing for CPU.
+
+---
+
+## 8. ~~Gallery width collapsing to image intrinsic width~~ — DONE, deployed 2026-08-25
+
+`/cars` rendered visibly narrower than the other galleries. At a 2000px viewport its grid was **1456px** with 272px gutters, where `/places` and `/events` were 1800px.
+
+The wrapper `<div className="max-w-full mx-auto flex-1">` sat inside a `flex flex-col` parent. **Auto cross-axis margins suppress the default `align-items: stretch`**, so the wrapper shrink-to-fit instead of filling, and gallery width came from the images' intrinsic widths rather than the viewport:
+
+| route | image `naturalWidth` | grid |
+|---|---|---|
+| `/cars` | all 351px | 4 × 351 + gaps = **1456px** |
+| `/places`, `/events` | some 500px | max-content > 1800px, clamps |
+
+The dependency is circular — image natural width sets grid width, which feeds `sizes`, which decides which variant loads — so it was unstable and viewport-dependent. That is why only `/cars` looked wrong.
+
+Fixed by replacing `max-w-full mx-auto` with `w-full` on all six gallery wrappers; the grid's own `max-width` + `margin: 0 auto` does the centering.
+
+**Two lessons worth keeping:**
+
+- **`mx-auto` on a flex child is not a no-op.** Inside a flex container it stops the child stretching on the cross axis. If a wrapper should fill its parent, use `w-full`, not `max-w-full mx-auto`.
+- **Validate layout at more than one viewport width.** The masonry CSS-columns change was checked at 1440px, where this collapse is invisible because content width ≈ viewport width. It only appears above ~1800px. Layout changes now get checked at 2560 / 2000 / 1440 / 900 / 412.
+
+Verified on production across viewports — all six galleries identical in behaviour:
+
+| viewport | masonry (`/cars`, `/places`, `/events`) | grid (`/live`, `/bw`, `/people`) |
+|---|---|---|
+| 2560px | 1800px, 4 col | 1830px, 4 col |
+| 2000px | 1800px, 4 col | 1830px, 4 col |
+| 1440px | 1440px, 4 col | 1440px, 4 col |
+| 412px | 412px, 2 col | 412px, 2 col |
