@@ -5,12 +5,12 @@ import Image from 'next/image';
 import styles from './WorkClient.module.css';
 
 const categories = [
-  { path: '/live', image: 'live/A7400474-music.webp', label: 'Live' },
-  { path: '/bw', image: 'covers/bw_cover.jpg', label: 'B & W' },
-  { path: '/people', image: 'covers/people_cover.jpg', label: 'People' },
-  { path: '/places', image: 'places/A7406615-scapes.webp', label: 'Places' },
-  { path: '/cars', image: 'covers/cars_cover.jpg', label: 'Cars' },
-  { path: '/events', image: 'events/A7404835-color.webp', label: 'Events' },
+  { path: '/live', image: 'live/A7400474-music.webp', label: 'Live', alt: 'Live music and concert photography' },
+  { path: '/bw', image: 'covers/bw_cover.jpg', label: 'B & W', alt: 'Black and white photography' },
+  { path: '/people', image: 'covers/people_cover.jpg', label: 'People', alt: 'Portrait and lifestyle photography' },
+  { path: '/places', image: 'places/A7406615-scapes.webp', label: 'Places', alt: 'Travel and landscape photography' },
+  { path: '/cars', image: 'covers/cars_cover.jpg', label: 'Cars', alt: 'Automotive photography' },
+  { path: '/events', image: 'events/A7404835-color.webp', label: 'Events', alt: 'Event and celebration photography' },
 ];
 
 export default function WorkClient() {
@@ -23,15 +23,24 @@ export default function WorkClient() {
             href={category.path}
             className={styles.categoryLink}
           >
-            <figure className={styles.figure}>
+            {/*
+              The fade lives on the figure, not the image, so the caption
+              fades in together with its cover rather than popping in first.
+            */}
+            <figure
+              className={`${styles.figure} ${styles.animateFadeInOpacity}`}
+              style={{ animationDelay: `${Math.min(index * 0.08, 0.4)}s` }}
+            >
               <Image
                 src={`/${category.image}`}
-                alt={category.label}
+                alt={category.alt}
                 width={400}
                 height={400}
-                className={`${styles.categoryImage} ${styles.animateFadeInOpacity}`}
-                style={{ opacity: 0 }}
-                priority={index < 2}
+                className={styles.categoryImage}
+                // The grid is 3 columns on desktop, so the first three tiles
+                // are the above-the-fold row and any of them can be the LCP
+                // element. Priority sets fetchpriority=high and eager loading.
+                priority={index < 3}
                 sizes="(max-width: 470px) 200px, (max-width: 999px) 300px, 400px"
               />
               <figcaption className={styles.figcaption}>

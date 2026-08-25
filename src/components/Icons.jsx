@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { FaRegEnvelope, FaInstagram, FaLinkedinIn, FaGithub, FaRegFileAlt } from 'react-icons/fa';
 
 export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) {
@@ -24,7 +23,7 @@ export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) 
         title="Instagram"
         className="hover:text-accent-1 transition-colors"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="me noopener noreferrer"
       >
         <FaInstagram size={iconSize} />
       </a>
@@ -34,7 +33,7 @@ export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) 
         title="LinkedIn"
         className="hover:text-accent-1 transition-colors"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="me noopener noreferrer"
       >
         <FaLinkedinIn size={iconSize} />
       </a>
@@ -54,7 +53,7 @@ export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) 
         title="GitHub"
         className="hover:text-accent-1 transition-colors"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="me noopener noreferrer"
       >
         <FaGithub size={iconSize} />
       </a>

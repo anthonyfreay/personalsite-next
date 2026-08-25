@@ -3,19 +3,19 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
     <loc>https://www.anthonyfreay.com/</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/work</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/live</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -44,7 +44,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX704131-music.webp</image:loc>
-      <image:title>Lizzie McAlpine</image:title>
+      <image:title>Lizzy McAlpine</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX701806-music.webp</image:loc>
@@ -72,7 +72,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX704049-Enhanced-NR-Edit-music.webp</image:loc>
-      <image:title>Lizie McAlpine</image:title>
+      <image:title>Lizzy McAlpine</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX703010-Enhanced-NR-Edit-music.webp</image:loc>
@@ -80,7 +80,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/DSC05554-Enhanced-NR-music.webp</image:loc>
-      <image:title>Tyler, The Creator singing sad</image:title>
+      <image:title>Tyler, the Creator</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX704104-Edit-2-music.webp</image:loc>
@@ -104,7 +104,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/DSC05693-Enhanced-NR-music.webp</image:loc>
-      <image:title>Tyler, The Creator sillouette</image:title>
+      <image:title>Tyler, the Creator</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/A7207787-music.webp</image:loc>
@@ -116,7 +116,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/DSC05678-Enhanced-NR-music.webp</image:loc>
-      <image:title>Tyler, The Creator on Stage</image:title>
+      <image:title>Tyler, the Creator</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/A7207540-music.webp</image:loc>
@@ -132,7 +132,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/RX704229-Enhanced-NR-Edit-music.webp</image:loc>
-      <image:title>Lizzie McAlpine</image:title>
+      <image:title>Lizzy McAlpine</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/live/DSC06611-music.webp</image:loc>
@@ -149,7 +149,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/bw</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -263,7 +263,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/people</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -325,7 +325,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/places</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -539,7 +539,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/cars</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -625,7 +625,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/events</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -855,7 +855,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/contact</loc>
-    <lastmod>2026-03-22</lastmod>
+    <lastmod>2026-08-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

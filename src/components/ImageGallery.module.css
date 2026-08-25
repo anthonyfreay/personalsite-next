@@ -14,14 +14,88 @@
   animation: fadeIn 0.6s ease-in forwards;
 }
 
+/*
+  Four per row on desktop, and no wider than that.
+  Source images are 450x675, so 450px is the point past which they would be
+  upscaled and start to soften. The container caps at 4*450 + 3*10 gaps =
+  1830px, which means the 1fr tracks can never resolve above native width.
+  Narrower viewports simply shrink the tracks, which is always safe.
+*/
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
+  align-items: start;
   gap: 10px;
   max-width: 1830px;
   margin: auto;
   padding: 0 10px;
+}
+
+@media (max-width: 1023px) {
+  .gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/*
+  Hover caption (opt-in via the captionOnHover prop).
+
+  The tile is the positioning context; the caption is absolutely positioned so
+  revealing it costs no layout and cannot cause CLS. Gated behind
+  `hover: hover` so touch devices - where :hover latches after a tap and would
+  fight the lightbox - never see it.
+*/
+.tile {
+  position: relative;
+  overflow: hidden;
+  line-height: 0;
+}
+
+/*
+  Images are display:inline by default, so they sit on the text baseline and
+  leave a descender gap inside the tile. The tile was therefore a few px taller
+  than the image, and a caption pinned to bottom:0 rendered its gradient in that
+  gap - visibly past the bottom edge of the photo. Making the image a block
+  removes the gap so the tile height matches the image exactly.
+*/
+.tile img {
+  display: block;
+}
+
+.hoverCaption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 2.25rem 0.75rem 0.7rem;
+  color: #fff;
+  /* Match the site face; the tile sets line-height: 0 to kill the image
+     baseline gap, so both must be restored explicitly here. */
+  font-family: var(--fontFamily);
+  font-size: 0.9rem;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  text-align: center;
+  background: linear-gradient(to top, rgba(9, 9, 9, 0.85), rgba(9, 9, 9, 0));
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .hoverCaption,
+  .tile:focus-visible .hoverCaption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hoverCaption {
+    transition: none;
+    transform: none;
+  }
 }
 
 .lightbox {
@@ -29,18 +103,17 @@
 }
 
 .lightbox :global(img) {
-  border: 50px solid white !important;
+  border: 18px solid white !important;
 }
 
 @media (max-width: 640px) {
-  .gallery>div {
-    width: calc(50% - 5px);
-    max-width: none;
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (max-width: 470px) {
   .lightbox :global(img) {
-    border: 30px solid white !important;
+    border: 10px solid white !important;
   }
 }

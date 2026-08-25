@@ -1,9 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Icons from '@/components/Icons';
 import styles from './HomeClient.module.css';
 
 // tone: 'light' = bright image (navbar should use dark text)
@@ -34,12 +31,32 @@ const getImageUrl = (imageId, size) => {
   return `/home/${size}-wallpaper-${imageId}-20260213.webp`;
 };
 
+// Pixel width of the 'large' tier. Above this we need the 2560px 'compressed'
+// tier. (The retired 'full' tier was 5400-6900px / up to 16MB per image, which
+// no display needs for a background and which wrecked LCP.)
+const LARGE_TIER_WIDTH = 1367;
+
+// The hero tiers are ~3:2 landscape.
+const HERO_ASPECT_RATIO = 1.5;
+
+// Pick a tier by the PHYSICAL pixels the hero must fill, not CSS pixels.
+//
+// Two things make the naive `innerWidth > 1368` check wrong:
+//   1. devicePixelRatio - a 14" MacBook Pro reports innerWidth 852 but is DPR 2,
+//      so it needs ~1704px, not 852. Comparing CSS px against a physical-px tier
+//      hands retina laptops an upscaled, soft image.
+//   2. object-cover - when the viewport is taller than the image aspect, height
+//      drives the scale, so the width we need is innerHeight * aspect.
+//
+// DPR is capped at 2: beyond that the file size cost outruns the visible gain.
 const getResponsiveSize = () => {
-  if (typeof window === 'undefined') return 'compressed';
-  const width = window.innerWidth;
-  if (width > 1368) return 'full';
-  if (width > 842) return 'large';
-  return 'large';
+  if (typeof window === 'undefined') return 'large';
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const cssWidthNeeded = Math.max(
+    window.innerWidth,
+    window.innerHeight * HERO_ASPECT_RATIO
+  );
+  return cssWidthNeeded * dpr > LARGE_TIER_WIDTH ? 'compressed' : 'large';
 };
 
 const isMobile = (width) => width <= 842;
@@ -53,19 +70,30 @@ const buildPlaylist = (width) =>
 
 export default function HomeClient() {
   const [currentTone, setCurrentTone] = useState(HERO_IMAGES[0]?.tone || 'dark');
-  const initialSrc = getImageUrl(HERO_IMAGES[0].id, 'compressed');
+  // First paint uses the lighter 1367px tier; the slideshow effect immediately
+  // swaps in the viewport-appropriate tier. All three layers share this URL, so
+  // the browser issues a single request for it.
+  const initialSrc = getImageUrl(HERO_IMAGES[0].id, 'large');
   const topLayerRef = useRef(null);
   const middleLayerRef = useRef(null);
   const bottomLayerRef = useRef(null);
   const indexRef = useRef(0);
-  const sizeRef = useRef('compressed');
+  const sizeRef = useRef('large'); // matches initialSrc's tier
   const widthRef = useRef(1024);
   const playlistRef = useRef(HERO_IMAGES);
   const timerRef = useRef(null);
   const navRef = useRef(null);
   const fadingRef = useRef(false);
 
-  // Home page setup: dark theme, scroll lock
+  // Home page setup: dark theme class + theme-color.
+  //
+  // The scroll lock itself is NOT applied here. It used to set
+  // body { position: fixed; width/height: 100% } from this effect, which runs
+  // after hydration - taking <body> out of normal flow post-paint and causing a
+  // 0.41 layout shift, by far the worst CLS on the site. It now ships as a
+  // server-rendered <style> in page.jsx, so it applies before first paint and
+  // costs nothing. `overflow: hidden` was already redundant with the
+  // `html.home-dark` rule in globals.css.
   useEffect(() => {
     const root = document?.documentElement;
     if (!root) return undefined;
@@ -77,25 +105,11 @@ export default function HomeClient() {
       metaThemeColor.setAttribute('content', '#090909');
     }
 
-    const originalOverflow = document.body.style.overflow;
-    const originalPosition = document.body.style.position;
-    const originalWidth = document.body.style.width;
-    const originalHeight = document.body.style.height;
-
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
-
     return () => {
       root.classList.remove('home-dark');
       if (metaThemeColor) {
         metaThemeColor.setAttribute('content', '#F5F5F5');
       }
-      document.body.style.overflow = originalOverflow;
-      document.body.style.position = originalPosition;
-      document.body.style.width = originalWidth;
-      document.body.style.height = originalHeight;
     };
   }, []);
 
@@ -266,32 +280,39 @@ export default function HomeClient() {
       onClick={handleClick}
       role="presentation"
     >
-      <Image
+      {/*
+        These three layers are plain <img>, deliberately, not next/image.
+        The slideshow drives them imperatively (layers[i].src = ...), and a
+        browser that sees a `srcset` selects from it and ignores `src` — so
+        next/image's generated srcset silently breaks the crossfade and pins
+        every layer to the first frame. next/image would also upscale these
+        (a 1367px tier offered at up to 3840w) and re-encode at q75, which
+        visibly degrades them. Responsive selection is already handled by
+        getResponsiveSize() choosing a pre-built tier.
+      */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={topLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
-        priority
+        fetchPriority="high"
         decoding="async"
       />
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={middleLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"
       />
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={bottomLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"

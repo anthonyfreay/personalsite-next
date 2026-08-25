@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef, useEffect, memo } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import Masonry from 'react-masonry-css';
 import Image from 'next/image';
 import Lightbox from 'yet-another-react-lightbox';
@@ -77,7 +77,7 @@ const MasonryImageGallery = memo(({ horizontalImages = [], verticalImages = [] }
               animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
             }}
           >
-            <LazyLoadImage src={image.src} alt={image.alt} priority={index < 2} index={index} />
+            <LazyLoadImage src={image.src} alt={image.alt} index={index} />
           </div>
         ))}
       </Masonry>
@@ -99,7 +99,17 @@ const MasonryImageGallery = memo(({ horizontalImages = [], verticalImages = [] }
   );
 });
 
-const LazyLoadImage = ({ src, alt, priority = false, index = 0 }) => {
+// The masonry grid is 4 columns on desktop, and react-masonry-css fills them
+// round-robin, so items 0-3 are the first visible row and 4-7 the second.
+// Because column heights vary, that second row routinely sits above the fold -
+// a short landscape image in column 0 pulls item 4 straight up into view. Both
+// LCP warnings seen in dev (/cars item 4, /places item 6) came from exactly
+// that. Preload the first row, eager-load the second, lazy-load the rest.
+const FIRST_ROW = 4;
+const ABOVE_FOLD = 8;
+
+const LazyLoadImage = ({ src, alt, index = 0 }) => {
+  const isFirstRow = index < FIRST_ROW;
   return (
     <Image
       src={src}
@@ -107,8 +117,8 @@ const LazyLoadImage = ({ src, alt, priority = false, index = 0 }) => {
       width={400}
       height={400}
       className="w-full h-auto"
-      loading={priority || index < 2 ? 'eager' : 'lazy'}
-      priority={priority || index < 2}
+      priority={isFirstRow}
+      loading={index < ABOVE_FOLD ? 'eager' : 'lazy'}
       sizes="(max-width: 490px) 100vw, (max-width: 900px) 50vw, (max-width: 1100px) 33vw, 25vw"
     />
   );

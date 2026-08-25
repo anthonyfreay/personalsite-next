@@ -1,0 +1,71 @@
+/*
+  Deliberately a CSS module rather than Tailwind utilities.
+
+  tailwind.config.js is not loaded under Tailwind v4 (it needs an explicit
+  `@config` directive, or migration to `@theme`), and the legacy
+  `@tailwind base/components/utilities` directives in globals.css only bring in
+  part of the default theme. The practical effect is that spacing, font-size
+  and font-weight utilities - gap-6, mt-4, px-5, font-bold - emit no CSS at all.
+  Only layout/display utilities and arbitrary values survive.
+
+  The rest of the site is unaffected because it styles through CSS modules; this
+  page follows that convention so it does not depend on the broken config.
+  See "Tailwind v4 config is not loaded" in FOLLOW-UPS.md.
+*/
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 60vh;
+  padding: 6rem 1.25rem;
+}
+
+.code {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.lead {
+  font-size: 1.25rem;
+  margin-top: 1rem;
+}
+
+.body {
+  margin-top: 0.75rem;
+  max-width: 43.75rem;
+  line-height: 1.5;
+}
+
+.primaryLinks,
+.galleryLinks {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+}
+
+.primaryLinks {
+  margin-top: 1.75rem;
+}
+
+.galleryLinks {
+  margin-top: 1rem;
+}
+
+.primaryLinks a {
+  text-decoration: underline;
+}
+
+.primaryLinks a,
+.galleryLinks a {
+  transition: color 0.2s ease;
+}
+
+.primaryLinks a:hover,
+.galleryLinks a:hover {
+  color: var(--accentColor1);
+}
