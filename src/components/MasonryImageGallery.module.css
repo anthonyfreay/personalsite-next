@@ -1,16 +1,36 @@
 /* MasonryImageGallery styles */
 
+/*
+  CSS multi-column masonry, replacing react-masonry-css.
+
+  That library measures window.innerWidth on mount, so the server always
+  rendered its `default` of 4 columns and the client re-rendered to 2 at
+  <=900px. The reflow was a hydration layout shift - measured CLS 0.082 on
+  /events (mobile), and the same on /places and /cars.
+
+  Column count is now purely a media query, so the server emits the correct
+  layout for every viewport and nothing moves after hydration. Resizing is
+  handled by the browser rather than a resize listener.
+
+  DOM order is unchanged, which matters: the lightbox indexes into the same
+  array the tiles are rendered from, so click -> slide mapping still lines up.
+  What differs is visual placement - CSS columns fill top-to-bottom within a
+  column, where react-masonry-css dealt items round-robin across columns. For
+  an unordered photo grid that is cosmetic, and column balancing is better.
+*/
 .masonryGrid {
-  display: flex;
-  width: 100vw;
+  column-count: 4;
+  column-gap: 10px;
+  width: 100%;
   max-width: 1800px;
   margin: 0 auto;
-  padding-right: 10px;
+  padding: 0 10px;
 }
 
-.masonryGridColumn {
-  padding-left: 10px;
-  background-clip: padding-box;
+@media (max-width: 900px) {
+  .masonryGrid {
+    column-count: 2;
+  }
 }
 
 @keyframes fadeIn {
@@ -25,8 +45,12 @@
 
 .animateFadeIn {
   animation: fadeIn 0.6s ease-in forwards;
-  margin: 10px 0;
+  /* Vertical rhythm between tiles; column-gap handles the horizontal. */
+  margin: 0 0 10px;
   max-width: 100%;
+  /* Without this a tile can be split across a column boundary. */
+  break-inside: avoid;
+  -webkit-column-break-inside: avoid;
 }
 
 .lightbox {
