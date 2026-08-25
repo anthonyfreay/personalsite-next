@@ -31,7 +31,10 @@ export default function WorkClient() {
                 height={400}
                 className={`${styles.categoryImage} ${styles.animateFadeInOpacity}`}
                 style={{ opacity: 0 }}
-                priority={index < 2}
+                // The grid is 3 columns on desktop, so the first three tiles
+                // are the above-the-fold row and any of them can be the LCP
+                // element. Priority sets fetchpriority=high and eager loading.
+                priority={index < 3}
                 sizes="(max-width: 470px) 200px, (max-width: 999px) 300px, 400px"
               />
               <figcaption className={styles.figcaption}>

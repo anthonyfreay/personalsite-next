@@ -1,9 +1,6 @@
 'use client';
 
 import { useEffect, useState, useRef } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import Icons from '@/components/Icons';
 import styles from './HomeClient.module.css';
 
 // tone: 'light' = bright image (navbar should use dark text)
@@ -269,32 +266,39 @@ export default function HomeClient() {
       onClick={handleClick}
       role="presentation"
     >
-      <Image
+      {/*
+        These three layers are plain <img>, deliberately, not next/image.
+        The slideshow drives them imperatively (layers[i].src = ...), and a
+        browser that sees a `srcset` selects from it and ignores `src` — so
+        next/image's generated srcset silently breaks the crossfade and pins
+        every layer to the first frame. next/image would also upscale these
+        (a 1367px tier offered at up to 3840w) and re-encode at q75, which
+        visibly degrades them. Responsive selection is already handled by
+        getResponsiveSize() choosing a pre-built tier.
+      */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={topLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
-        priority
+        fetchPriority="high"
         decoding="async"
       />
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={middleLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"
       />
-      <Image
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
         ref={bottomLayerRef}
         src={initialSrc}
         alt=""
-        fill
-        sizes="100vw"
         className={`absolute inset-0 w-full h-full object-cover ${styles.bgLayer}`}
         loading="eager"
         decoding="async"

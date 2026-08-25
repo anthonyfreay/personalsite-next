@@ -24,7 +24,26 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | P2 redirect URLs | **Resolved** — URLs supplied; 5 of 6 are correct canonicalization, no defect. `/index.html` → `/` redirect added |
 | `public/home/originals/` (350 M) | **Done** — moved to `assets/home-originals/`, excluded from deploys via `.vercelignore`. `public/` 843 M → 154 M |
 | Mobile tier path / unused `small`+`medium` | **Done** — `large` confirmed as mobile tier; `small`/`medium` deleted. `public/home/` 612 M → 12 M |
+| Hero slideshow broken by image optimization | **Fixed** — see "Regression" below |
+| `/work` LCP tile not prioritized | **Fixed** — first grid row now eager |
 | Gallery manifest refactor | **Not started** — P3, the only item left |
+
+### Regression found in dev testing (2026-08-24) — fixed
+
+Enabling Next image optimization broke the home page hero: **the slideshow stopped animating and the imagery looked far worse than production.** Both symptoms had a single root cause.
+
+The slideshow drives its three layers imperatively (`layers[i].src = getImageUrl(...)`). Once `unoptimized: true` was removed, `next/image` began emitting a `srcset` on those elements — and **when an `<img>` carries a `srcset`, the browser selects a candidate from it and ignores `src` entirely.** So:
+
+- **No animation.** Every imperative `src` swap was silently discarded; all three layers stayed pinned to the first frame.
+- **Poor resolution.** The generated srcset offered candidates up to `3840w` from a **1367px** source, so Next upscaled ~2.8× and re-encoded at q75 — visibly worse than the raw tier.
+
+**Fix:** the three slideshow layers are now plain `<img>`, not `next/image`. That is the correct primitive for imperatively-controlled elements, and `next/image` was contributing nothing here — the hero is never lazy-loaded, and responsive selection is already handled by `getResponsiveSize()` picking a pre-built tier. Verified in the built output and against a running dev server: no `srcset` on the hero, raw tier served, and Next still emits a `<link rel="preload" fetchPriority="high">` for it so LCP stays hinted. The three `no-img-element` lint warnings are suppressed per-element with the rationale inline.
+
+Galleries are unaffected and remain fully optimized (357 optimized refs on `/bw`, 141 on `/work`).
+
+**Takeaway for future work:** never wrap an imperatively-mutated image in `next/image`. If a component sets `.src` by hand, it needs a plain `<img>`.
+
+Separately, dev logging flagged `/covers/people_cover.jpg` as the LCP element on `/work` without eager loading. The grid is 3 columns on desktop, so the above-the-fold row is indices 0–2, but `priority` was set on `index < 2` — leaving the third tile, `people_cover`, lazy. Now `index < 3`.
 
 Verified: `npm run lint` clean, `npm run build` succeeds, all 11 routes prerender, every referenced image and every sitemap image still resolves, and no `full`-tier reference remains in the build output.
 
@@ -110,6 +129,8 @@ The `full` tier is never the right choice for a background element: `A7403629` (
 2. **Re-encode the tiers to sane budgets.** Target ≤250 KB for `large` and ≤120 KB for `compressed` at quality 78–82 webp. Current `compressed` (1.46 MB avg) is heavier than most sites' full-size hero.
 3. **Fix the three-layer initial mount.** Only the top layer needs a real `src` on first paint; give layers 2 and 3 an empty/placeholder source until the first transition schedules.
 4. **Reconsider `images.unoptimized: true`.** On Vercel, removing it enables automatic resizing and AVIF/WebP negotiation, and makes every existing `sizes` attribute functional. Verify the deployment plan's image-optimization quota first; if it must stay off, the manual tiers above have to carry the full burden.
+
+   > **Caveat learned in dev:** enabling this broke the hero slideshow, because `next/image`'s generated `srcset` overrides the imperative `src` swaps the slideshow relies on. The hero layers had to move to plain `<img>`. See the Regression section above.
 5. Re-measure with PageSpeed Insights / Lighthouse on `/` before and after, and record LCP.
 
 **Files:** `src/app/HomeClient.jsx`, `next.config.js`, `public/home/*`
