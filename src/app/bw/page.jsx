@@ -52,7 +52,7 @@ function BlackWhite() {
         These timeless, high-contrast images capture concerts, street scenes, and candid moments
         across New York City and beyond.
       </p>
-      <div className="max-w-full mx-auto my-2.5 flex-1">
+      <div className="w-full my-2.5 flex-1">
         <ImageGallery images={imageData} />
       </div>
     </div>
