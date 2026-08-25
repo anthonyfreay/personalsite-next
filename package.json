@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && node scripts/generate-sitemap.js",
+    "build": "next build && node scripts/generate-sitemap.mjs",
     "start": "next start",
     "lint": "eslint",
-    "generate-sitemap": "node scripts/generate-sitemap.js"
+    "generate-sitemap": "node scripts/generate-sitemap.mjs"
   },
   "dependencies": {
     "@formspree/react": "^3.0.0",
