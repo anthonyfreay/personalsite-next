@@ -49,16 +49,32 @@
 .tile {
   position: relative;
   overflow: hidden;
+  line-height: 0;
+}
+
+/*
+  Images are display:inline by default, so they sit on the text baseline and
+  leave a descender gap inside the tile. The tile was therefore a few px taller
+  than the image, and a caption pinned to bottom:0 rendered its gradient in that
+  gap - visibly past the bottom edge of the photo. Making the image a block
+  removes the gap so the tile height matches the image exactly.
+*/
+.tile img {
+  display: block;
 }
 
 .hoverCaption {
   position: absolute;
   inset-inline: 0;
   bottom: 0;
-  padding: 2.25rem 0.75rem 0.6rem;
+  padding: 2.25rem 0.75rem 0.7rem;
   color: #fff;
+  /* Match the site face; the tile sets line-height: 0 to kill the image
+     baseline gap, so both must be restored explicitly here. */
+  font-family: var(--fontFamily);
   font-size: 0.9rem;
-  line-height: 1.25;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
   text-align: center;
   background: linear-gradient(to top, rgba(9, 9, 9, 0.85), rgba(9, 9, 9, 0));
   opacity: 0;
