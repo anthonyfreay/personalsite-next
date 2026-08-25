@@ -52,7 +52,7 @@ function People() {
         This gallery features candid and environmental portraits shot across NYC landmarks,
         studios, parks, and neighborhoods — capturing genuine moments and personality.
       </p>
-      <div className="max-w-full mx-auto my-2.5 flex-1">
+      <div className="w-full my-2.5 flex-1">
         <ImageGallery images={imageData} />
       </div>
     </div>

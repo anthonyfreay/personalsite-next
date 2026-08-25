@@ -58,7 +58,7 @@ function Live() {
         and beyond. This gallery features artists including Tyler, the Creator, Daniel Caesar,
         Jack Harlow, Nicki Minaj, and many more captured in their element on stage.
       </p>
-      <div className="max-w-full mx-auto my-2.5 flex-1">
+      <div className="w-full my-2.5 flex-1">
         <ImageGallery images={imageData} captionOnHover />
       </div>
     </div>

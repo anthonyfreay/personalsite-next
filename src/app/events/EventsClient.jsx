@@ -11,7 +11,7 @@ const verticalImages = withHd(eventsVertical);
 export default function EventsClient() {
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="max-w-full mx-auto flex-1">
+      <div className="w-full flex-1">
         <MasonryImageGallery horizontalImages={horizontalImages} verticalImages={verticalImages} />
       </div>
     </div>
