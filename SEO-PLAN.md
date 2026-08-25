@@ -382,4 +382,29 @@ The site is 9 pages competing for generic, high-competition photography terms ("
    - **Mobile now receives `compressed` (2560px, ~0.35 MB), not `large`.** This reverses the earlier "keep `large` for mobile" decision. That decision assumed `large` was adequate for phones; the DPR math shows it is not — an iPhone 15 Pro needs ~2556px. This is driven by physics, not preference. `large` now serves only DPR-1 displays at ≤1367 CSS px, plus the SSR first paint, and is worth keeping for both.
    - **Very large high-DPR displays are still under-served.** A 27" 5K needs ~5120px against a 2560px maximum — a **2× upscale**. Open question 8.
 
+### Gallery layout and LCP pass (2026-08-24)
+
+Three items from dev review, all fixed.
+
+**1. Live / B&W / People now render 4 per row at native size.** The container was already `max-width: 1830px` — exactly `4 x 450 + 3 x 10px gaps` — but the layout was `flex-wrap` with `max-w-sm` (384px) per tile, so it under-filled the row it was designed for. Replaced with a grid: 4 columns on desktop, 3 at ≤1023px, 2 at ≤640px. The 1830px cap means the `1fr` tracks can never resolve above 450px, so tiles scale up to native width and stop.
+
+**2. Grid tiles now render from the 1080px `-hd` source, not the 450px base.** All 73 images in these galleries are 450×675, so a 450px tile needs 900 physical px on a retina display — more than the base file contains. Next never upscales past a source (verified: requesting `w=1920` from the 450px file returns 450px), so the browser was doing a 2× upscale instead. Pointing the grid at the `-hd` file lets Next downscale to what each device actually needs.
+
+   Payload for the 8 eager above-the-fold tiles:
+
+   | | Before | After |
+   |---|---|---|
+   | DPR 1 | ~83 KB | ~120 KB |
+   | DPR 2 | ~83 KB (upscaled, soft) | ~276 KB (sharp) |
+
+   The rest of each gallery stays lazy-loaded. This is a deliberate quality-for-bytes trade on a photography portfolio; it is the change most worth revisiting if mobile data use becomes a concern.
+
+**3. Masonry LCP warnings on `/cars` and `/places` fixed.** `react-masonry-css` fills its 4 columns round-robin, so items 0–3 are the first visible row and 4–7 the second — and because column heights vary, a short landscape image in column 0 pulls item 4 straight up above the fold. The two warned images sat at exactly those positions (`/cars` item 4, `/places` item 6) while `priority` covered only `index < 2`. Now the first row is preloaded and the second eager-loaded, with the rest lazy. Verified both warned images now render `loading="eager"`.
+
+   Same root cause as the earlier `/work` warning, where a 3-column grid had `priority={index < 2}` and left the third above-fold tile lazy.
+
+**4. `/work` captions fade in with their covers.** The fade class and an inline `opacity: 0` sat on the `<Image>` only, so each caption appeared before its cover. Moved the animation to the `<figure>` so both fade together, with `opacity: 0` in the class rather than inline, plus a small per-tile stagger. Also fixed `.categoryLink { max-width: 400 px }` — the space made it invalid CSS, silently ignored.
+
+---
+
 8. **Should a wider tier exist for large high-DPR displays?** The `compressed` tier (2560px) covers everything up to roughly a 16" laptop at 1.2× or better, but a 27" 5K sees a 2× upscale. A 3840px tier regenerated from `assets/home-originals/` would be roughly 0.8–1.2 MB per image (~26 MB total) and close that gap. The tradeoff is payload against a display class that may be rare in the actual audience — worth deciding from analytics rather than assumption. Deliberately **not** implemented pending that call.

@@ -14,14 +14,28 @@
   animation: fadeIn 0.6s ease-in forwards;
 }
 
+/*
+  Four per row on desktop, and no wider than that.
+  Source images are 450x675, so 450px is the point past which they would be
+  upscaled and start to soften. The container caps at 4*450 + 3*10 gaps =
+  1830px, which means the 1fr tracks can never resolve above native width.
+  Narrower viewports simply shrink the tracks, which is always safe.
+*/
 .gallery {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   justify-content: center;
+  align-items: start;
   gap: 10px;
   max-width: 1830px;
   margin: auto;
   padding: 0 10px;
+}
+
+@media (max-width: 1023px) {
+  .gallery {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .lightbox {
@@ -33,9 +47,8 @@
 }
 
 @media (max-width: 640px) {
-  .gallery>div {
-    width: calc(50% - 5px);
-    max-width: none;
+  .gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

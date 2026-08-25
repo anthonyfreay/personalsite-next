@@ -23,14 +23,20 @@ export default function WorkClient() {
             href={category.path}
             className={styles.categoryLink}
           >
-            <figure className={styles.figure}>
+            {/*
+              The fade lives on the figure, not the image, so the caption
+              fades in together with its cover rather than popping in first.
+            */}
+            <figure
+              className={`${styles.figure} ${styles.animateFadeInOpacity}`}
+              style={{ animationDelay: `${Math.min(index * 0.08, 0.4)}s` }}
+            >
               <Image
                 src={`/${category.image}`}
                 alt={category.alt}
                 width={400}
                 height={400}
-                className={`${styles.categoryImage} ${styles.animateFadeInOpacity}`}
-                style={{ opacity: 0 }}
+                className={styles.categoryImage}
                 // The grid is 3 columns on desktop, so the first three tiles
                 // are the above-the-fold row and any of them can be the LCP
                 // element. Priority sets fetchpriority=high and eager loading.

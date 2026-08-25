@@ -26,25 +26,33 @@ const ImageGallery = memo(({ images }) => {
 
   return (
     <div>
-      <div className={`${styles.gallery} flex flex-wrap justify-center`}>
+      <div className={styles.gallery}>
         {images.map((image, index) => (
           <div
             key={image.src}
-            className={`${styles.animateFadeIn} max-w-sm opacity-0 cursor-pointer`}
+            className={`${styles.animateFadeIn} opacity-0 cursor-pointer`}
             onClick={() => openLightbox(index)}
             style={{
               animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
             }}
           >
             <Image
-              src={image.src}
+              // Grid tiles render from the 1080px -hd source, not the 450px
+              // base. A tile is up to 450 CSS px wide, which a retina display
+              // needs 900 physical px to fill - more than the base image has,
+              // so it would be upscaled and soft. Next never upscales past the
+              // source, so it downscales the -hd file to whatever each device
+              // actually needs and the tiles stay sharp at every DPR.
+              src={image.hdSrc}
               alt={image.alt}
-              width={450}
-              height={300}
+              width={1080}
+              height={1620}
               className="w-full h-auto"
-              loading={index < 6 ? 'eager' : 'lazy'}
-              priority={index < 1}
-              sizes="(max-width: 470px) 100vw, (max-width: 999px) 50vw, 33vw"
+              // The grid is 4 columns on desktop, so the first four tiles are
+              // the above-the-fold row and any of them can be the LCP element.
+              priority={index < 4}
+              loading={index < 8 ? 'eager' : 'lazy'}
+              sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"
             />
           </div>
         ))}
