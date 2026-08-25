@@ -26,7 +26,20 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | Mobile tier path / unused `small`+`medium` | **Done** — `large` confirmed as mobile tier; `small`/`medium` deleted. `public/home/` 612 M → 12 M |
 | Hero slideshow broken by image optimization | **Fixed** — see "Regression" below |
 | `/work` LCP tile not prioritized | **Fixed** — first grid row now eager |
-| Gallery manifest refactor | **Not started** — P3, the only item left |
+| Dependency update | **Done** — all current except ESLint (see below); 0 vulnerabilities |
+| Gallery manifest refactor | **Not started** — P3 |
+
+### Dependency update (2026-08-24)
+
+All packages current except one deliberate hold. `npm audit`: **0 vulnerabilities**.
+
+- **Removed `framer-motion` and `next-seo`** — neither was imported anywhere in `src/`. Removing beat updating them (`framer-motion` had a major waiting).
+- **`next` 16.2.1 → 16.3.2**, plus `@next/third-parties`, `eslint-config-next`, `tailwindcss`, `@tailwindcss/postcss`, `react-icons`, `yet-another-react-lightbox` to latest in-range.
+- **`react` / `react-dom` 19.2.3 → 19.2.8.** These are pinned exactly (no caret), so `npm update` skipped them; bumped explicitly, keeping the exact-pin convention.
+- **`lucide-react` 0.563.0 → 1.34.0** (major). Only `Menu` and `X` are used, in `Navbar.jsx`; both still export and render — verified `lucide lucide-menu` SVG in built output.
+- **`eslint` held at 9.39.5.** ESLint 10 installs but **breaks linting**: `TypeError: scopeManager.addGlobals is not a function`, from a version conflict in the toolchain `eslint-config-next` pulls (npm reports ERESOLVE peer overrides). `eslint-config-next` declares `eslint >=9.0.0`, so the range permits 10, but it does not actually work. Rolled back. **Revisit when `eslint-config-next` ships explicit ESLint 10 support.**
+
+**Side effect:** the `[DEP0205] module.register() is deprecated` warning seen in dev is **gone**. It originated inside Next.js, not this codebase, and the 16.3.2 update resolved it.
 
 ### Regression found in dev testing (2026-08-24) — fixed
 
