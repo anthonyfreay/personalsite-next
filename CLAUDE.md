@@ -21,11 +21,11 @@ Next.js 16 App Router site, all JS/JSX (no TypeScript). Path alias `@/*` maps to
 Most gallery routes follow one of two patterns:
 
 1. **Server page only** (`src/app/bw/page.jsx`, `people`, `live`): the `page.jsx` itself defines `metadata`, JSON-LD structured data, and the `imageData` array, and renders `<ImageGallery images={imageData} />` directly (client component, but page stays server-rendered around it).
-2. **Server page + separate Client component** (`src/app/cars/page.jsx` + `CarsClient.jsx`, same for `events`, `places`): `page.jsx` holds `metadata`/JSON-LD (needs server-side export), and delegates image arrays + the masonry gallery render to a `'use client'` file. This split exists because `MasonryImageGallery` needs client-side `Masonry` layout logic and can't co-locate cleanly with server `metadata` exports in one file — use this pattern when a route needs `MasonryImageGallery`.
+2. **Server page + separate Client component** (`src/app/cars/page.jsx` + `CarsClient.jsx`, same for `events`, `places`): `page.jsx` holds `metadata`/JSON-LD (needs server-side export), and delegates image arrays + the masonry gallery render to a `'use client'` file. This split exists because `MasonryImageGallery` is a `'use client'` component (it owns lightbox state) and can't co-locate cleanly with server `metadata` exports in one file — use this pattern when a route needs `MasonryImageGallery`.
 
 Two gallery components in `src/components`:
 - `ImageGallery.jsx` - flex-wrap grid, used for simpler galleries (bw, live, people).
-- `MasonryImageGallery.jsx` - takes separate `horizontalImages`/`verticalImages` arrays and interleaves them proportionally into a masonry layout (via `react-masonry-css`), used for cars/events/places.
+- `MasonryImageGallery.jsx` - takes separate `horizontalImages`/`verticalImages` arrays and interleaves them proportionally into a masonry layout, used for cars/events/places. The masonry is **CSS multi-column** (`column-count` in `MasonryImageGallery.module.css`), not a JS library: column count must stay a media query so the server renders the right layout. It previously used `react-masonry-css`, which read `window.innerWidth` on mount and caused a 0.082 CLS hydration shift.
 
 Both open images in a shared `yet-another-react-lightbox` instance on click.
 
@@ -57,6 +57,13 @@ Global `<head>` metadata, Vercel Analytics/Speed Insights, and Google Analytics 
 ### Styling
 
 Tailwind CSS 4 (via `@tailwindcss/postcss`) for layout/utility classes, plus CSS Modules (`*.module.css`) per-component for animations and custom styles (e.g. `ImageGallery.module.css` fade-in keyframes, `Navbar.module.css`).
+
+Two rules that are easy to get wrong here:
+
+- **Theme values live in `@theme` in `src/app/globals.css`.** There is no `tailwind.config.js` — v4 does not auto-load one, and the old config sat dead for a long time with every class it defined (`bg-brand-light`, `text-accent-1`, …) emitting no CSS.
+- **Any global CSS must go inside `@layer base`.** v4 emits utilities into `@layer utilities`, and an *unlayered* rule beats a layered one regardless of specificity. An unlayered `* { margin: 0 }` silently overrides every margin utility on the site. `globals.css` already wraps its resets accordingly.
+
+Most layout is done in CSS Modules rather than utilities; when in doubt, follow the surrounding component.
 
 <!-- BEGIN:nextjs-agent-rules -->
 

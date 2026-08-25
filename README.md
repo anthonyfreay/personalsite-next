@@ -8,9 +8,8 @@ The site showcases photography work across multiple galleries (live, black & whi
 
 - `next` 16 (App Router)
 - `react` 19
-- Tailwind CSS 4 + CSS modules
+- Tailwind CSS 4 (v4 entrypoint: `@import "tailwindcss"` + `@theme` in `src/app/globals.css`; there is no `tailwind.config.js`) + CSS modules
 - `yet-another-react-lightbox` for gallery fullscreen views
-- `react-masonry-css` for masonry layouts
 - `@formspree/react` for contact form submissions
 - `@vercel/analytics` + `@vercel/speed-insights`
 - `@next/third-parties` for Google Analytics
