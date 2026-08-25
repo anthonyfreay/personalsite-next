@@ -30,6 +30,8 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | Gallery manifest refactor | **Done** — one manifest per gallery in `src/lib/galleries/`; verified lossless |
 | Entity / structured-data consolidation | **Done** — see below |
 | Off-page work | **Handed off** — in-repo entity support done; the rest is `OFF-PAGE-SEO.md` |
+| Tailwind v4 config migration | **Done, deployed 2026-08-24** — see `FOLLOW-UPS.md` item 1 |
+| Masonry hydration CLS | **Done, deployed 2026-08-25** — CLS 0.082 → 0 on `/events`, `/places`, `/cars` |
 
 ### Entity consolidation for off-page SEO (2026-08-24)
 
@@ -434,6 +436,17 @@ Re-run against a production build, before → after the fixes below:
 | `/events` | 62 → **69** | 16.7s → **6.1s** | 0 | 310 → **120ms** | 100 |
 
 **SEO 100 on every page**, confirming the structured-data and metadata work landed.
+
+**After `font-display: swap` was applied in the Adobe Fonts dashboard (2026-08-24)** — the change this plan identified as the biggest remaining win, and the one that could not be made from this repo:
+
+| Route | Perf | LCP | FCP |
+|---|---|---|---|
+| `/` | 73 → **77** | 5.3s → **4.6s** | 3.2s |
+| `/work` | 67 → **93** | 5.7s → **2.9s** | 3.4s → **2.2s** |
+| `/live` | 67 → **85** | 5.9s → **4.1s** | 3.5s → **2.2s** |
+| `/events` | 69 → **75** | 6.1s → **5.7s** | 3.4s → **2.1s** |
+
+FCP dropped ~1.3s across the board, confirming the diagnosis that the webfont — not imagery — was gating first paint. The `/events` CLS regression visible in that run (0 → 0.082) was the masonry hydration shift, since fixed and deployed.
 
 **Fixed: CLS 0.41 on `/`.** `HomeClient.jsx` applied `body { position: fixed; width/height: 100% }` from a `useEffect`, i.e. after hydration — taking `<body>` out of normal flow post-paint. That single line was the worst layout shift on the site. The scroll lock now ships as a server-rendered `<style>` in `page.jsx`, so it applies before first paint and costs nothing; React removes it on navigation away, so no cleanup code is needed. `overflow: hidden` was already redundant with the `html.home-dark` rule. **Verified 0.41 → 0.**
 

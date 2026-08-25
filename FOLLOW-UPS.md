@@ -2,11 +2,11 @@
 
 Deferred work. Each item is scoped to be a separate branch/PR. Ordered by value.
 
-**Shipped since this file was written:** the Tailwind v4 migration (item 1, merged to `main`) and the masonry hydration fix (item 7, branch `fix/masonry-hydration-cls`). Adobe Fonts `font-display: swap` (item 2) was applied in the Adobe dashboard and is live.
+**Status as of 2026-08-25.** Items 1, 2 and 7 are **done and deployed to production**. Items 3-6 remain: 3 is a standing practice, 4 and 5 are not code, 6 is small deferred work.
 
 ---
 
-## 1. ~~Tailwind v4 config is not loaded~~ — DONE (branch `chore/tailwind-v4-config`)
+## 1. ~~Tailwind v4 config is not loaded~~ — DONE, deployed 2026-08-24
 
 Migrated to the v4 entrypoint: `@import "tailwindcss"` plus an `@theme` block, and `tailwind.config.js` deleted. All previously-dead utilities now emit and apply.
 
@@ -41,7 +41,7 @@ Setting the project's `font-display` to **swap** should pull LCP well below the 
 
 ---
 
-## 3. Lighthouse methodology — always measure production
+## 3. Lighthouse methodology — standing practice, not a task
 
 Dev-mode numbers are not usable. Measured on this project:
 
@@ -66,7 +66,7 @@ See **`OFF-PAGE-SEO.md`** for the full prioritised checklist. Summary of what is
 
 ---
 
-## 5. GSC follow-up (~2 weeks after deploy)
+## 5. GSC follow-up — check from ~2026-09-08
 
 - Coverage should show more than the current 4 indexed pages.
 - **"Page with redirect" will stay at 6 and keep failing validation. This is correct.** Those are the site's own apex→www and http→https canonicalisation redirects plus `/resume`. Re-checking is informational only; see `SEO-PLAN.md` §P2.
@@ -85,7 +85,7 @@ See **`OFF-PAGE-SEO.md`** for the full prioritised checklist. Summary of what is
 
 ---
 
-## 7. ~~Masonry hydration layout shift~~ — DONE (branch `fix/masonry-hydration-cls`)
+## 7. ~~Masonry hydration layout shift~~ — DONE, deployed 2026-08-25
 
 `react-masonry-css` picked its column count from `window.innerWidth` on mount, which the server cannot know. SSR emitted 4 columns at every width while the client re-rendered to 2 below 900px; that reflow was worth **0.082 CLS** on `/events`, `/places` and `/cars`.
 
