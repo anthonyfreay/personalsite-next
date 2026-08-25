@@ -352,8 +352,34 @@ The site is 9 pages competing for generic, high-competition photography terms ("
 
 5. ~~**`public/home/originals/` — 350 MB of source JPEGs, publicly deployed.**~~ **Resolved 2026-08-24.** Confirmed to be the full-size masters for the hero slideshow. Moved to `assets/home-originals/` — still version-controlled, no longer inside `public/`, so no longer deployed or publicly downloadable. Added `.vercelignore` excluding `assets/` so the 350 MB is not uploaded on every Vercel build, and `assets/README.md` documenting the tier ladder and the `cwebp` commands to regenerate the served tiers. `public/` is now **154 MB**, down from 843 MB. No runtime performance cost — nothing referenced the path.
 
-6. ~~**Unused `small` (668px) and `medium` (825px) hero tiers.**~~ **Resolved 2026-08-24.** `large` (1367px) is confirmed as the mobile tier and the two narrower tiers were deleted (52 files, ~7.2 MB).
+6. ~~**Unused `small` (668px) and `medium` (825px) hero tiers.**~~ **Deleted 2026-08-24** (52 files, ~7.2 MB). Deleting them was correct — after the P0 re-encode, `large` was **both higher resolution and smaller on disk** than `medium` (0.12 MB at 1367px vs 0.17 MB at 825px), so a narrower tier would have cost bytes *and* lost resolution.
 
-   The reasoning is worth keeping, because it inverts the usual instinct to add a narrower tier for phones. After the P0 re-encode, `large` is **both higher resolution and smaller on disk** than `medium` was — 0.12 MB at 1367px vs 0.17 MB at 825px — so switching phones to `medium` would have cost bytes *and* lost resolution. Device pixel ratio points the same way: a 400px-wide phone at DPR 3 wants roughly 1200px, which `large` supplies and `medium` does not. The dead branch in `getResponsiveSize()` (`width > 842` and the fallback both returning `'large'`) was already removed as part of the P0 rewrite, so mobile behavior is unchanged — the tier it was always effectively using is now the tier it explicitly uses.
+   **But the accompanying conclusion — "`large` is the mobile tier" — was wrong, and has been superseded.** See item 7.
 
    `public/home/` is now **12 MB** across two tiers, down from 612 MB.
+
+7. **`getResponsiveSize()` ignored `devicePixelRatio` — fixed 2026-08-24.**
+
+   Reported from dev: the hero still looked poor on a 14" MacBook Pro at 852 × 881. The threshold was `window.innerWidth > 1368`, comparing **CSS pixels against a physical-pixel tier**. At `innerWidth` 852 the check failed and the device was served `large` permanently — despite being DPR 2 and therefore needing ~1704 physical px. `object-cover` on a viewport taller than the image aspect makes it worse, since height drives the scale: covering 1762 physical px from a 911px-tall image is a **1.93× upscale**.
+
+   The fix selects by physical pixels, accounting for both DPR (capped at 2) and the `object-cover` height constraint. On the reported display the upscale drops **1.93× → 1.03×**.
+
+   Resulting tier selection:
+
+   | Device | CSS | DPR | Width needed | Tier |
+   |---|---|---|---|---|
+   | 14" MBP (reported) | 852×881 | 2 | 2643 | `compressed` |
+   | 14" MBP full-screen | 1512×916 | 2 | 3024 | `compressed` |
+   | 16" MBP | 1728×1000 | 2 | 3456 | `compressed` |
+   | iPhone 15 Pro | 393×852 | 3 | 2556 | `compressed` |
+   | iPad Air portrait | 820×1180 | 2 | 3540 | `compressed` |
+   | 1080p external | 1920×1080 | 1 | 1920 | `compressed` |
+   | 27" 5K | 2560×1440 | 2 | 5120 | `compressed` |
+   | non-retina 1366×768 | 1366×768 | 1 | 1366 | `large` |
+
+   **Two consequences worth noting:**
+
+   - **Mobile now receives `compressed` (2560px, ~0.35 MB), not `large`.** This reverses the earlier "keep `large` for mobile" decision. That decision assumed `large` was adequate for phones; the DPR math shows it is not — an iPhone 15 Pro needs ~2556px. This is driven by physics, not preference. `large` now serves only DPR-1 displays at ≤1367 CSS px, plus the SSR first paint, and is worth keeping for both.
+   - **Very large high-DPR displays are still under-served.** A 27" 5K needs ~5120px against a 2560px maximum — a **2× upscale**. Open question 8.
+
+8. **Should a wider tier exist for large high-DPR displays?** The `compressed` tier (2560px) covers everything up to roughly a 16" laptop at 1.2× or better, but a 27" 5K sees a 2× upscale. A 3840px tier regenerated from `assets/home-originals/` would be roughly 0.8–1.2 MB per image (~26 MB total) and close that gap. The tradeoff is payload against a display class that may be rare in the actual audience — worth deciding from analytics rather than assumption. Deliberately **not** implemented pending that call.

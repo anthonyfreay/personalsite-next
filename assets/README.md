@@ -16,18 +16,29 @@ The tiers actually served from `public/home/` are generated from these:
 
 | Tier | Width | Typical size | Used when |
 |---|---|---|---|
-| `large` | 1367px | ~0.12MB | viewport <= 1368px (incl. mobile), and first paint |
-| `compressed` | 2560px | ~0.35MB | viewport > 1368px |
+| `large` | 1367px | ~0.12MB | DPR-1 displays <= 1367 CSS px, and SSR first paint |
+| `compressed` | 2560px | ~0.35MB | everything else (all retina devices, incl. phones) |
 
 Tier selection lives in `getResponsiveSize()` in `src/app/HomeClient.jsx`.
 
-Two narrower tiers, `small` (668px) and `medium` (825px), were also generated
-but never referenced by any code path, and were deleted. Note that after
-re-encoding, `large` is both **higher resolution and smaller on disk** than
-`medium` was (0.12MB vs 0.17MB), so there is no payload argument for a
-narrower mobile tier — and at DPR 2-3 a phone wants roughly 1200px anyway.
-`large` is the correct mobile tier; do not reintroduce narrower ones without
-measuring first.
+**It selects on physical pixels, not CSS pixels** — `window.innerWidth * dpr`,
+and because the hero is `object-cover`, `innerHeight * aspect` when the
+viewport is taller than the image. Comparing CSS px against a physical-px tier
+is the bug this replaced: a 14" MacBook Pro reports `innerWidth` 852 but is
+DPR 2, so it needs ~1704px and was being handed a 1367px image upscaled 1.93x.
+
+Consequence: nearly every modern device gets `compressed`. `large` survives for
+low-DPR displays and as a fast first paint, both of which are worth keeping.
+
+Two narrower tiers, `small` (668px) and `medium` (825px), were generated but
+never referenced by any code path, and were deleted. After re-encoding, `large`
+is both higher resolution and smaller on disk than `medium` was (0.12MB vs
+0.17MB), so there is no payload argument for a narrower tier. Do not
+reintroduce one without measuring.
+
+A 27" 5K display needs ~5120px and still gets a 2x upscale from `compressed`.
+Adding a 3840px tier (~0.8-1.2MB each) would close that gap; not done, since it
+trades payload against a possibly-rare display class.
 
 ### Regenerating the served tiers
 

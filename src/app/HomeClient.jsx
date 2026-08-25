@@ -31,12 +31,32 @@ const getImageUrl = (imageId, size) => {
   return `/home/${size}-wallpaper-${imageId}-20260213.webp`;
 };
 
-// Tier widths: large = 1367px, compressed = 2560px.
-// Nothing wider is served: the retired 'full' tier was 5400-6900px (up to 16MB),
-// which is far beyond any display and wrecked LCP on the home page.
+// Pixel width of the 'large' tier. Above this we need the 2560px 'compressed'
+// tier. (The retired 'full' tier was 5400-6900px / up to 16MB per image, which
+// no display needs for a background and which wrecked LCP.)
+const LARGE_TIER_WIDTH = 1367;
+
+// The hero tiers are ~3:2 landscape.
+const HERO_ASPECT_RATIO = 1.5;
+
+// Pick a tier by the PHYSICAL pixels the hero must fill, not CSS pixels.
+//
+// Two things make the naive `innerWidth > 1368` check wrong:
+//   1. devicePixelRatio - a 14" MacBook Pro reports innerWidth 852 but is DPR 2,
+//      so it needs ~1704px, not 852. Comparing CSS px against a physical-px tier
+//      hands retina laptops an upscaled, soft image.
+//   2. object-cover - when the viewport is taller than the image aspect, height
+//      drives the scale, so the width we need is innerHeight * aspect.
+//
+// DPR is capped at 2: beyond that the file size cost outruns the visible gain.
 const getResponsiveSize = () => {
   if (typeof window === 'undefined') return 'large';
-  return window.innerWidth > 1368 ? 'compressed' : 'large';
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const cssWidthNeeded = Math.max(
+    window.innerWidth,
+    window.innerHeight * HERO_ASPECT_RATIO
+  );
+  return cssWidthNeeded * dpr > LARGE_TIER_WIDTH ? 'compressed' : 'large';
 };
 
 const isMobile = (width) => width <= 842;
