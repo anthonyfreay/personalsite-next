@@ -38,12 +38,56 @@
   }
 }
 
+/*
+  Hover caption (opt-in via the captionOnHover prop).
+
+  The tile is the positioning context; the caption is absolutely positioned so
+  revealing it costs no layout and cannot cause CLS. Gated behind
+  `hover: hover` so touch devices - where :hover latches after a tap and would
+  fight the lightbox - never see it.
+*/
+.tile {
+  position: relative;
+  overflow: hidden;
+}
+
+.hoverCaption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  padding: 2.25rem 0.75rem 0.6rem;
+  color: #fff;
+  font-size: 0.9rem;
+  line-height: 1.25;
+  text-align: center;
+  background: linear-gradient(to top, rgba(9, 9, 9, 0.85), rgba(9, 9, 9, 0));
+  opacity: 0;
+  transform: translateY(0.4rem);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .tile:hover .hoverCaption,
+  .tile:focus-visible .hoverCaption {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hoverCaption {
+    transition: none;
+    transform: none;
+  }
+}
+
 .lightbox {
   --yarl__color_backdrop: rgba(14, 14, 14, 0.5);
 }
 
 .lightbox :global(img) {
-  border: 50px solid white !important;
+  border: 18px solid white !important;
 }
 
 @media (max-width: 640px) {
@@ -54,6 +98,6 @@
 
 @media (max-width: 470px) {
   .lightbox :global(img) {
-    border: 30px solid white !important;
+    border: 10px solid white !important;
   }
 }

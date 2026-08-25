@@ -59,7 +59,7 @@ function Live() {
         Jack Harlow, Nicki Minaj, and many more captured in their element on stage.
       </p>
       <div className="max-w-full mx-auto my-2.5 flex-1">
-        <ImageGallery images={imageData} />
+        <ImageGallery images={imageData} captionOnHover />
       </div>
     </div>
   );

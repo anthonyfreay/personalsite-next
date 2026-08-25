@@ -34,6 +34,21 @@ export default function Home() {
 
   return (
     <>
+      {/*
+        Server-rendered so the dark ground and scroll lock are in effect on the
+        very first paint. Doing this from a useEffect (as it was) applied
+        `position: fixed` to <body> after hydration and shifted the whole page:
+        CLS 0.41 on this route. React removes this <style> on navigation away,
+        so the lock is scoped to the home page without any cleanup code.
+      */}
+      <style>{`
+        html, body {
+          background-color: #090909;
+          overflow: hidden;
+          overscroll-behavior: none;
+          height: 100%;
+        }
+      `}</style>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

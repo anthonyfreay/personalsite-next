@@ -6,7 +6,13 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import styles from './ImageGallery.module.css';
 
-const ImageGallery = memo(({ images }) => {
+/**
+ * @param images        manifest entries, already run through withHd()
+ * @param captionOnHover  reveal each image's alt text on hover. Opt-in, because
+ *   it only makes sense where the alt names a subject (e.g. /live names the
+ *   artist). Hover-capable pointers only - see the media query in the CSS.
+ */
+const ImageGallery = memo(({ images, captionOnHover = false }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -30,7 +36,7 @@ const ImageGallery = memo(({ images }) => {
         {images.map((image, index) => (
           <div
             key={image.src}
-            className={`${styles.animateFadeIn} opacity-0 cursor-pointer`}
+            className={`${styles.animateFadeIn} ${styles.tile} opacity-0 cursor-pointer`}
             onClick={() => openLightbox(index)}
             style={{
               animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
@@ -54,6 +60,13 @@ const ImageGallery = memo(({ images }) => {
               loading={index < 8 ? 'eager' : 'lazy'}
               sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"
             />
+            {captionOnHover && (
+              // aria-hidden: this duplicates the image's alt text, which screen
+              // readers already announce. Purely a visual affordance.
+              <span className={styles.hoverCaption} aria-hidden="true">
+                {image.alt}
+              </span>
+            )}
           </div>
         ))}
       </div>

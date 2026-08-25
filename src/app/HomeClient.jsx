@@ -85,7 +85,15 @@ export default function HomeClient() {
   const navRef = useRef(null);
   const fadingRef = useRef(false);
 
-  // Home page setup: dark theme, scroll lock
+  // Home page setup: dark theme class + theme-color.
+  //
+  // The scroll lock itself is NOT applied here. It used to set
+  // body { position: fixed; width/height: 100% } from this effect, which runs
+  // after hydration - taking <body> out of normal flow post-paint and causing a
+  // 0.41 layout shift, by far the worst CLS on the site. It now ships as a
+  // server-rendered <style> in page.jsx, so it applies before first paint and
+  // costs nothing. `overflow: hidden` was already redundant with the
+  // `html.home-dark` rule in globals.css.
   useEffect(() => {
     const root = document?.documentElement;
     if (!root) return undefined;
@@ -97,25 +105,11 @@ export default function HomeClient() {
       metaThemeColor.setAttribute('content', '#090909');
     }
 
-    const originalOverflow = document.body.style.overflow;
-    const originalPosition = document.body.style.position;
-    const originalWidth = document.body.style.width;
-    const originalHeight = document.body.style.height;
-
-    document.body.style.overflow = 'hidden';
-    document.body.style.position = 'fixed';
-    document.body.style.width = '100%';
-    document.body.style.height = '100%';
-
     return () => {
       root.classList.remove('home-dark');
       if (metaThemeColor) {
         metaThemeColor.setAttribute('content', '#F5F5F5');
       }
-      document.body.style.overflow = originalOverflow;
-      document.body.style.position = originalPosition;
-      document.body.style.width = originalWidth;
-      document.body.style.height = originalHeight;
     };
   }, []);
 

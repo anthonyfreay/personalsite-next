@@ -34,7 +34,7 @@
 }
 
 .lightbox :global(img) {
-  border: 30px solid white !important;
+  border: 14px solid white !important;
 }
 
 .lazyPlaceholder {

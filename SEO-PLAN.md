@@ -414,6 +414,39 @@ The site is 9 pages competing for generic, high-competition photography terms ("
    - **Mobile now receives `compressed` (2560px, ~0.35 MB), not `large`.** This reverses the earlier "keep `large` for mobile" decision. That decision assumed `large` was adequate for phones; the DPR math shows it is not — an iPhone 15 Pro needs ~2556px. This is driven by physics, not preference. `large` now serves only DPR-1 displays at ≤1367 CSS px, plus the SSR first paint, and is worth keeping for both.
    - **Very large high-DPR displays are still under-served.** A 27" 5K needs ~5120px against a 2560px maximum — a **2× upscale**. Open question 8.
 
+### Lighthouse pass (2026-08-24, mobile)
+
+**First, a methodology correction.** The initial reports were run against `npm run dev`. Dev-mode numbers are not usable for performance: they measure unminified sources plus the HMR client. Measured difference on this site:
+
+| | dev | production |
+|---|---|---|
+| JS payload | ~1,456 KB / 22 files | **183–203 KB gzipped / 9–11 files** |
+
+The "Minify JavaScript (~490 KiB)" and "Reduce unused JavaScript (~1,150 KiB)" opportunities were pure dev artifacts, as was `/events` loading all 58 images (Lighthouse's full-page-screenshot gatherer scrolls, triggering lazy loads). **Always measure with `npm run build && npm run start`.**
+
+Re-run against a production build, before → after the fixes below:
+
+| Route | Perf | LCP | CLS | TBT | SEO |
+|---|---|---|---|---|---|
+| `/` | 50 → **73** | 6.2s → **5.3s** | **0.41 → 0** | 290 → **80ms** | 100 |
+| `/work` | 67 → **67** | 9.1s → **5.7s** | 0.004 → **0** | 280 → **90ms** | 100 |
+| `/live` | 68 → **67** | 6.9s → **5.9s** | 0 | 290 → **60ms** | 100 |
+| `/events` | 62 → **69** | 16.7s → **6.1s** | 0 | 310 → **120ms** | 100 |
+
+**SEO 100 on every page**, confirming the structured-data and metadata work landed.
+
+**Fixed: CLS 0.41 on `/`.** `HomeClient.jsx` applied `body { position: fixed; width/height: 100% }` from a `useEffect`, i.e. after hydration — taking `<body>` out of normal flow post-paint. That single line was the worst layout shift on the site. The scroll lock now ships as a server-rendered `<style>` in `page.jsx`, so it applies before first paint and costs nothing; React removes it on navigation away, so no cleanup code is needed. `overflow: hidden` was already redundant with the `html.home-dark` rule. **Verified 0.41 → 0.**
+
+**Not a real issue: Best Practices 96.** Caused by two 404s for `/_vercel/insights/script.js` and `/_vercel/speed-insights/script.js`. Those are injected by Vercel and only exist on a deployment; locally they 404. This scores 100 in real production.
+
+**The dominant remaining bottleneck is the webfont, and it is not fixable from this repo.** On all four routes the LCP element is the navbar wordmark — a *text* node, not an image — with FCP at 3.2–3.5s. Adobe Fonts serves all six faces with `font-display: auto`, so the browser hides text for ~3s while the font loads. That ~3s is the FCP.
+
+- Done here: `preconnect` to `use.typekit.net`, `p.typekit.net` (with `crossOrigin`, required since font files are CORS requests) and `www.google-analytics.com` — worth ~340ms.
+- **Open, requires the Adobe Fonts dashboard:** set the web project's `font-display` to **swap**. `font-display` is an `@font-face` descriptor and cannot be overridden from site CSS; `?display=swap` on the stylesheet URL is ignored by Typekit (verified by fetching it both ways). This is the single highest-impact remaining performance change and should pull LCP well below the current ~5s.
+- Alternative if the dashboard route is unavailable: load the Typekit stylesheet asynchronously so first paint uses the fallback font. Not done — it trades a flash of fallback text and possible reintroduced CLS for the LCP win, and CLS is currently 0.
+
+**Known false positive: "Properly size images" (125 KiB) on `/`.** It flags the 2560px hero as oversized for a 412px viewport. It is judging by width alone; because the hero is full-bleed `object-cover` on a tall phone viewport, the *height* is binding — a 2560×1707 image covering 412×823 CSS at DPR 2.625 is actually upscaled ~1.27×. The height-aware selection in `getResponsiveSize()` is more correct than the audit here. A genuinely portrait-cropped mobile hero (art direction via `<picture>`) would beat both, and is the real optimization if this is ever revisited.
+
 ### Gallery layout and LCP pass (2026-08-24)
 
 Three items from dev review, all fixed.
