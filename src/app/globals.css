@@ -1,39 +1,109 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/*
+  Tailwind v4 entrypoint.
 
-:root {
-  --mainColorLight: #F5F5F5;
-  --mainColorDark: #090909;
-  --textColor: #0e0e0e;
-  --accentColor1: #54c6eb;
-  --accentColor2: #2ecc71;
-  --accentColor3: #e87461;
-  --fontFamily: helvetica-neue-lt-pro, Arial, sans-serif;
+  This replaced the v3-style `@tailwind base/components/utilities` directives.
+  Those still emitted core utilities under v4, but only part of the default
+  theme came through: numeric spacing (gap-6, mt-4, px-5), font-weight, and
+  every class defined in tailwind.config.js silently emitted no CSS at all,
+  because v4 does not auto-load that file. See FOLLOW-UPS.md item 1.
+
+  Theme values live in @theme below; tailwind.config.js is gone.
+*/
+@import "tailwindcss";
+
+/*
+  The design tokens Tailwind generates utilities from.
+
+  Only what the codebase actually uses is defined here - the old config also
+  carried spacing/sizing/fontSize scales (text-64px, w-160px, p-25, ...) that
+  no JSX referenced. v4's default spacing scale already covers `my-2.5`
+  (2.5 x 0.25rem = 0.625rem), the single spacing utility in use, so no custom
+  spacing is needed.
+
+  Keep these in sync with the :root custom properties below. Both exist on
+  purpose: @theme feeds Tailwind's utility generation, :root feeds the CSS
+  modules, which reference var(--accentColor1) and friends directly.
+*/
+@theme {
+  --color-brand-light: #F5F5F5;
+  --color-brand-dark: #090909;
+  --color-brand-text: #0e0e0e;
+  --color-accent-1: #54c6eb;
+  --color-accent-2: #2ecc71;
+  --color-accent-3: #e87461;
+
+  --font-sans: helvetica-neue-lt-pro, Arial, sans-serif;
 }
 
-html,
-body {
-  background-color: var(--mainColorLight);
-  font-family: var(--fontFamily);
-  margin: 0;
-  padding: 0;
-}
+/*
+  Everything below MUST stay inside @layer base.
 
-html.home-dark,
-html.home-dark body {
-  background-color: var(--mainColorDark) !important;
-  overflow: hidden !important;
-  overscroll-behavior: none;
-}
+  v4 emits utilities into `@layer utilities`, and in the CSS cascade an
+  unlayered rule beats a layered one no matter how low its specificity. Left
+  unlayered, `* { margin: 0; padding: 0 }` silently overrides every margin and
+  padding utility, and `a { color: inherit }` overrides every text-colour
+  utility on links. Verified during this migration: my-2.5, px-5 and
+  hover:text-accent-1 all computed to the reset value despite their CSS being
+  emitted correctly.
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+  Putting these in `base` restores the intended order - preflight and resets
+  first, utilities on top.
+*/
+@layer base {
+  :root {
+    --mainColorLight: #F5F5F5;
+    --mainColorDark: #090909;
+    --textColor: #0e0e0e;
+    --accentColor1: #54c6eb;
+    --accentColor2: #2ecc71;
+    --accentColor3: #e87461;
+    --fontFamily: helvetica-neue-lt-pro, Arial, sans-serif;
+  }
 
-a {
-  text-decoration: none;
-  color: inherit;
+  html,
+  body {
+    background-color: var(--mainColorLight);
+    font-family: var(--fontFamily);
+    margin: 0;
+    padding: 0;
+
+    /*
+      Deliberately holds the pre-migration vertical rhythm.
+
+      `@import "tailwindcss"` pulls in v4's full preflight, which sets
+      `line-height: 1.5` on <html>. The old `@tailwind base` directive never
+      applied that under v4, so the site has always rendered at the font's
+      natural `normal` (~1.2). Adopting 1.5 grew the navbar 65px -> 73.2px and
+      pushed every page down ~8px - a visual redesign, which is not what this
+      migration was for.
+
+      Deleting this line adopts Tailwind's default typography. That may well be
+      an improvement, but it should be a deliberate design decision reviewed on
+      its own. Components needing a specific line-height already set it in
+      their own CSS module.
+    */
+    line-height: normal;
+  }
+
+  /*
+    The `!important` here still wins from inside a layer: important
+    declarations invert layer precedence, so base beats utilities for these.
+  */
+  html.home-dark,
+  html.home-dark body {
+    background-color: var(--mainColorDark) !important;
+    overflow: hidden !important;
+    overscroll-behavior: none;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
 }

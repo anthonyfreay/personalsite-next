@@ -4,47 +4,20 @@ Deferred work from the `seo/coverage-fixes` branch (merged 2026-08-24). Each ite
 
 ---
 
-## 1. Tailwind v4 config is not loaded — spacing/typography utilities are silently dead
+## 1. ~~Tailwind v4 config is not loaded~~ — DONE (branch `chore/tailwind-v4-config`)
 
-**Severity: high (correctness), low (current visual impact).** Found during the pre-merge review.
+Migrated to the v4 entrypoint: `@import "tailwindcss"` plus an `@theme` block, and `tailwind.config.js` deleted. All previously-dead utilities now emit and apply.
 
-`package.json` runs **Tailwind v4**, but `src/app/globals.css` still uses the v3 entrypoint:
+Two things the migration surfaced that are worth remembering:
 
-```css
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-```
+**Cascade layers, not specificity.** v4 emits utilities into `@layer utilities`, and an *unlayered* rule beats a layered one regardless of specificity. The custom globals (`* { margin: 0; padding: 0 }`, `a { color: inherit }`) were unlayered, so even after the theme was correct, `my-2.5`, `px-5` and `hover:text-accent-1` still computed to the reset value. Wrapping those globals in `@layer base` fixed it. If you add global CSS to `globals.css`, put it in `@layer base` or it will silently outrank every utility.
 
-and `tailwind.config.js` is a v3-style config. **Tailwind v4 does not auto-load `tailwind.config.js`** — it needs an explicit `@config` directive, or the theme migrated to `@theme` in CSS. Combined with the legacy directives only pulling in part of the default theme, the measured result in the production build is:
+**Preflight changes are real changes.** `@import "tailwindcss"` pulls in the full v4 preflight, which the old directives never applied. Two consequences:
 
-| Utility class | Emits CSS? |
-|---|---|
-| `flex`, `items-center`, `w-full`, `opacity-0`, `underline`, `transition-colors`, `sr-only` | **yes** |
-| arbitrary values — `min-h-[60vh]`, `text-[4rem]`, `text-[#54c6eb]` | **yes** |
-| **all numeric spacing** — `gap-6`, `mt-4`, `px-5`, `py-24`, `p-4`, `m-0` | **no** |
-| `font-bold` | **no** |
-| everything from `tailwind.config.js` — `bg-brand-light`, `text-brand-text`, `text-accent-1`, `text-64px`, `max-w-700px`, `p-25` | **no** |
+- `line-height: 1.5` on `<html>` grew the navbar 65px → 73.2px and pushed every page down ~8px. **Deliberately reverted** with `line-height: normal` in `globals.css` — that is a redesign, not a migration. Delete that line to adopt Tailwind's typography as a considered decision.
+- `img { display: block }` removed the baseline descender gap under every inline image. Masonry pages got shorter (cars −24px, events-mobile −116px) because the gap accumulated once per image per column. This is a genuine improvement — the same bug fixed by hand in `ImageGallery.module.css` for the caption gradient.
 
-Verified by grepping the emitted stylesheets: **zero** `.gap-*`/`.mt-*`/`.px-*` selectors exist.
-
-The site looks correct today only because layout comes from CSS Modules and `globals.css`, which set the real backgrounds, fonts and spacing. But these classes are scattered through the JSX and do nothing:
-
-- `src/app/layout.jsx` — `bg-brand-light text-brand-text font-sans` on `<body>`
-- `src/components/Icons.jsx` — `text-brand-light`, `gap-6`, `hover:text-accent-1` (×5)
-- `src/app/HomeClient.jsx` — `bg-brand-dark`
-- `src/app/{bw,live,people}/page.jsx` — `my-2.5`
-
-`src/app/not-found.jsx` was written against these and was genuinely unstyled; it was converted to a CSS Module (`not-found.module.css`) as part of the merge, so it does not depend on the broken config. That is a workaround, not the fix.
-
-**Fix options**
-
-1. **Smallest:** add `@config "../../tailwind.config.js";` to the top of `globals.css` so v4 loads the existing config.
-2. **Proper:** migrate to the v4 entrypoint — `@import "tailwindcss";` plus an `@theme` block for the brand colours, spacing and font scales — and delete `tailwind.config.js`.
-
-**Do this on its own branch and diff the rendered pages before/after.** Reviving ~30 currently-inert classes will change layout in places, which is exactly why it was not done at merge time.
-
----
+Verified with before/after screenshots and layout metrics across 10 routes × 2 viewports. Remaining intended differences: body colour now `#0e0e0e` (`text-brand-text` finally applies, was default black), and `my-2.5` adds 10px to the gallery wrapper on `/bw`, `/live`, `/people`.
 
 ## 2. Adobe Fonts `font-display: swap` — biggest remaining performance win
 
