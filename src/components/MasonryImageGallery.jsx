@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo, useRef, useEffect, memo } from 'react';
+import { useState, useCallback, useMemo, memo } from 'react';
 import Masonry from 'react-masonry-css';
 import Image from 'next/image';
 import Lightbox from 'yet-another-react-lightbox';

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ROUTES } from '@/lib/constants';
+import styles from './not-found.module.css';
 
 export const metadata = {
   title: 'Page Not Found | Anthony Freay',
@@ -13,33 +14,23 @@ const galleryRoutes = ROUTES.filter(
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col items-center justify-center text-center px-20px py-25 min-h-[60vh]">
-      <h1 className="text-64px font-bold">404</h1>
-      <p className="text-20px mt-15px">This page could not be found.</p>
-      <p className="mt-10px max-w-700px">
+    <div className={styles.wrapper}>
+      <h1 className={styles.code}>404</h1>
+      <p className={styles.lead}>This page could not be found.</p>
+      <p className={styles.body}>
         The link may be out of date, or the page may have moved. You can browse the
         photography portfolio below, or head back to the homepage.
       </p>
 
-      <div className="flex flex-wrap justify-center gap-6 mt-25px">
-        <Link href="/" className="underline hover:text-accent-1 transition-colors">
-          Home
-        </Link>
-        <Link href="/work" className="underline hover:text-accent-1 transition-colors">
-          Work
-        </Link>
-        <Link href="/contact" className="underline hover:text-accent-1 transition-colors">
-          Contact
-        </Link>
+      <div className={styles.primaryLinks}>
+        <Link href="/">Home</Link>
+        <Link href="/work">Work</Link>
+        <Link href="/contact">Contact</Link>
       </div>
 
-      <div className="flex flex-wrap justify-center gap-6 mt-15px">
+      <div className={styles.galleryLinks}>
         {galleryRoutes.map((route) => (
-          <Link
-            key={route.path}
-            href={route.path}
-            className="hover:text-accent-1 transition-colors"
-          >
+          <Link key={route.path} href={route.path}>
             {route.label}
           </Link>
         ))}

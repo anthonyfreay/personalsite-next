@@ -78,7 +78,7 @@ export default function HomeClient() {
   const middleLayerRef = useRef(null);
   const bottomLayerRef = useRef(null);
   const indexRef = useRef(0);
-  const sizeRef = useRef('compressed');
+  const sizeRef = useRef('large'); // matches initialSrc's tier
   const widthRef = useRef(1024);
   const playlistRef = useRef(HERO_IMAGES);
   const timerRef = useRef(null);
