@@ -1,5 +1,10 @@
 import ImageGallery from '@/components/ImageGallery';
 import { people, withHd } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 export const metadata = {
   title: 'People | Anthony Freay',
@@ -21,20 +26,19 @@ export const metadata = {
 };
 
 function People() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Portrait Photography by Anthony Freay',
-    description: 'Portraits by Anthony Freay. Capturing candid and lifestyle moments.',
-    url: 'https://www.anthonyfreay.com/people',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: imageData.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Portrait Photography by Anthony Freay',
+      description: 'Portraits by Anthony Freay. Capturing candid and lifestyle moments.',
+      path: '/people',
+      images: imageData,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'People', path: '/people' },
+    ]),
+  ]);
 
   return (
     <div className="flex flex-col min-h-screen">

@@ -1,5 +1,10 @@
 import PlacesClient from './PlacesClient';
 import { places as allImages } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 
 export const metadata = {
@@ -22,20 +27,19 @@ export const metadata = {
 };
 
 export default function Places() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Travel & Landscape Photography by Anthony Freay',
-    description: 'Travel and street photography by Anthony Freay. Exploring cities, landscapes, and the moments in between.',
-    url: 'https://www.anthonyfreay.com/places',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: allImages.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Travel & Landscape Photography by Anthony Freay',
+      description: 'Travel and street photography by Anthony Freay. Exploring cities, landscapes, and the moments in between.',
+      path: '/places',
+      images: allImages,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'Places', path: '/places' },
+    ]),
+  ]);
 
   return (
     <>

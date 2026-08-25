@@ -27,7 +27,26 @@ Implemented on branch `seo/coverage-fixes` (commit `a92b8b5`):
 | Hero slideshow broken by image optimization | **Fixed** — see "Regression" below |
 | `/work` LCP tile not prioritized | **Fixed** — first grid row now eager |
 | Dependency update | **Done** — all current except ESLint (see below); 0 vulnerabilities |
-| Gallery manifest refactor | **Not started** — P3 |
+| Gallery manifest refactor | **Done** — one manifest per gallery in `src/lib/galleries/`; verified lossless |
+| Entity / structured-data consolidation | **Done** — see below |
+| Off-page work | **Handed off** — in-repo entity support done; the rest is `OFF-PAGE-SEO.md` |
+
+### Entity consolidation for off-page SEO (2026-08-24)
+
+Off-page links only pay off if Google resolves the site to one real-world entity. That half is code, and it is done:
+
+- **`rel="me"`** on the Instagram / LinkedIn / GitHub links in `Icons.jsx` — the standard verifiable identity claim, and what makes reciprocal profile links count.
+- **One canonical `Person`** (`src/lib/structured-data.js`, `@id` = `…/#person`) emitted on every page with `sameAs`, `jobTitle`, `knowsAbout`, NYC locality. Replaces six divergent inline author blocks.
+- **`WebSite`** node with the Person as publisher, on every page.
+- **`ProfessionalService`** on `/contact`, grounded in the bio's statement that Anthony is booking sessions in NYC. Carries **no** address/phone/hours/pricing/reviews — none are known here, and inventing them would be a liability.
+- **`BreadcrumbList`** on every non-home page.
+- **`max-image-preview:large`** so Google may show full-size thumbnails.
+- Every `Photograph` carries `author`/`creator`/`copyrightHolder` → the same Person.
+- `/contact` gained `sr-only` descriptive copy; it previously had only an `<h1>`.
+
+**Self-contained graphs.** Every page declares the nodes it references, so `author` and `isPartOf` resolve without a crawler having fetched `/` first. Verified programmatically across all 10 routes: **no dangling `@id`**. (An intermediate version did have one — gallery pages referenced `#website` without declaring it — caught by that check and fixed via `siteGraphJsonLd()`.)
+
+The remaining off-page work is not code. See **`OFF-PAGE-SEO.md`** for the prioritised checklist: reciprocal profile links, photography directories, credit links from artists/venues/press, and content depth — plus honest expectations about what technical SEO can and cannot do.
 
 ### Dependency update (2026-08-24)
 

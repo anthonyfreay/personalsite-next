@@ -5,6 +5,9 @@ import {
   SITE_URL,
   DEFAULT_IMAGE_ABS,
 } from '@/lib/constants';
+import {
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 export const metadata = {
   title: SITE_TITLE,
@@ -26,26 +29,8 @@ export const metadata = {
 };
 
 export default function Home() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Person',
-    name: 'Anthony Freay',
-    url: SITE_URL,
-    jobTitle: 'Photographer & Software Engineer',
-    description: SITE_DESCRIPTION,
-    image: DEFAULT_IMAGE_ABS,
-    address: {
-      '@type': 'PostalAddress',
-      addressLocality: 'New York',
-      addressRegion: 'NY',
-      addressCountry: 'US',
-    },
-    sameAs: [
-      'https://www.instagram.com/anthonyfreay',
-      'https://www.linkedin.com/in/anthonyfreay',
-      'https://github.com/anthonyfreay',
-    ],
-  };
+  // Home needs no page-specific node beyond the site graph itself.
+  const jsonLd = siteGraphJsonLd();
 
   return (
     <>

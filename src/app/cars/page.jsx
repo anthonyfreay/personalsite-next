@@ -1,5 +1,10 @@
 import CarsClient from './CarsClient';
 import { cars as allImages } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 
 export const metadata = {
@@ -22,20 +27,19 @@ export const metadata = {
 };
 
 export default function Cars() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Automotive Photography by Anthony Freay',
-    description: 'Automotive photography by Anthony Freay. Classic cars, modern designs, and everything in between.',
-    url: 'https://www.anthonyfreay.com/cars',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: allImages.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Automotive Photography by Anthony Freay',
+      description: 'Automotive photography by Anthony Freay. Classic cars, modern designs, and everything in between.',
+      path: '/cars',
+      images: allImages,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'Cars', path: '/cars' },
+    ]),
+  ]);
 
   return (
     <>

@@ -1,5 +1,10 @@
 import ImageGallery from '@/components/ImageGallery';
 import { live, withHd } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 export const metadata = {
   title: 'Live Music | Anthony Freay',
@@ -27,20 +32,19 @@ export const metadata = {
 };
 
 function Live() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Live Music Photography by Anthony Freay',
-    description: 'Concert and live music photography by Anthony Freay. Featuring artists like Tyler, the Creator, Daniel Caesar, and more.',
-    url: 'https://www.anthonyfreay.com/live',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: imageData.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Live Music Photography by Anthony Freay',
+      description: 'Concert and live music photography by Anthony Freay. Featuring artists like Tyler, the Creator, Daniel Caesar, and more.',
+      path: '/live',
+      images: imageData,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'Live', path: '/live' },
+    ]),
+  ]);
 
   return (
     <div className="flex flex-col min-h-screen">

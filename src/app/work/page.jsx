@@ -1,4 +1,8 @@
 import WorkClient from './WorkClient';
+import {
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 export const metadata = {
   title: 'Work | Anthony Freay',
@@ -26,8 +30,19 @@ export const metadata = {
 };
 
 export default function Work() {
+  const jsonLd = siteGraphJsonLd([
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+    ]),
+  ]);
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <h1 className="sr-only">Photography Portfolio</h1>
       <p className="sr-only">
         The photography portfolio of Anthony Freay, a New York City-based photographer.

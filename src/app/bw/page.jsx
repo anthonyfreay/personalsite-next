@@ -1,5 +1,10 @@
 import ImageGallery from '@/components/ImageGallery';
 import { bw, withHd } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 export const metadata = {
   title: 'Black & White | Anthony Freay',
@@ -21,20 +26,19 @@ export const metadata = {
 };
 
 function BlackWhite() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Black & White Photography by Anthony Freay',
-    description: 'A collection of black and white photography by Anthony Freay. Rich, timeless, and classic shots.',
-    url: 'https://www.anthonyfreay.com/bw',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: imageData.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Black & White Photography by Anthony Freay',
+      description: 'A collection of black and white photography by Anthony Freay. Rich, timeless, and classic shots.',
+      path: '/bw',
+      images: imageData,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'B & W', path: '/bw' },
+    ]),
+  ]);
 
   return (
     <div className="flex flex-col min-h-screen">

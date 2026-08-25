@@ -1,5 +1,10 @@
 import EventsClient from './EventsClient';
 import { events as allImages } from '@/lib/galleries';
+import {
+  imageGalleryJsonLd,
+  breadcrumbJsonLd,
+  siteGraphJsonLd,
+} from '@/lib/structured-data';
 
 
 export const metadata = {
@@ -22,20 +27,19 @@ export const metadata = {
 };
 
 export default function Events() {
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'ImageGallery',
-    name: 'Event Photography by Anthony Freay',
-    description: 'Photography from events by Anthony Freay — candid moments, celebrations, and live gatherings.',
-    url: 'https://www.anthonyfreay.com/events',
-    author: { '@type': 'Person', name: 'Anthony Freay', url: 'https://www.anthonyfreay.com' },
-    image: allImages.map(img => ({
-      '@type': 'Photograph',
-      name: img.alt,
-      url: `https://www.anthonyfreay.com${img.src}`,
-      author: { '@type': 'Person', name: 'Anthony Freay' },
-    })),
-  };
+  const jsonLd = siteGraphJsonLd([
+    imageGalleryJsonLd({
+      name: 'Event Photography by Anthony Freay',
+      description: 'Photography from events by Anthony Freay — candid moments, celebrations, and live gatherings.',
+      path: '/events',
+      images: allImages,
+    }),
+    breadcrumbJsonLd([
+      { name: 'Home', path: '/' },
+      { name: 'Work', path: '/work' },
+      { name: 'Events', path: '/events' },
+    ]),
+  ]);
 
   return (
     <>
