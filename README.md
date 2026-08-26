@@ -85,36 +85,17 @@ If you change Formspree projects, update that ID before deploying.
 
 ## Adding photos
 
-Export once from Lightroom at full resolution, then:
+Export once from Lightroom at full resolution; `npm run add-photos` derives
+every size the site serves and registers the photo.
 
 ```bash
-npm run add-photos -- <gallery> <file-or-folder>...   # bw live people cars places events
-npm run add-photos -- live ~/Desktop/exports          # a whole folder
-npm run add-photos -- events shot.jpg --alt "Cake"    # one photo, with its caption
-npm run add-photos -- --check                         # manifests and files agree?
+npm run add-photos -- live ~/Desktop/exports        # add a folder of photos
+npm run add-photos -- places ~/re-export --force    # re-derive existing ones
+npm run add-photos -- --check                       # manifests match disk?
 ```
 
-For each photo it writes two long-edge-constrained WebPs and registers the
-photo in `src/lib/galleries/<gallery>.js`:
-
-| file | long edge | used for |
-|---|---|---|
-| `<slug>.webp` | 675px | the canonical URL, referenced by the sitemap and JSON-LD |
-| `<slug>-hd.webp` | 1620px | what the grid and lightbox render from |
-
-The grid does not pay for the larger file - Next downscales `-hd` to whatever
-the tile needs. The extra pixels are there for the full-screen lightbox.
-
-The manifest entry records the `-hd` dimensions, so tiles reserve the right
-aspect ratio and there is no layout shift, and the photo's dominant colour,
-which is the tone a tile paints while the image loads.
-
-Re-running is safe: photos already in the manifest are skipped. `--dry-run`
-shows what would happen.
-
-**Afterwards, edit the alt text.** It defaults to a humanised filename, and it
-is real SEO surface: it becomes the image sitemap title, the JSON-LD
-`Photograph` name, and the hover caption on `/live`.
+**See [PHOTO-WORKFLOW.md](PHOTO-WORKFLOW.md)** for the full procedure — adding,
+updating, re-exporting a whole gallery, removing, and what the script produces.
 
 ## Content Maintenance Notes
 

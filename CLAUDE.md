@@ -33,6 +33,15 @@ Both open images in a shared `yet-another-react-lightbox` instance on click.
 
 Every image entry is `{ alt, src }`; an `hdSrc` is always derived by suffixing the filename with `-hd` before the extension (`replace(/(\.\w+)$/, '-hd$1')`), either inline in the page or via a `.map()`. The low-res `src` renders in the grid; `hdSrc` is swapped in for the lightbox. When adding gallery images, both a normal and an `-hd` variant must exist in `public/<category>/`.
 
+### Adding or changing photos
+
+Use `npm run add-photos` — never add files to `public/` or hand-write manifest
+entries. It derives both sizes from one full-resolution export, computes the
+`-hd` dimensions and dominant colour the tiles need, and registers the photo.
+`--force` re-derives an existing photo while keeping its alt text; `--check`
+verifies manifests and disk agree both ways. Full procedure in
+[PHOTO-WORKFLOW.md](PHOTO-WORKFLOW.md).
+
 ### Keeping image lists in sync
 
 Image arrays are duplicated in two places and must be kept in sync manually when adding/removing photos:

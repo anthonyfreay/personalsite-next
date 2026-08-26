@@ -8,6 +8,7 @@
  *   npm run add-photos -- live ~/Desktop/exports
  *   npm run add-photos -- events shot.jpg --alt "Cake"
  *   npm run add-photos -- --check
+ *   npm run add-photos -- places ~/re-exports --force
  *
  * Export once from Lightroom at full resolution; this derives the rest. Two
  * files are written per photo, both long-edge constrained so landscape and
@@ -100,6 +101,32 @@ function existingSources(gallery) {
   );
 }
 
+/** The alt text currently recorded for a src, if any. */
+function existingAlt(gallery, src) {
+  const re = new RegExp(
+    `\\{\\s*alt:\\s*'((?:\\\\.|[^'])*)',\\s*src:\\s*'${src.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&')}'`
+  );
+  const m = re.exec(readManifest(gallery));
+  return m ? m[1].replace(/\\'/g, "'") : null;
+}
+
+/** Swap one entry in place, keeping its position in the ordered list. */
+function replaceInManifest(gallery, entry) {
+  const p = manifestPath(gallery);
+  const s = readManifest(gallery);
+  const escaped = entry.src.replace(/[.*+?^\${}()|[\]\\]/g, '\\$&');
+  const re = new RegExp(`  \\{[^\\n]*src: '${escaped}'[^\\n]*\\},`);
+  if (!re.test(s)) fail(`Could not find the existing entry for ${entry.src}`);
+  fs.writeFileSync(p, s.replace(re, formatRow(entry)));
+}
+
+function formatRow(e) {
+  return (
+    `  { alt: '${e.alt.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}', ` +
+    `src: '${e.src}', width: ${e.width}, height: ${e.height}, color: '${e.color}' },`
+  );
+}
+
 async function derive(sourceFile, gallery, altOverride) {
   const slug = path.basename(sourceFile).replace(SOURCE_EXT, '');
   const publicDir = path.join(repoRoot, 'public', gallery);
@@ -157,13 +184,7 @@ function appendToManifest(gallery, entries) {
   const s = readManifest(gallery);
   const close = s.lastIndexOf('];');
   if (close === -1) fail(`Could not find the images array in ${gallery}.js`);
-  const rows = entries
-    .map(
-      (e) =>
-        `  { alt: '${e.alt.replace(/\\/g, '\\\\').replace(/'/g, "\\'")}', ` +
-        `src: '${e.src}', width: ${e.width}, height: ${e.height}, color: '${e.color}' },`
-    )
-    .join('\n');
+  const rows = entries.map(formatRow).join('\n');
   fs.writeFileSync(p, s.slice(0, close) + rows + '\n' + s.slice(close));
 }
 
@@ -213,13 +234,18 @@ async function main() {
     argv.splice(altIndex, 2);
   }
   const dryRun = argv.includes('--dry-run');
+  const force = argv.includes('--force');
   const positional = argv.filter((a) => !a.startsWith('--'));
   const [gallery, ...inputs] = positional;
 
   if (!gallery || !inputs.length) {
     console.log(`
-${c.bold('Usage')}  npm run add-photos -- <gallery> <file-or-folder>... [--alt "text"] [--dry-run]
+${c.bold('Usage')}  npm run add-photos -- <gallery> <file-or-folder>... [options]
        npm run add-photos -- --check
+
+${c.bold('Options')}  --alt "text"   caption for a single photo
+         --force        re-derive photos already in the manifest, keeping their alt
+         --dry-run      show what would happen
 
 ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
 `);
@@ -237,34 +263,56 @@ ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
 
   const already = existingSources(gallery);
   const entries = [];
+  const replaced = [];
   let skipped = 0;
 
   console.log(`\n${c.bold(`Adding ${sources.length} photo(s) to /${gallery}`)}\n`);
 
   for (const file of sources) {
     const slug = path.basename(file).replace(SOURCE_EXT, '');
-    if (already.has(`/${gallery}/${slug}.webp`)) {
-      console.log(`  ${c.dim('skip')}  ${slug} ${c.dim('(already in the manifest)')}`);
+    const src = `/${gallery}/${slug}.webp`;
+    const isKnown = already.has(src);
+
+    if (isKnown && !force) {
+      console.log(
+        `  ${c.dim('skip')}  ${slug} ${c.dim('(already in the manifest - use --force to re-derive)')}`
+      );
       skipped++;
       continue;
     }
     if (dryRun) {
-      console.log(`  ${c.dim('would add')}  ${slug}`);
+      console.log(`  ${c.dim(isKnown ? 'would replace' : 'would add')}  ${slug}`);
       continue;
     }
-    const entry = await derive(file, gallery, alt);
-    entries.push(entry);
-    console.log(
-      `  ${c.green('+')} ${slug}  ${entry.width}x${entry.height}  ` +
-        `${(entry.bytes / 1024).toFixed(0)} KB  ${entry.color}  ${c.dim(`alt: "${entry.alt}"`)}`
-    );
+
+    // On replace, keep the alt text that is already there. It is hand-written
+    // SEO surface and regenerating it from the filename would silently undo it.
+    const keptAlt = isKnown ? existingAlt(gallery, src) : null;
+    const entry = await derive(file, gallery, alt ?? keptAlt);
+
+    if (isKnown) {
+      replaceInManifest(gallery, entry);
+      replaced.push(entry);
+      console.log(
+        `  ${c.yellow('~')} ${slug}  ${entry.width}x${entry.height}  ` +
+          `${(entry.bytes / 1024).toFixed(0)} KB  ${entry.color}  ` +
+          `${c.dim(keptAlt ? `alt kept: "${keptAlt}"` : '')}`
+      );
+    } else {
+      entries.push(entry);
+      console.log(
+        `  ${c.green('+')} ${slug}  ${entry.width}x${entry.height}  ` +
+          `${(entry.bytes / 1024).toFixed(0)} KB  ${entry.color}  ${c.dim(`alt: "${entry.alt}"`)}`
+      );
+    }
   }
 
   if (!dryRun && entries.length) appendToManifest(gallery, entries);
 
-  console.log(
-    `\n${c.green('✓')} ${entries.length} added${skipped ? `, ${skipped} skipped` : ''}\n`
-  );
+  const parts = [`${entries.length} added`];
+  if (replaced.length) parts.push(`${replaced.length} replaced`);
+  if (skipped) parts.push(`${skipped} skipped`);
+  console.log(`\n${c.green('✓')} ${parts.join(', ')}\n`);
   if (entries.length && !alt) {
     console.log(
       `${c.yellow('Next:')} edit the alt text in ${c.bold(`src/lib/galleries/${gallery}.js`)} —\n` +
