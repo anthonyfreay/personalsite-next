@@ -325,7 +325,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/places</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -434,7 +434,7 @@
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/places/RX702292-scapes.webp</image:loc>
-      <image:title>Mom\'s Apartment</image:title>
+      <image:title>Mom\\\'s Apartment</image:title>
     </image:image>
     <image:image>
       <image:loc>https://www.anthonyfreay.com/places/A7407477-scapes.webp</image:loc>
@@ -539,7 +539,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/cars</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>
@@ -625,7 +625,7 @@
   </url>
   <url>
     <loc>https://www.anthonyfreay.com/events</loc>
-    <lastmod>2026-08-25</lastmod>
+    <lastmod>2026-08-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <image:image>

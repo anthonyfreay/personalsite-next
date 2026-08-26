@@ -44,7 +44,13 @@ const MasonryImageGallery = memo(({ images = [] }) => {
               animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
             }}
           >
-            <LazyLoadImage src={image.src} alt={image.alt} index={index} />
+            <LazyLoadImage
+              src={image.hdSrc}
+              alt={image.alt}
+              width={image.width}
+              height={image.height}
+              index={index}
+            />
           </div>
         ))}
       </div>
@@ -75,14 +81,25 @@ const MasonryImageGallery = memo(({ images = [] }) => {
 const FIRST_ROW = 4;
 const ABOVE_FOLD = 8;
 
-const LazyLoadImage = ({ src, alt, index = 0 }) => {
+// Renders from the 1620x1080 -hd source, not the 675x450 base. A tile is up
+// to ~438 CSS px, which a retina display needs ~876px to fill - more than the
+// base image has, so tiles were upscaled (1.30x for landscape, 1.95x for
+// portrait). Next never upscales past a source, so it downscales -hd to
+// whatever each device actually needs. Matches ImageGallery, which already
+// sourced from -hd.
+//
+// width/height come per image from the manifest and are the real -hd pixel
+// dimensions. These galleries mix landscape and portrait, so a single hard
+// coded pair would reserve the wrong aspect ratio for half the tiles and
+// shift them once the image loaded.
+const LazyLoadImage = ({ src, alt, width, height, index = 0 }) => {
   const isFirstRow = index < FIRST_ROW;
   return (
     <Image
       src={src}
       alt={alt}
-      width={400}
-      height={400}
+      width={width}
+      height={height}
       className="w-full h-auto"
       priority={isFirstRow}
       loading={index < ABOVE_FOLD ? 'eager' : 'lazy'}
