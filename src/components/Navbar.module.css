@@ -270,3 +270,95 @@
   color: #090909;
   transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
 }
+/*
+  WORK -> galleries reveal, shown only inside the Work section.
+
+  Open state is :hover / :focus-within rather than React state: it needs no
+  hydration, and keyboard users get it for free by tabbing into the links.
+  The panel is always in the DOM so the links stay reachable and indexable;
+  visibility is what animates.
+*/
+.workGroup {
+  position: relative;
+  display: inline-block;
+}
+
+.galleryPanel {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  z-index: 20;
+  min-width: 190px;
+  padding: 8px 0;
+  background-color: var(--mainColorLight);
+  box-shadow: 0 10px 30px rgba(9, 9, 9, 0.14);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+}
+
+.workGroup:hover .galleryPanel,
+.workGroup:focus-within .galleryPanel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+  /* Drop the visibility delay on the way in so the panel is usable at once. */
+  transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s;
+}
+
+.galleryList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each row eases in behind the panel; the per-item delay is set inline. */
+.galleryItem {
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.workGroup:hover .galleryItem,
+.workGroup:focus-within .galleryItem {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.galleryLink {
+  display: block;
+  padding: 7px 20px;
+  font-size: 1.05rem;
+  color: var(--mainColorDark);
+  white-space: nowrap;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.galleryLink:hover {
+  color: var(--accentColor1);
+  background-color: rgba(9, 9, 9, 0.04);
+}
+
+.galleryLinkActive {
+  color: var(--accentColor1);
+  text-decoration: underline;
+}
+
+/*
+  Touch devices latch :hover after a tap, which would leave the panel stuck
+  open over the gallery. The footer already links every gallery, so simply
+  don't offer the reveal there.
+*/
+@media (hover: none), (pointer: coarse) {
+  .galleryPanel {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .galleryPanel,
+  .galleryItem {
+    transition: none;
+  }
+}
