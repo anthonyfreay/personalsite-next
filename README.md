@@ -83,14 +83,46 @@ Open `http://localhost:3000`.
 
 If you change Formspree projects, update that ID before deploying.
 
+## Adding photos
+
+Export once from Lightroom at full resolution, then:
+
+```bash
+npm run add-photos -- <gallery> <file-or-folder>...   # bw live people cars places events
+npm run add-photos -- live ~/Desktop/exports          # a whole folder
+npm run add-photos -- events shot.jpg --alt "Cake"    # one photo, with its caption
+npm run add-photos -- --check                         # manifests and files agree?
+```
+
+For each photo it writes two long-edge-constrained WebPs and registers the
+photo in `src/lib/galleries/<gallery>.js`:
+
+| file | long edge | used for |
+|---|---|---|
+| `<slug>.webp` | 675px | the canonical URL, referenced by the sitemap and JSON-LD |
+| `<slug>-hd.webp` | 1620px | what the grid and lightbox render from |
+
+The grid does not pay for the larger file - Next downscales `-hd` to whatever
+the tile needs. The extra pixels are there for the full-screen lightbox.
+
+The manifest entry records the `-hd` dimensions, so tiles reserve the right
+aspect ratio and there is no layout shift, and the photo's dominant colour,
+which is the tone a tile paints while the image loads.
+
+Re-running is safe: photos already in the manifest are skipped. `--dry-run`
+shows what would happen.
+
+**Afterwards, edit the alt text.** It defaults to a humanised filename, and it
+is real SEO surface: it becomes the image sitemap title, the JSON-LD
+`Photograph` name, and the hover caption on `/live`.
+
 ## Content Maintenance Notes
 
-When adding/removing gallery images, keep these in sync:
-
-1. Route/client image arrays under `src/app/**` (used by the UI).
-2. `scripts/generate-sitemap.js` gallery image lists (used for image sitemap entries).
-
-Most galleries expect a regular image and an `-hd` variant for lightbox display.
+Gallery images live in one place per gallery, `src/lib/galleries/<gallery>.js`,
+and that single list feeds the UI, the JSON-LD and the image sitemap. There is
+nothing to keep in sync by hand - use `npm run add-photos` (above) rather than
+editing `public/` directly, and `npm run add-photos -- --check` verifies the
+manifests and the files on disk still agree in both directions.
 
 ## Deployment
 
