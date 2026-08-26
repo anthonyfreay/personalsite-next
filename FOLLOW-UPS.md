@@ -130,3 +130,40 @@ Verified on production across viewports — all six galleries identical in behav
 | 2000px | 1800px, 4 col | 1830px, 4 col |
 | 1440px | 1440px, 4 col | 1440px, 4 col |
 | 412px | 412px, 2 col | 412px, 2 col |
+
+---
+
+## 9. Navbar: WORK moves left to reveal the galleries
+
+A first version exists on branch `feat/navbar-work-reveal` (`59f0a5a`) but was
+**not** the requested behaviour and is parked, not merged. It drops a hover
+panel beneath WORK. What is actually wanted is an inline reveal: entering a
+gallery from `/work` animates WORK leftward and it stays there, with the
+galleries revealed between it and CONTACT:
+
+```
+WORK | LIVE  BW  PEOPLE  PLACES  CARS  EVENTS | CONTACT
+```
+
+Points to settle when building it:
+
+- The move is permanent while inside the Work section, not a hover state, so it
+  is layout rather than an overlay. `feat/navbar-work-reveal` should probably be
+  abandoned rather than extended.
+- Six extra labels plus WORK and CONTACT is a lot of horizontal room. Needs a
+  plan for narrow desktop widths before it collapses to the hamburger.
+- Animating a layout change smoothly usually means FLIP (measure, transform,
+  release) rather than transitioning layout properties, which do not animate
+  cheaply.
+- It should survive a hard load directly onto `/live` - the galleries need to be
+  present without an entrance animation replaying on every navigation.
+
+## 10. Landing page: swipe up to enter
+
+Requested for later. The home page is a full-screen slideshow with an Enter
+button; the idea is a swipe-up gesture that transitions into the site.
+
+- Needs to work as a gesture on touch and as scroll/keyboard on desktop, and
+  must not fight the scroll lock the home page applies.
+- The Enter button should remain for anyone who does not discover the gesture.
+- `prefers-reduced-motion` should skip the transition.
