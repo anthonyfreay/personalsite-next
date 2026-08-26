@@ -1,0 +1,40 @@
+/*
+  The frame carries the photo's dominant colour and its aspect ratio, so the
+  tile occupies its final size and a sensible tone from the very first paint.
+  No layout shift, and nothing appears or disappears as images arrive.
+*/
+.frame {
+  display: block;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  /* The colour is a stand-in, not content. */
+  transition: background-color 0.4s ease;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  /*
+    Slow enough to read as a settle rather than a flicker, and eased out so it
+    finishes gently. Tiles still finish loading at different moments, but a soft
+    fade from a near-matching tone is far calmer than a hard swap.
+  */
+  transition: opacity 0.5s ease-out;
+}
+
+.loaded {
+  opacity: 1;
+}
+
+/*
+  Respect users who ask for less motion: show the photo the moment it is there,
+  with no transition at all.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .image {
+    transition: none;
+  }
+}

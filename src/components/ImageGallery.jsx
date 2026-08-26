@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useCallback, memo } from 'react';
-import Image from 'next/image';
+import GalleryImage from './GalleryImage';
 import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import styles from './ImageGallery.module.css';
@@ -39,24 +39,17 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
             className={`${styles.tile} cursor-pointer`}
             onClick={() => openLightbox(index)}
           >
-            <Image
-              // Grid tiles render from the 1080px -hd source, not the 450px
-              // base. A tile is up to 450 CSS px wide, which a retina display
-              // needs 900 physical px to fill - more than the base image has,
-              // so it would be upscaled and soft. Next never upscales past the
-              // source, so it downscales the -hd file to whatever each device
-              // actually needs and the tiles stay sharp at every DPR.
+            <GalleryImage
+              // The 1080px -hd source: a tile is up to 450 CSS px, which a
+              // retina display needs 900px to fill - more than the 450px base
+              // has. Next downscales -hd to whatever each device needs.
               src={image.hdSrc}
               alt={image.alt}
-              width={1080}
-              height={1620}
-              className="w-full h-auto"
-              // The grid is 4 columns on desktop, so the first four tiles are
-              // the above-the-fold row and any of them can be the LCP element.
-              placeholder={image.blurDataURL ? 'blur' : 'empty'}
-              blurDataURL={image.blurDataURL}
+              width={image.width ?? 1080}
+              height={image.height ?? 1620}
+              color={image.color}
               priority={index < 4}
-              loading={index < 8 ? 'eager' : 'lazy'}
+              eager={index < 8}
               sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"
             />
             {captionOnHover && (
