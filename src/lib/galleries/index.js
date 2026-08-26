@@ -11,21 +11,9 @@
 import { images as bw } from './bw.js';
 import { images as live } from './live.js';
 import { images as people } from './people.js';
-import {
-  images as cars,
-  horizontalImages as carsHorizontal,
-  verticalImages as carsVertical,
-} from './cars.js';
-import {
-  images as places,
-  horizontalImages as placesHorizontal,
-  verticalImages as placesVertical,
-} from './places.js';
-import {
-  images as events,
-  horizontalImages as eventsHorizontal,
-  verticalImages as eventsVertical,
-} from './events.js';
+import { images as cars } from './cars.js';
+import { images as places } from './places.js';
+import { images as events } from './events.js';
 
 /**
  * Add the high-resolution variant path for an image list.
@@ -45,14 +33,8 @@ export {
   live,
   people,
   cars,
-  carsHorizontal,
-  carsVertical,
   places,
-  placesHorizontal,
-  placesVertical,
   events,
-  eventsHorizontal,
-  eventsVertical,
 };
 
 /** Route path -> image list, for consumers that iterate every gallery. */

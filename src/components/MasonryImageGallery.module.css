@@ -33,24 +33,30 @@
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
+/*
+  Tiles are visible immediately, showing their inline blur placeholder, and
+  Next crossfades to the real image as it decodes.
 
-  to {
-    opacity: 1;
-  }
-}
-
-.animateFadeIn {
-  animation: fadeIn 0.6s ease-in forwards;
+  This replaced a keyframe fade staggered on `index * 0.05s`. That ran on a
+  timer from mount with no relationship to when an image actually finished
+  loading, so a tile would finish fading in while still empty and the photo
+  would pop in afterwards - the exact seam this is meant to hide. Nothing here
+  is time-based any more; the transition tracks real load progress.
+*/
+.tile {
   /* Vertical rhythm between tiles; column-gap handles the horizontal. */
   margin: 0 0 10px;
   max-width: 100%;
   /* Without this a tile can be split across a column boundary. */
   break-inside: avoid;
   -webkit-column-break-inside: avoid;
+}
+
+/* Next renders the blur placeholder as a background on the img itself. */
+.tile img {
+  display: block;
+  background-size: cover;
+  background-position: center;
 }
 
 .lightbox {
