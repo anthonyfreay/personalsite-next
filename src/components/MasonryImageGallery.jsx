@@ -6,7 +6,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import styles from './MasonryImageGallery.module.css';
 
-const MasonryImageGallery = memo(({ horizontalImages = [], verticalImages = [] }) => {
+const MasonryImageGallery = memo(({ images = [] }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -19,39 +19,12 @@ const MasonryImageGallery = memo(({ horizontalImages = [], verticalImages = [] }
     setLightboxOpen(false);
   }, []);
 
-  const organizedImages = useMemo(() => {
-    const horizontal = horizontalImages.map(img => ({ ...img, orientation: 'horizontal' }));
-    const vertical = verticalImages.map(img => ({ ...img, orientation: 'vertical' }));
-
-    const result = [];
-    const maxLength = Math.max(horizontal.length, vertical.length);
-
-    const hRatio = horizontal.length / maxLength;
-    const vRatio = vertical.length / maxLength;
-
-    let hIndex = 0;
-    let vIndex = 0;
-
-    for (let i = 0; i < maxLength * 2; i++) {
-      const shouldAddHorizontal = hIndex < horizontal.length &&
-        (vIndex >= vertical.length || (hIndex / (horizontal.length || 1)) <= (vIndex / (vertical.length || 1)));
-
-      if (shouldAddHorizontal) {
-        result.push(horizontal[hIndex]);
-        hIndex++;
-      } else if (vIndex < vertical.length) {
-        result.push(vertical[vIndex]);
-        vIndex++;
-      }
-    }
-
-    return result;
-  }, [horizontalImages, verticalImages]);
-
-  const lightboxImages = organizedImages.map(image => ({
-    ...image,
-    src: image.hdSrc
-  }));
+  // Memoised: this maps the full gallery (up to 56 items) and previously ran
+  // on every render, including every lightbox open/close.
+  const lightboxImages = useMemo(
+    () => images.map((image) => ({ ...image, src: image.hdSrc })),
+    [images]
+  );
 
   return (
     <div>
@@ -62,7 +35,7 @@ const MasonryImageGallery = memo(({ horizontalImages = [], verticalImages = [] }
         re-rendered to 2 below 900px, costing 0.082 CLS at hydration.
       */}
       <div className={styles.masonryGrid}>
-        {organizedImages.map((image, index) => (
+        {images.map((image, index) => (
           <div
             key={image.src}
             className={`${styles.animateFadeIn} cursor-pointer opacity-0`}
@@ -113,7 +86,12 @@ const LazyLoadImage = ({ src, alt, index = 0 }) => {
       className="w-full h-auto"
       priority={isFirstRow}
       loading={index < ABOVE_FOLD ? 'eager' : 'lazy'}
-      sizes="(max-width: 490px) 100vw, (max-width: 900px) 50vw, (max-width: 1100px) 33vw, 25vw"
+      // Must track .masonryGrid: 4 columns, 2 at <=900px, and the grid
+      // caps at 1800px so tiles stop growing past ~450px. The previous value
+      // still encoded react-masonry-css's old 490/900/1100 breakpoints and
+      // overstated the tile by 2.16x on a phone and 1.46x at 2560px, so
+      // browsers fetched roughly double the pixels they could display.
+      sizes="(max-width: 900px) 50vw, (max-width: 1800px) 25vw, 450px"
     />
   );
 };
