@@ -36,11 +36,8 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
         {images.map((image, index) => (
           <div
             key={image.src}
-            className={`${styles.animateFadeIn} ${styles.tile} opacity-0 cursor-pointer`}
+            className={`${styles.tile} cursor-pointer`}
             onClick={() => openLightbox(index)}
-            style={{
-              animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
-            }}
           >
             <Image
               // Grid tiles render from the 1080px -hd source, not the 450px
@@ -56,6 +53,8 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
               className="w-full h-auto"
               // The grid is 4 columns on desktop, so the first four tiles are
               // the above-the-fold row and any of them can be the LCP element.
+              placeholder={image.blurDataURL ? 'blur' : 'empty'}
+              blurDataURL={image.blurDataURL}
               priority={index < 4}
               loading={index < 8 ? 'eager' : 'lazy'}
               sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"

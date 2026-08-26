@@ -38,17 +38,15 @@ const MasonryImageGallery = memo(({ images = [] }) => {
         {images.map((image, index) => (
           <div
             key={image.src}
-            className={`${styles.animateFadeIn} cursor-pointer opacity-0`}
+            className={`${styles.tile} cursor-pointer`}
             onClick={() => openLightbox(index)}
-            style={{
-              animationDelay: `${Math.min(index * 0.05, 0.35)}s`,
-            }}
           >
             <LazyLoadImage
               src={image.hdSrc}
               alt={image.alt}
               width={image.width}
               height={image.height}
+              blurDataURL={image.blurDataURL}
               index={index}
             />
           </div>
@@ -92,7 +90,7 @@ const ABOVE_FOLD = 8;
 // dimensions. These galleries mix landscape and portrait, so a single hard
 // coded pair would reserve the wrong aspect ratio for half the tiles and
 // shift them once the image loaded.
-const LazyLoadImage = ({ src, alt, width, height, index = 0 }) => {
+const LazyLoadImage = ({ src, alt, width, height, blurDataURL, index = 0 }) => {
   const isFirstRow = index < FIRST_ROW;
   return (
     <Image
@@ -101,6 +99,8 @@ const LazyLoadImage = ({ src, alt, width, height, index = 0 }) => {
       width={width}
       height={height}
       className="w-full h-auto"
+      placeholder={blurDataURL ? 'blur' : 'empty'}
+      blurDataURL={blurDataURL}
       priority={isFirstRow}
       loading={index < ABOVE_FOLD ? 'eager' : 'lazy'}
       // Must track .masonryGrid: 4 columns, 2 at <=900px, and the grid
