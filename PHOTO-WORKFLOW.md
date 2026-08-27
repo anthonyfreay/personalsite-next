@@ -143,6 +143,54 @@ That one manifest feeds the gallery UI, the JSON-LD, and the image sitemap. Ther
 
 ---
 
+## Cover images
+
+Two derivatives per route, from one export, because the jobs conflict — the
+`/work` tile is square and a social card is 1.91:1, so no single file serves
+both without cropping badly somewhere.
+
+```bash
+npm run add-photos -- --cover live ~/Desktop/live-cover.jpg
+```
+
+| file | size | used for |
+|---|---|---|
+| `covers/<name>_cover.webp` | 900×900 | the `/work` tile (renders 400 CSS px square, so 800 on retina) |
+| `covers/<name>_og.jpg` | 1200×630 | the social card — Open Graph and Twitter |
+
+Names: the six galleries, plus `home` and `contact`.
+
+Both crop with attention focus rather than centre, so the subject survives the
+crop instead of whatever happened to be in the middle.
+
+The card is **JPEG on purpose**. Several social scrapers still handle WebP
+poorly, and a card that fails to render is worse than a slightly larger file.
+
+After generating, point the route at it:
+
+```js
+// src/app/<route>/page.jsx
+openGraph: {
+  images: [{ url: 'https://www.anthonyfreay.com/covers/live_og.jpg', width: 1200, height: 630 }],
+},
+twitter: { images: ['https://www.anthonyfreay.com/covers/live_og.jpg'] },
+```
+
+and, for a gallery, update its tile in `src/app/work/WorkClient.jsx` to
+`covers/<name>_cover.webp`.
+
+### Why this matters
+
+The covers that exist today are 450×675 portrait or 484×450, but every route
+**declares** its OG image as 1200×630. Social platforms lay the card out from
+the declared size, so the real image is cropped or letterboxed, and at 450px
+wide it is below the threshold for a large card on Facebook and X — shares
+render as a small thumbnail instead of a banner. `/places` has no cover at all
+and points at a gallery photo.
+
+The same files feed the `/work` tiles, where a 450px source is upscaled 1.78×
+on a retina display — the same softness the galleries had before `-hd`.
+
 ## The home page hero is separate
 
 The hero slideshow uses its own tiers and is **not** handled by this script. Masters live in `assets/home-originals/` (version-controlled, excluded from deploys); see [`assets/README.md`](assets/README.md) for the `cwebp` commands and the tier table. Adding a hero image also means editing `HERO_IMAGES` in `src/app/HomeClient.jsx`.

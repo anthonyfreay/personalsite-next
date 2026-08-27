@@ -45,6 +45,12 @@ const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events'];
 const BASE_LONG_EDGE = 675;
 const HD_LONG_EDGE = 1620;
 const QUALITY = 82;
+
+// Covers. Two derivatives from one export, for two very different jobs.
+const COVER_TILE = 900;          // /work tile renders at 400 CSS px square -> 800 on retina
+const OG_WIDTH = 1200;           // the size every social scraper actually wants
+const OG_HEIGHT = 630;           // 1.91:1
+const COVER_TARGETS = [...GALLERIES, 'home', 'contact'];
 const SOURCE_EXT = /\.(jpe?g|png|tiff?|webp)$/i;
 
 const c = {
@@ -188,6 +194,62 @@ function appendToManifest(gallery, entries) {
   fs.writeFileSync(p, s.slice(0, close) + rows + '\n' + s.slice(close));
 }
 
+/**
+ * Build the two cover derivatives for a route.
+ *
+ *   covers/<name>_cover.webp   900px square  - the /work tile
+ *   covers/<name>_og.jpg      1200x630       - the social card
+ *
+ * These are separate files because the jobs conflict: the tile is square and
+ * the card is 1.91:1, so one image cannot serve both without being cropped
+ * badly somewhere. Both crop with attention focus rather than centre, which
+ * keeps the subject rather than the middle of the frame.
+ *
+ * The card is JPEG on purpose. Several social scrapers still handle WebP
+ * poorly, and a card that fails to render is worse than a slightly larger file.
+ */
+async function deriveCover(sourceFile, name) {
+  const dir = path.join(repoRoot, 'public', 'covers');
+  fs.mkdirSync(dir, { recursive: true });
+
+  const meta = await sharp(sourceFile).metadata();
+  const short = Math.min(meta.width, meta.height);
+  if (short < COVER_TILE) {
+    console.warn(
+      `${c.yellow('!')} ${name}: source short edge is ${short}px; the square tile ` +
+        `wants ${COVER_TILE}px and will not be upscaled`
+    );
+  }
+  if (meta.width < OG_WIDTH) {
+    console.warn(
+      `${c.yellow('!')} ${name}: source is ${meta.width}px wide; the social card ` +
+        `wants ${OG_WIDTH}px and will not be upscaled`
+    );
+  }
+
+  const tilePath = path.join(dir, `${name}_cover.webp`);
+  const ogPath = path.join(dir, `${name}_og.jpg`);
+
+  await sharp(sourceFile)
+    .rotate()
+    .resize(COVER_TILE, COVER_TILE, { fit: 'cover', position: sharp.strategy.attention, withoutEnlargement: true })
+    .webp({ quality: QUALITY })
+    .toFile(tilePath);
+
+  await sharp(sourceFile)
+    .rotate()
+    .resize(OG_WIDTH, OG_HEIGHT, { fit: 'cover', position: sharp.strategy.attention, withoutEnlargement: true })
+    .jpeg({ quality: 84, mozjpeg: true })
+    .toFile(ogPath);
+
+  const t = await sharp(tilePath).metadata();
+  const o = await sharp(ogPath).metadata();
+  return {
+    tile: { path: tilePath, w: t.width, h: t.height, bytes: fs.statSync(tilePath).size },
+    og: { path: ogPath, w: o.width, h: o.height, bytes: fs.statSync(ogPath).size },
+  };
+}
+
 /** Verify manifests and files agree in both directions. */
 function check() {
   let problems = 0;
@@ -226,6 +288,34 @@ async function main() {
   const argv = process.argv.slice(2);
   if (argv.includes('--check')) return check();
 
+  const coverIndex = argv.indexOf('--cover');
+  if (coverIndex !== -1) {
+    const name = argv[coverIndex + 1];
+    const source = argv[coverIndex + 2];
+    if (!name || !source) fail('Usage: npm run add-photos -- --cover <name> <file>');
+    if (!COVER_TARGETS.includes(name)) {
+      fail(`Unknown cover "${name}". Expected one of: ${COVER_TARGETS.join(', ')}`);
+    }
+    if (!fs.existsSync(source)) fail(`No such file: ${source}`);
+
+    console.log(`\n${c.bold(`Building covers for ${name}`)}\n`);
+    const r = await deriveCover(path.resolve(source), name);
+    for (const [label, x] of [['tile', r.tile], ['card', r.og]]) {
+      console.log(
+        `  ${c.green('+')} ${path.basename(x.path).padEnd(24)} ${`${x.w}x${x.h}`.padEnd(10)} ` +
+          `${(x.bytes / 1024).toFixed(0)} KB  ${c.dim(label === 'tile' ? '/work tile' : 'social card')}`
+      );
+    }
+    console.log(
+      `\n${c.yellow('Next:')} point the route's metadata at ` +
+        `${c.bold(`/covers/${name}_og.jpg`)} with width 1200 height 630` +
+        (GALLERIES.includes(name)
+          ? `,\nand WorkClient at ${c.bold(`covers/${name}_cover.webp`)}.\n`
+          : '.\n')
+    );
+    return;
+  }
+
   const altIndex = argv.indexOf('--alt');
   let alt = null;
   if (altIndex !== -1) {
@@ -242,6 +332,10 @@ async function main() {
     console.log(`
 ${c.bold('Usage')}  npm run add-photos -- <gallery> <file-or-folder>... [options]
        npm run add-photos -- --check
+
+${c.bold('Covers')}   npm run add-photos -- --cover <name> <file>
+         builds the /work tile and the 1200x630 social card
+         names: ${COVER_TARGETS.join(', ')}
 
 ${c.bold('Options')}  --alt "text"   caption for a single photo
          --force        re-derive photos already in the manifest, keeping their alt

@@ -167,3 +167,38 @@ button; the idea is a swipe-up gesture that transitions into the site.
   must not fight the scroll lock the home page applies.
 - The Enter button should remain for anyone who does not discover the gesture.
 - `prefers-reduced-motion` should skip the transition.
+
+---
+
+## 11. Cover and social-card images are the wrong shape and too small
+
+Found auditing what `add-photos` did not cover. Every route declares its Open
+Graph image as **1200×630**, but no file is that size:
+
+| route | actual | declared |
+|---|---|---|
+| `/bw` `/live` `/cars` `/work` `/` | 450×675 | 1200×630 |
+| `/people` | 450×600 | 1200×630 |
+| `/events` | 484×450 | 1200×630 |
+| `/contact` | 1440×1920 | 1200×630 |
+| `/places` | 450×675 (a gallery photo — no cover exists) | 1200×630 |
+
+Two consequences:
+
+- **Shares render badly.** Platforms lay the card out from the declared size, so
+  the real image is cropped or letterboxed. At 450px wide it is also under the
+  threshold for a large card on Facebook and X, so a share becomes a small
+  thumbnail rather than a banner. This undercuts the entity work in item 4 —
+  every link someone posts looks worse than it should.
+- **`/work` tiles are soft.** They render 400 CSS px square, so 800 physical on
+  retina, from a 450px source — a 1.78× upscale. The same problem the galleries
+  had before `-hd`.
+
+`npm run add-photos -- --cover <name> <file>` now builds both derivatives
+(900×900 tile, 1200×630 card, attention-cropped). What remains is editorial:
+choosing which photo represents each gallery, exporting it, then pointing the
+route metadata and `WorkClient` at the results. See `PHOTO-WORKFLOW.md`.
+
+Interim option: bootstrap the cards from existing `-hd` gallery files rather
+than waiting for new exports. Those are 1080–1620px, so a 1200×630 crop is close
+to full quality and would be a large improvement over the current 450px files.
