@@ -81,6 +81,18 @@ export default function ContactForm() {
       onInput={handleFormInput}
       className={styles.contactForm}
     >
+      {/* Formspree silently discards any submission that fills this in.
+          display:none keeps it out of the accessibility tree as well as the
+          layout, and tabIndex -1 keeps it out of the keyboard order. */}
+      <input
+        type="text"
+        name="_gotcha"
+        style={{ display: 'none' }}
+        tabIndex="-1"
+        autoComplete="off"
+        aria-hidden="true"
+      />
+
       <label htmlFor="fname" className="sr-only">First Name</label>
       <input
         id="fname"
