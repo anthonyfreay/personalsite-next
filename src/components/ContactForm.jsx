@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useForm, ValidationError } from '@formspree/react';
 import styles from './ContactForm.module.css';
 
@@ -8,6 +8,8 @@ export default function ContactForm() {
   const [formState, submit] = useForm('mzdadlpl');
   const formRef = useRef();
   const budgetOutRef = useRef();
+  const lastBudgetRef = useRef('');
+  const [dismissedResult, setDismissedResult] = useState(null);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +23,7 @@ export default function ContactForm() {
   useEffect(() => {
     if (formState.result) {
       formRef.current?.reset();
+      lastBudgetRef.current = '';
       if (budgetOutRef.current) budgetOutRef.current.value = '';
     }
   }, [formState.result]);
@@ -29,26 +32,44 @@ export default function ContactForm() {
   // clears it along with everything else. Sanitizing mutates the input in
   // place; the hidden sibling carries the USD-formatted value to Formspree.
   const syncBudgetOutput = (amount) => {
+    if (!budgetOutRef.current) return;
     const parsed = Number(amount);
     budgetOutRef.current.value =
       amount === '' || Number.isNaN(parsed) ? '' : `USD $${parsed.toFixed(2)}`;
   };
 
-  // Digits with at most two decimal places; anything else never lands.
+  // Digits with at most two decimal places; anything else never lands. A
+  // second decimal point is rejected outright rather than reflowed, which
+  // would quietly turn 1000.00 into 1.00 on one stray keystroke.
   const handleBudgetChange = (e) => {
     const cleaned = e.target.value.replace(/[^\d.]/g, '');
     const [whole, ...rest] = cleaned.split('.');
-    e.target.value = rest.length
-      ? `${whole}.${rest.join('').slice(0, 2)}`
-      : whole;
-    syncBudgetOutput(e.target.value);
+    let next;
+    if (rest.length > 1) {
+      next = lastBudgetRef.current;
+    } else {
+      next = rest.length ? `${whole}.${rest[0].slice(0, 2)}` : whole;
+    }
+    lastBudgetRef.current = next;
+    e.target.value = next;
+    syncBudgetOutput(next);
   };
 
   const handleBudgetBlur = (e) => {
     const parsed = Number(e.target.value);
     e.target.value =
       e.target.value === '' || Number.isNaN(parsed) ? '' : parsed.toFixed(2);
+    lastBudgetRef.current = e.target.value;
     syncBudgetOutput(e.target.value);
+  };
+
+  // formState.result is a fresh object per success, so comparing against the
+  // one already acknowledged lets the banner reappear on a second send and
+  // clear as soon as the visitor starts typing again.
+  const showSuccess = Boolean(formState.result) && formState.result !== dismissedResult;
+
+  const handleFormInput = () => {
+    if (formState.result) setDismissedResult(formState.result);
   };
 
   const formErrors = formState.errors?.getFormErrors?.() ?? [];
@@ -57,6 +78,7 @@ export default function ContactForm() {
     <form
       ref={formRef}
       onSubmit={handleOnSubmit}
+      onInput={handleFormInput}
       className={styles.contactForm}
     >
       <label htmlFor="fname" className="sr-only">First Name</label>
@@ -122,7 +144,6 @@ export default function ContactForm() {
           onChange={handleBudgetChange}
           onBlur={handleBudgetBlur}
           placeholder="1000.00"
-          pattern="\d+(\.\d{1,2})?"
           title="Enter an amount in US dollars, e.g. 1000.00"
           aria-describedby="budget-hint"
         />
@@ -157,10 +178,10 @@ export default function ContactForm() {
       )}
 
       <p aria-live="polite" className="sr-only">
-        {formState.succeeded ? 'Your message was sent.' : ''}
+        {showSuccess ? 'Your message was sent.' : ''}
       </p>
 
-      {formState.succeeded && (
+      {showSuccess && (
         <p className={`${styles.thankYouMessage} ${styles.thankYouMessageActive}`}>
           Thanks for reaching out! <br />
           I&apos;ll be in touch soon.
