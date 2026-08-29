@@ -2,16 +2,30 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { ROUTES } from '@/lib/constants';
 import styles from './WorkClient.module.css';
 
-const categories = [
-  { path: '/live', image: 'live/A7400474-music.webp', label: 'Live', alt: 'Live music and concert photography' },
-  { path: '/bw', image: 'covers/bw_cover.jpg', label: 'B & W', alt: 'Black and white photography' },
-  { path: '/people', image: 'covers/people_cover.jpg', label: 'People', alt: 'Portrait and lifestyle photography' },
-  { path: '/places', image: 'places/A7406615-scapes.webp', label: 'Places', alt: 'Travel and landscape photography' },
-  { path: '/cars', image: 'covers/cars_cover.jpg', label: 'Cars', alt: 'Automotive photography' },
-  { path: '/events', image: 'events/A7404835-color.webp', label: 'Events', alt: 'Event and celebration photography' },
+/*
+  Cover art and alt text per gallery. The tile *label* is not here: it comes
+  from ROUTES, the same source as the navbar title, the footer and the 404
+  list, so renaming a gallery cannot leave this page saying something else -
+  which is exactly what happened when /live became "Live Music".
+
+  Array order is the tile order on the page.
+*/
+const covers = [
+  { path: '/live', image: 'live/A7400474-music.webp', alt: 'Live music and concert photography' },
+  { path: '/bw', image: 'covers/bw_cover.jpg', alt: 'Black and white photography' },
+  { path: '/people', image: 'covers/people_cover.jpg', alt: 'Portrait and lifestyle photography' },
+  { path: '/places', image: 'places/A7406615-scapes.webp', alt: 'Travel and landscape photography' },
+  { path: '/cars', image: 'covers/cars_cover.jpg', alt: 'Automotive photography' },
+  { path: '/events', image: 'events/A7404835-color.webp', alt: 'Event and celebration photography' },
 ];
+
+const categories = covers.map((cover) => ({
+  ...cover,
+  label: ROUTES.find((route) => route.path === cover.path)?.label ?? '',
+}));
 
 export default function WorkClient() {
   return (
@@ -19,7 +33,7 @@ export default function WorkClient() {
       <div className={styles.mainContent}>
         {categories.map((category, index) => (
           <Link
-            key={category.label}
+            key={category.path}
             href={category.path}
             className={styles.categoryLink}
           >

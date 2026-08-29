@@ -10,7 +10,7 @@ export const GA_MEASUREMENT_ID = 'G-5RYLFVDX71';
 export const ROUTES = [
   { path: '/', label: 'Home' },
   { path: '/work', label: 'Work' },
-  { path: '/live', label: 'Live' },
+  { path: '/live', label: 'Live Music' },
   { path: '/bw', label: 'B & W' },
   { path: '/people', label: 'People' },
   { path: '/places', label: 'Places' },
