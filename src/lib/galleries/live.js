@@ -14,6 +14,7 @@ export const images = [
   { alt: 'J Balvin', src: '/live/RX709066-Edit-music.webp', color: '#080808' },
   { alt: 'Lizzy McAlpine', src: '/live/RX704131-music.webp', color: '#080808' },
   { alt: 'Gracie Abrams', src: '/live/RX701806-music.webp', color: '#080808' },
+  { alt: 'Dominic Fike', src: '/live/DSC03296-music.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Gracie Abrams', src: '/live/RX701741-Enhanced-NR-music.webp', color: '#080808' },
   { alt: 'Tiffany Day', src: '/live/A7400474-music.webp', color: '#080808' },
   { alt: 'Tai Verdes', src: '/live/RX708483-music.webp', color: '#f8f8f8' },
@@ -38,4 +39,5 @@ export const images = [
   { alt: 'Lauv', src: '/live/DSC06611-music.webp', color: '#080808' },
   { alt: 'Olu', src: '/live/RX703590-music.webp', color: '#080808' },
   { alt: 'Nicki Minaj', src: '/live/RX709090-music.webp', color: '#080808' },
+  { alt: 'Lorde', src: '/live/DSC02182-music.webp', width: 1080, height: 1620, color: '#080808' },
 ];
