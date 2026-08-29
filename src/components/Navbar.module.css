@@ -108,8 +108,15 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  /* Same treatment as the wordmark: 1.8rem, undecorated, uppercase. */
+  /*
+    The gallery title in its secondary face. This and GalleryHeading are the
+    same title at two breakpoints - exactly one is visible at a time - so they
+    have to carry the same treatment or it would change on resize.
+  */
+  font-family: var(--fontFamilySecondary);
   font-size: 1.8rem;
+  font-weight: 400;
+  font-style: italic;
   text-transform: uppercase;
   color: var(--mainColorDark);
   white-space: nowrap;
@@ -117,9 +124,9 @@
 }
 
 /*
-  At the wordmark's own size the longest label ("LIVE MUSIC") would collide
-  with the brand on a narrow desktop window, so step it down before that
-  happens rather than letting the two run together.
+  At the wordmark's own size the longest label ("PLACES", "EVENTS") would
+  collide with the brand on a narrow desktop window, so step it down before
+  that happens rather than letting the two run together.
 */
 @media only screen and (max-width: 1000px) {
   .galleryTitle {

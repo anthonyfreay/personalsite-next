@@ -10,12 +10,13 @@
   Below 668px the navbar has no room for it (wordmark + hamburger), so the
   heading becomes visible here.
 */
-/* Matches the navbar treatment: undecorated uppercase, like the wordmark. */
+/* Matches the navbar treatment: the secondary face, undecorated uppercase. */
 .heading {
   text-align: center;
-  font-family: var(--fontFamily);
+  font-family: var(--fontFamilySecondary);
   font-size: 1.5rem;
   font-weight: 400;
+  font-style: italic;
   text-transform: uppercase;
   color: var(--textColor);
   padding: 1.25rem 10px 1rem;
