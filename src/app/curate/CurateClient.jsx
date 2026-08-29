@@ -60,11 +60,8 @@ export default function CurateClient({ galleries }) {
   const [status, setStatus] = useState({ state: 'loading' });
   const [compact, setCompact] = useState(false);
   const [hideRemoved, setHideRemoved] = useState(false);
-  /*
-    Ordered rather than a Set: with two already picked, a third click has to
-    drop one, and dropping the older of the two is the only choice that lets you
-    walk a candidate along a row -- keep the anchor, retry the partner.
-  */
+  // At most two, and the tiles enforce it: with two picked, every other
+  // selector is disabled rather than quietly displacing one of them.
   const [selected, setSelected] = useState([]);
 
   const dragFrom = useRef(null);
@@ -143,7 +140,8 @@ export default function CurateClient({ galleries }) {
   const toggleSelected = useCallback((src) => {
     setSelected((current) => {
       if (current.includes(src)) return current.filter((value) => value !== src);
-      return [...current, src].slice(-2);
+      if (current.length === 2) return current;
+      return [...current, src];
     });
   }, []);
 
@@ -319,6 +317,8 @@ export default function CurateClient({ galleries }) {
           const isRemoved = removed.has(image.src);
           const position = kept.indexOf(image);
           const isSelected = selected.includes(image.src);
+          // Deselecting stays available, or a full pair would be a dead end.
+          const selectable = isSelected || selected.length < 2;
 
           return (
             <div
@@ -366,6 +366,7 @@ export default function CurateClient({ galleries }) {
                 className={styles.selectBox}
                 onClick={() => toggleSelected(image.src)}
                 aria-pressed={isSelected}
+                disabled={!selectable}
                 aria-label={
                   isSelected
                     ? `Deselect ${image.alt || image.src}`

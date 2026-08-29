@@ -227,3 +227,9 @@
 .selected .hit {
   box-shadow: inset 0 0 0 3px var(--accentColor1, #54c6eb);
 }
+
+/* Two already picked: every other selector is out of play. */
+.selectBox:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
