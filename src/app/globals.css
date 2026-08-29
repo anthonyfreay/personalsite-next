@@ -34,6 +34,7 @@
 
   --font-sans: helvetica-neue-lt-pro, Arial, sans-serif;
   --font-serif: garamond-premier-pro, serif;
+  --font-serif-caption: garamond-premier-pro-caption, serif;
 }
 
 /*
@@ -68,6 +69,14 @@
       everywhere this is used rather than left to inherit.
     */
     --fontFamilySecondary: garamond-premier-pro, serif;
+
+    /*
+      The alt face: Garamond Premier Pro's Caption optical cut, roman 400. Same
+      family drawn for small sizes - taller x-height, more open counters,
+      sturdier strokes - so it holds up where the display italic above goes
+      thin. Use it for small text, not for titles.
+    */
+    --fontFamilyAlt: garamond-premier-pro-caption, serif;
   }
 
   html,

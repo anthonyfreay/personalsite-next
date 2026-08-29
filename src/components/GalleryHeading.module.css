@@ -36,8 +36,3 @@
     border: 0;
   }
 }
-
-/* A route that declares its own `heading` casing keeps it. */
-.verbatim {
-  text-transform: none;
-}

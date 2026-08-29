@@ -64,16 +64,17 @@
   padding: 2.25rem 0.75rem 0.7rem;
   color: #fff;
   /*
-    The secondary face: these are image titles, descriptive rather than
-    navigational. Set a size larger than the sans it replaced - Garamond's
-    x-height is markedly smaller, and this is small white text over a
-    gradient. The tile sets line-height: 0 to kill the image baseline gap,
+    The alt face - the Caption optical cut - because this is the smallest text
+    on the site and sits in white over a gradient, which is exactly what that
+    cut is drawn for. It carries small sizes where the display italic went
+    thin, so this is back at the size the sans used rather than bumped up to
+    compensate. The tile sets line-height: 0 to kill the image baseline gap,
     so line-height must be restored explicitly here too.
   */
-  font-family: var(--fontFamilySecondary);
+  font-family: var(--fontFamilyAlt);
   font-weight: 400;
-  font-style: italic;
-  font-size: 1.05rem;
+  font-style: normal;
+  font-size: 0.95rem;
   line-height: 1.3;
   letter-spacing: 0.02em;
   text-align: center;
