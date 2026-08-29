@@ -11,9 +11,9 @@ import styles from './Footer.module.css';
   the home page (the wordmark) and /work.
 
   Sourced from ROUTES rather than written out, so a label cannot drift between
-  the footer, the navbar's centred gallery title and the 404 page - which is
-  exactly what happened when /live became "Live Music" and only the footer
-  still said "Live". ROUTES order is the display order.
+  the footer, the navbar's centred gallery title, the /work tiles and the 404
+  page - which is exactly what happened when /live was renamed and only the
+  footer kept the old label. ROUTES order is the display order.
 */
 const NAVBAR_ONLY = new Set(['/', '/work']);
 const footerRoutes = ROUTES.filter((route) => !NAVBAR_ONLY.has(route.path));
