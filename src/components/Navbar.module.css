@@ -109,12 +109,12 @@
   left: 50%;
   transform: translateX(-50%);
   /*
-    The gallery title in its secondary face. This and GalleryHeading are the
-    same title at two breakpoints - exactly one is visible at a time - so they
-    have to carry the same treatment or it would change on resize.
+    The gallery title in its secondary face, sized to the nav links rather
+    than the wordmark: it sits between them, and at the wordmark's size it
+    read as a second brand competing with the real one.
   */
   font-family: var(--fontFamilySecondary);
-  font-size: 1.8rem;
+  font-size: 1.3rem; /* .navItem */
   font-weight: 400;
   font-style: italic;
   text-transform: uppercase;
@@ -124,23 +124,15 @@
 }
 
 /*
-  At the wordmark's own size the longest label ("PLACES", "EVENTS") would
-  collide with the brand on a narrow desktop window, so step it down before
-  that happens rather than letting the two run together.
-*/
-@media only screen and (max-width: 1000px) {
-  .galleryTitle {
-    font-size: 1.4rem;
-  }
-}
+  There used to be a step-down at 1000px, because at the wordmark's 1.8rem the
+  longest label ran into "ANTHONY FREAY" on a narrow desktop window. At the nav
+  links' size it clears the wordmark by well over 80px at every width this rule
+  covers, so the step-down is gone and the size is constant here.
 
-/*
-  Below this the wordmark and the centred title start to touch - "LIVE MUSIC"
-  is the longest label and runs into "ANTHONY FREAY" at around 680px even at
-  the reduced size. Rather than shrinking the type until it no longer matches
-  the wordmark, hand off here: GalleryHeading becomes visible and shows the
-  title above the grid instead. The two breakpoints are complementary, so
-  exactly one is shown at any width.
+  This handoff stays: below 800px the navbar has no room for a centred title
+  alongside the wordmark and the hamburger, so GalleryHeading becomes visible
+  and shows it above the grid instead. The two breakpoints are complementary,
+  so exactly one is shown at any width.
 */
 @media only screen and (max-width: 800px) {
   .galleryTitle {
