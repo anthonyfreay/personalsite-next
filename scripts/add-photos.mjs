@@ -41,7 +41,7 @@ import sharp from 'sharp';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, '..');
 
-const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events'];
+const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events', 'sports'];
 // The galleries assume one frame shape. A stray 4:3 or 16:9 export breaks the
 // masonry column rhythm and the /work tiles, so sources are gated on it here
 // rather than discovered later on the page. The tolerance absorbs Lightroom's

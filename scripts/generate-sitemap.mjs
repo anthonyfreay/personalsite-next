@@ -14,11 +14,12 @@ const routes = [
   '/',
   '/work',
   '/live',
-  '/bw',
-  '/people',
-  '/places',
-  '/cars',
   '/events',
+  '/people',
+  '/sports',
+  '/cars',
+  '/bw',
+  '/places',
   '/contact',
 ];
 
@@ -32,6 +33,7 @@ const routeSources = {
   '/places': 'src/app/places',
   '/cars': 'src/app/cars',
   '/events': 'src/app/events',
+  '/sports': 'src/app/sports',
   '/contact': 'src/app/contact',
 };
 

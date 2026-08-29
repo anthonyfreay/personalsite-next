@@ -11,15 +11,17 @@ import styles from './WorkClient.module.css';
   list, so renaming a gallery cannot leave this page saying something else -
   which is exactly what happened when /live became "Live Music".
 
-  Array order is the tile order on the page.
+  Array order is the tile order on the page, and must track ROUTES: the grid is
+  three columns, so each row of this list is one tier of prominence.
 */
 const covers = [
   { path: '/live', image: 'live/A7400474-live.webp', alt: 'Live music and concert photography' },
-  { path: '/bw', image: 'covers/bw_cover.jpg', alt: 'Black and white photography' },
-  { path: '/people', image: 'covers/people_cover.jpg', alt: 'Portrait and lifestyle photography' },
-  { path: '/places', image: 'places/A7406615-places.webp', alt: 'Travel and landscape photography' },
-  { path: '/cars', image: 'covers/cars_cover.jpg', alt: 'Automotive photography' },
   { path: '/events', image: 'events/A7404835-events.webp', alt: 'Event and celebration photography' },
+  { path: '/people', image: 'covers/people_cover.jpg', alt: 'Portrait and lifestyle photography' },
+  { path: '/sports', image: 'sports/DSC02801-sports.webp', alt: 'Sports photography' },
+  { path: '/cars', image: 'covers/cars_cover.jpg', alt: 'Automotive photography' },
+  { path: '/bw', image: 'covers/bw_cover.jpg', alt: 'Black and white photography' },
+  { path: '/places', image: 'places/A7406615-places.webp', alt: 'Travel and landscape photography' },
 ];
 
 const categories = covers.map((cover) => ({
