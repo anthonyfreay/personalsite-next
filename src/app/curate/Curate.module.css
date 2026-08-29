@@ -221,11 +221,14 @@
 }
 
 /*
-  Inset rather than a plain outline: an outline on a masonry tile paints outside
-  the column box and clips against the neighbouring column.
+  An outline pulled inside the box, not an inset box-shadow: a shadow paints
+  below the element's content and the photo fills the button edge to edge, so
+  the ring would never be seen. The negative offset also keeps it off the
+  neighbouring masonry column, which a positive outline would overlap.
 */
 .selected .hit {
-  box-shadow: inset 0 0 0 3px var(--accentColor1, #54c6eb);
+  outline: 3px solid var(--accentColor1, #54c6eb);
+  outline-offset: -3px;
 }
 
 /* Two already picked: every other selector is out of play. */
