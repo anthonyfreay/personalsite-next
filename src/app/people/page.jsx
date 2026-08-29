@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import ImageGallery from '@/components/ImageGallery';
 import { people, withHd } from '@/lib/galleries';
 import {
@@ -46,7 +47,7 @@ function People() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Portrait Photography</h1>
+      <GalleryHeading path="/people" title="Portrait Photography" />
       <p className="sr-only">
         Portrait and lifestyle photography by Anthony Freay, based in New York City.
         This gallery features candid and environmental portraits shot across NYC landmarks,

@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import ImageGallery from '@/components/ImageGallery';
 import { bw, withHd } from '@/lib/galleries';
 import {
@@ -46,7 +47,7 @@ function BlackWhite() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Black & White Photography</h1>
+      <GalleryHeading path="/bw" title="Black & White Photography" />
       <p className="sr-only">
         A collection of black and white photography by Anthony Freay, a NYC-based photographer.
         These timeless, high-contrast images capture concerts, street scenes, and candid moments

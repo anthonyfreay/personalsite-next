@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import PlacesClient from './PlacesClient';
 import { places as allImages } from '@/lib/galleries';
 import {
@@ -16,13 +17,13 @@ export const metadata = {
   openGraph: {
     title: 'Places | Anthony Freay',
     description: 'Travel and street photography by Anthony Freay. Exploring cities, landscapes, and the moments in between.',
-    images: [{ url: 'https://www.anthonyfreay.com/places/A7406615-scapes.webp', width: 1200, height: 630 }],
+    images: [{ url: 'https://www.anthonyfreay.com/places/A7406615-places.webp', width: 1200, height: 630 }],
     url: 'https://www.anthonyfreay.com/places',
   },
   twitter: {
     title: 'Places | Anthony Freay',
     description: 'Travel and street photography by Anthony Freay. Exploring cities, landscapes, and the moments in between.',
-    images: ['https://www.anthonyfreay.com/places/A7406615-scapes.webp'],
+    images: ['https://www.anthonyfreay.com/places/A7406615-places.webp'],
   },
 };
 
@@ -47,7 +48,7 @@ export default function Places() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Travel & Landscape Photography</h1>
+      <GalleryHeading path="/places" title="Travel & Landscape Photography" />
       <p className="sr-only">
         Travel and landscape photography by Anthony Freay, a New York City-based photographer.
         This gallery spans destinations from the Oregon Coast and San Francisco to the Galapagos

@@ -33,6 +33,8 @@
   --color-accent-3: #e87461;
 
   --font-sans: helvetica-neue-lt-pro, Arial, sans-serif;
+  --font-serif: garamond-premier-pro, serif;
+  --font-serif-caption: garamond-premier-pro-caption, serif;
 }
 
 /*
@@ -58,6 +60,23 @@
     --accentColor2: #2ecc71;
     --accentColor3: #e87461;
     --fontFamily: helvetica-neue-lt-pro, Arial, sans-serif;
+
+    /*
+      The secondary face, for gallery titles. The Typekit kit ships exactly one
+      garamond-premier-pro face - italic, weight 400 - so it is only ever used
+      at that weight and style. Asking for roman or bold gets a synthesised
+      face, which is why the two properties are set alongside the family
+      everywhere this is used rather than left to inherit.
+    */
+    --fontFamilySecondary: garamond-premier-pro, serif;
+
+    /*
+      The alt face: Garamond Premier Pro's Caption optical cut, roman 400. Same
+      family drawn for small sizes - taller x-height, more open counters,
+      sturdier strokes - so it holds up where the display italic above goes
+      thin. Use it for small text, not for titles.
+    */
+    --fontFamilyAlt: garamond-premier-pro-caption, serif;
   }
 
   html,

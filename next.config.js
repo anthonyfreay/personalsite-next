@@ -18,6 +18,31 @@ const nextConfig = {
       // still being served from public/. That file is gone, so consolidate the
       // URL onto / rather than letting it start returning 404s.
       { source: '/index.html', destination: '/', permanent: true },
+      // Gallery slugs used to carry a topic suffix (-music, -scapes, -color,
+      // -portrait) that no longer matched the folder the photo lives in. They
+      // now all carry the gallery name, which is what the full-resolution
+      // masters are named too. These keep the old image URLs resolving: they
+      // are indexed, and an image that 404s loses its search placement.
+      //
+      // Each pair needs two rules, because the size marker sits after the
+      // suffix (`X-music-hd.webp` -> `X-live-hd.webp`) and an optional
+      // `:rest(-hd)?` throws "Expected rest to be a string" when it is absent.
+      ...[
+        ['bw', 'portrait'],
+        ['cars', 'color'],
+        ['cars', 'bw'],
+        ['events', 'color'],
+        ['live', 'music'],
+        ['people', 'portrait'],
+        ['places', 'scapes'],
+        ['places', 'color'],
+      ].flatMap(([gallery, legacy]) =>
+        ['-hd', ''].map((size) => ({
+          source: `/${gallery}/:slug(.*)-${legacy}${size}.webp`,
+          destination: `/${gallery}/:slug-${gallery}${size}.webp`,
+          permanent: true,
+        }))
+      ),
     ];
   },
 };

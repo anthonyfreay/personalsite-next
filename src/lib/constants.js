@@ -7,6 +7,11 @@ export const DEFAULT_IMAGE_ABS = `${SITE_URL}${DEFAULT_IMAGE_PATH}`;
 export const DEFAULT_TWITTER = '@anthonyfreay';
 export const GA_MEASUREMENT_ID = 'G-5RYLFVDX71';
 
+/*
+  `label` is the one name a route has. The footer, the /work tile captions, the
+  404 list, the h1 and the navbar's centred title all render it, each
+  uppercasing in its own CSS - so a gallery reads the same wherever it appears.
+*/
 export const ROUTES = [
   { path: '/', label: 'Home' },
   { path: '/work', label: 'Work' },

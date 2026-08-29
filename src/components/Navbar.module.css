@@ -93,6 +93,53 @@
   color: var(--mainColorDark);
 }
 
+/*
+  The gallery name, centred in the navbar.
+
+  Absolutely positioned rather than a flex child on purpose: the wordmark and
+  the nav links are different widths, so a flex item between them would centre
+  on the leftover space and sit visibly off-centre. Anchoring to 50% of the bar
+  puts it at the true middle regardless of what flanks it.
+
+  pointer-events: none so the label never intercepts a click meant for the
+  wordmark or the links, whose boxes it sits between.
+*/
+.galleryTitle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  /*
+    The gallery title in its secondary face, sized to the nav links rather
+    than the wordmark: it sits between them, and at the wordmark's size it
+    read as a second brand competing with the real one.
+  */
+  font-family: var(--fontFamilySecondary);
+  font-size: 1.3rem; /* .navItem */
+  font-weight: 400;
+  font-style: italic;
+  text-transform: uppercase;
+  color: var(--mainColorDark);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/*
+  There used to be a step-down at 1000px, because at the wordmark's 1.8rem the
+  longest label ran into "ANTHONY FREAY" on a narrow desktop window. At the nav
+  links' size it clears the wordmark by well over 80px at every width this rule
+  covers, so the step-down is gone and the size is constant here.
+
+  This handoff stays: below 800px the navbar has no room for a centred title
+  alongside the wordmark and the hamburger, so GalleryHeading becomes visible
+  and shows it above the grid instead. The two breakpoints are complementary,
+  so exactly one is shown at any width.
+*/
+@media only screen and (max-width: 800px) {
+  .galleryTitle {
+    display: none;
+  }
+}
+
 /* Hamburger toggle — hidden on desktop */
 .toggle {
   display: none;
@@ -176,6 +223,7 @@
   .navContainer {
     display: none;
   }
+
 
   .mobileMenu {
     position: absolute;

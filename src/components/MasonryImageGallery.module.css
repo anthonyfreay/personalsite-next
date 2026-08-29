@@ -24,7 +24,19 @@
   width: 100%;
   max-width: 1800px;
   margin: 0 auto;
-  padding: 0 10px;
+  /*
+    The bottom inset is load-bearing, not cosmetic.
+
+    Tiles carry `margin-bottom: 10px`, but a trailing margin is absorbed at a
+    column break, so the container's height stops exactly at the tallest
+    column. Whichever column balancing makes longest then ends flush against
+    the footer - 0px on /places - while the shorter columns keep a visible gap.
+    The uneven result reads as the gallery colliding with the footer.
+
+    The flex-grid galleries (ImageGallery) already clear the footer by 10px, so
+    matching that here keeps all six routes consistent.
+  */
+  padding: 0 10px 10px;
 }
 
 @media (max-width: 900px) {

@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import CarsClient from './CarsClient';
 import { cars as allImages } from '@/lib/galleries';
 import {
@@ -47,7 +48,7 @@ export default function Cars() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Automotive Photography</h1>
+      <GalleryHeading path="/cars" title="Automotive Photography" />
       <p className="sr-only">
         Automotive photography by Anthony Freay, a NYC-based photographer with an eye for
         classic and modern vehicles. This gallery spans vintage American classics, European

@@ -53,11 +53,21 @@
   object-fit: cover;
 }
 
+/*
+  The same gallery labels the titles use, so they take the same secondary
+  face - otherwise /work would name a gallery in one face and the gallery
+  itself in another.
+*/
 .figcaption {
   color: var(--mainColorDark);
   text-align: center;
-  font-size: 1.1rem;
+  font-family: var(--fontFamilySecondary);
+  font-size: 1.25rem;
+  font-weight: 400;
+  font-style: italic;
   margin: 5px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* Tablet: 2 columns */
