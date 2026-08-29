@@ -48,4 +48,8 @@ export const images = [
   { alt: 'Guayaquil Highway', src: '/places/RX702346-places.webp', width: 1080, height: 1620, color: '#5898c8' },
   { alt: 'Tropical landscape', src: '/places/A7401732-Enhanced-NR-places.webp', width: 1080, height: 1620, color: '#e8e8e8' },
   { alt: 'Father and child crossing a snowy Manhattan sidewalk', src: '/places/A7409942-places.webp', width: 1620, height: 1080, color: '#e8e8e8' },
+  { alt: 'Orange tree heavy with fruit in Seville', src: '/places/A7407089-places.webp', width: 1080, height: 1620, color: '#081808' },
+  { alt: 'Lion crest above the gate of the Alcazar, Seville', src: '/places/A7407256-places.webp', width: 1620, height: 1080, color: '#b8d8e8' },
+  { alt: 'Vespa turning down a narrow Seville street', src: '/places/A7407476-places.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Car buried in snow outside a Manhattan doorway', src: '/places/A7408301-places.webp', width: 1620, height: 1080, color: '#181818' },
 ];

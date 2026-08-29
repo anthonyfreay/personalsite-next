@@ -30,4 +30,6 @@ export const images = [
   { alt: 'Family on a Motorcycle', src: '/bw/RX702300-bw.webp', color: '#080808' },
   { alt: 'Alone in the parking lot', src: '/bw/A7208874-bw.webp', color: '#080808' },
   { alt: 'Dominic Fike silhouetted under a patterned stage canopy', src: '/bw/DSC03426-bw.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'DJs behind the booth in a smoke-filled club', src: '/bw/A7401025-bw.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Chef plating a course across a pass of identical plates', src: '/bw/A7409160-bw.webp', width: 1620, height: 1080, color: '#080808' },
 ];

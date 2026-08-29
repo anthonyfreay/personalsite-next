@@ -40,4 +40,10 @@ export const images = [
   { alt: 'Olu', src: '/live/RX703590-live.webp', color: '#080808' },
   { alt: 'Nicki Minaj', src: '/live/RX709090-live.webp', color: '#080808' },
   { alt: 'Lorde', src: '/live/DSC02182-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'DJ in a fitted cap under blue stage light', src: '/live/A7400742-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Hand raised in the crowd under pink and blue light', src: '/live/A7400768-live.webp', width: 1080, height: 1620, color: '#7828b8' },
+  { alt: 'Dancers caught in motion under red light', src: '/live/A7400798-live.webp', width: 1080, height: 1620, color: '#180808' },
+  { alt: 'DJ working a controller in a jersey', src: '/live/A7401127-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Packed dance floor in haze and pink light', src: '/live/A7401198-live.webp', width: 1620, height: 1080, color: '#180808' },
+  { alt: 'Festival main stage in silhouette and smoke', src: '/live/DSC03409-live.webp', width: 1620, height: 1080, color: '#080808' },
 ];
