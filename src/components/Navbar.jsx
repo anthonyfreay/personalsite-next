@@ -18,15 +18,19 @@ const navLinks = [
   Everything in ROUTES except the pages that are not galleries.
 */
 const NON_GALLERY = new Set(['/', '/work', '/contact']);
-const galleryLabel = (pathname) =>
-  NON_GALLERY.has(pathname)
-    ? null
-    : ROUTES.find((route) => route.path === pathname)?.label ?? null;
+// `heading` wins when a route sets one: it is the on-page title, and this is
+// the visible copy of it. Verbatim, so the route's own casing survives.
+const galleryTitle = (pathname) => {
+  if (NON_GALLERY.has(pathname)) return null;
+  const route = ROUTES.find((r) => r.path === pathname);
+  if (!route) return null;
+  return { text: route.heading ?? route.label, verbatim: Boolean(route.heading) };
+};
 
 export default function Navbar() {
   const pathname = usePathname();
   const isHome = pathname === '/';
-  const label = galleryLabel(pathname);
+  const title = galleryTitle(pathname);
   const [open, setOpen] = useState(false);
 
   if (isHome) {
@@ -60,9 +64,12 @@ export default function Navbar() {
         h1 becomes visible above the grid instead, where the longer labels have
         room the navbar cannot give them.
       */}
-      {label && (
-        <span className={styles.galleryTitle} aria-hidden="true">
-          {label}
+      {title && (
+        <span
+          className={`${styles.galleryTitle} ${title.verbatim ? styles.verbatim : ''}`}
+          aria-hidden="true"
+        >
+          {title.text}
         </span>
       )}
 

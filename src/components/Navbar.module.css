@@ -326,3 +326,7 @@
   color: #090909;
   transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
 }
+/* A route that declares its own `heading` casing keeps it. */
+.verbatim {
+  text-transform: none;
+}
