@@ -192,3 +192,38 @@
 .removed .badge {
   background: var(--accentColor3, #e87461);
 }
+
+/*
+  Swap selection. The checkbox sits opposite the position badge so the two never
+  collide, and above the hit button so a click selects rather than unregisters.
+*/
+.selectBox {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.selectBox[aria-pressed='true'] {
+  background: var(--accentColor1, #54c6eb);
+  border-color: var(--accentColor1, #54c6eb);
+  color: #04212b;
+}
+
+/*
+  Inset rather than a plain outline: an outline on a masonry tile paints outside
+  the column box and clips against the neighbouring column.
+*/
+.selected .hit {
+  box-shadow: inset 0 0 0 3px var(--accentColor1, #54c6eb);
+}

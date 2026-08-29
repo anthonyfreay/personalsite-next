@@ -14,6 +14,11 @@ import styles from './Curate.module.css';
  * kept entries are sent; the route handler rewrites the file to exactly that
  * order.
  *
+ * Selecting two tiles enables Swap, which exchanges their positions. Dragging
+ * is the wrong tool for trading two photos that are screens apart -- it means
+ * hauling one tile the whole way and displacing everything in between, where a
+ * swap moves exactly the two and leaves the rest of the order untouched.
+ *
  * Drag-and-drop is the native HTML5 API rather than a library: the list is one
  * flat grid of at most a few dozen tiles, which is well inside what dragover
  * reordering handles without jank.
@@ -55,6 +60,12 @@ export default function CurateClient({ galleries }) {
   const [status, setStatus] = useState({ state: 'loading' });
   const [compact, setCompact] = useState(false);
   const [hideRemoved, setHideRemoved] = useState(false);
+  /*
+    Ordered rather than a Set: with two already picked, a third click has to
+    drop one, and dropping the older of the two is the only choice that lets you
+    walk a candidate along a row -- keep the anchor, retry the partner.
+  */
+  const [selected, setSelected] = useState([]);
 
   const dragFrom = useRef(null);
   // Bumped to re-run the load effect for the same gallery (the Revert button).
@@ -81,6 +92,7 @@ export default function CurateClient({ galleries }) {
         setImages(data.images);
         setBaseline(data.images.map((image) => image.src));
         setRemoved(new Set());
+        setSelected([]);
         setStatus({ state: 'idle' });
       } catch (error) {
         if (active) setStatus({ state: 'error', message: error.message });
@@ -128,6 +140,30 @@ export default function CurateClient({ galleries }) {
     });
   }, []);
 
+  const toggleSelected = useCallback((src) => {
+    setSelected((current) => {
+      if (current.includes(src)) return current.filter((value) => value !== src);
+      return [...current, src].slice(-2);
+    });
+  }, []);
+
+  /*
+    Exchange the two selected entries in place. Everything else keeps its index,
+    which is the whole point of the feature, and the selection is cleared so the
+    button cannot be pressed twice and silently undo itself.
+  */
+  const swap = useCallback(() => {
+    if (selected.length !== 2) return;
+    setImages((current) => {
+      const [a, b] = selected.map((src) => current.findIndex((image) => image.src === src));
+      if (a === -1 || b === -1) return current;
+      const next = [...current];
+      [next[a], next[b]] = [next[b], next[a]];
+      return next;
+    });
+    setSelected([]);
+  }, [selected]);
+
   const moveTo = useCallback((from, to) => {
     if (from === to) return;
     setImages((current) => {
@@ -162,6 +198,7 @@ export default function CurateClient({ galleries }) {
       setImages(kept);
       setBaseline(kept.map((image) => image.src));
       setRemoved(new Set());
+      setSelected([]);
       setStatus({
         state: 'saved',
         message: `${data.kept} kept, ${data.removed} unregistered`,
@@ -198,7 +235,8 @@ export default function CurateClient({ galleries }) {
         <div>
           <h1 className={styles.title}>Curate</h1>
           <p className={styles.subtitle}>
-            Drag to reorder. Click a tile to unregister it. Nothing is written until you save.
+            Drag to reorder, or select two tiles and swap them. Click a tile to unregister
+            it. Nothing is written until you save.
           </p>
         </div>
 
@@ -215,6 +253,15 @@ export default function CurateClient({ galleries }) {
               </option>
             ))}
           </select>
+
+          <button
+            type="button"
+            className={styles.reset}
+            onClick={swap}
+            disabled={selected.length !== 2}
+          >
+            Swap
+          </button>
 
           <button
             type="button"
@@ -271,11 +318,17 @@ export default function CurateClient({ galleries }) {
           const index = images.indexOf(image);
           const isRemoved = removed.has(image.src);
           const position = kept.indexOf(image);
+          const isSelected = selected.includes(image.src);
 
           return (
             <div
               key={image.src}
-              className={`${layoutStyles.tile} ${styles.editTile} ${isRemoved ? styles.removed : ''}`}
+              className={[
+                layoutStyles.tile,
+                styles.editTile,
+                isRemoved ? styles.removed : '',
+                isSelected ? styles.selected : '',
+              ].filter(Boolean).join(' ')}
               draggable
               onDragStart={() => { dragFrom.current = index; }}
               onDragOver={(event) => onDragOver(event, index)}
@@ -301,6 +354,25 @@ export default function CurateClient({ galleries }) {
                   sizes={SIZES[layout]}
                   className={compact ? styles.compactImage : ''}
                 />
+              </button>
+
+              {/*
+                A sibling of the hit button rather than a child: nesting a
+                control inside a button is invalid, and stacking it on top keeps
+                selecting separate from marking for removal.
+              */}
+              <button
+                type="button"
+                className={styles.selectBox}
+                onClick={() => toggleSelected(image.src)}
+                aria-pressed={isSelected}
+                aria-label={
+                  isSelected
+                    ? `Deselect ${image.alt || image.src}`
+                    : `Select ${image.alt || image.src} to swap`
+                }
+              >
+                {isSelected ? '✓' : ''}
               </button>
 
               <span className={styles.badge}>{isRemoved ? '—' : position + 1}</span>
