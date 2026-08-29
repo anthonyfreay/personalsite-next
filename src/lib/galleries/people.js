@@ -8,12 +8,10 @@
 export const images = [
   { alt: 'Em in Williamsburg', src: '/people/DSC01179-Edit-people.webp', color: '#484848' },
   { alt: 'Couple leaning together on a tree-lined city street', src: '/people/A7403286-people.webp', width: 1079, height: 1620, color: '#181818' },
-  { alt: 'Woman looking back over the Paris rooftops from Montmartre', src: '/people/A7409817-people.webp', width: 1215, height: 1620, color: '#080808' },
   { alt: 'Kal looking over a fire escape', src: '/people/DSC06349-people.webp', color: '#080808' },
   { alt: 'Natalie Freay celebrating her enagement', src: '/people/A7404306-people.webp', color: '#081808' },
   { alt: 'Arize in Studio', src: '/people/A7201581-Edit-people.webp', color: '#f8f8f8' },
   { alt: 'Dajee at Untermyer Gardens', src: '/people/A7205925-people.webp', color: '#181818' },
-  { alt: 'Six law graduates outside the Fordham School of Law', src: '/people/A7401733-people.webp', width: 1215, height: 1620, color: '#c8a888' },
   { alt: 'Dajee at the MET Cloisters', src: '/people/A7205508-HDR-Edit-people.webp', color: '#080808' },
   { alt: 'Camille in Studio', src: '/people/A7201742-Edit-people.webp', color: '#d8d8d8' },
   { alt: 'Richard in his favorite green shirt', src: '/people/A7204813-Edit-people.webp', color: '#080808' },

@@ -42,7 +42,6 @@ export const images = [
   { alt: 'Party attendee portrait', src: '/events/A7206542-events.webp', width: 1080, height: 1620, color: '#685848' },
   { alt: 'Event celebration candid', src: '/events/A7207884-events.webp', width: 1080, height: 1620, color: '#181818' },
   { alt: 'Event attendee moment', src: '/events/A7206535-events.webp', width: 1080, height: 1620, color: '#d8d8c8' },
-  { alt: 'Server presenting a bottle of Kistler Russian River Valley chardonnay', src: '/events/A7400849-events.webp', width: 1107, height: 1620, color: '#080808' },
   { alt: 'Party gathering photography', src: '/events/A7405908-Enhanced-NR-events.webp', width: 1080, height: 1620, color: '#f8f8f8' },
   { alt: 'Party gathering photography', src: '/events/A7207716-events.webp', width: 1620, height: 1080, color: '#080808' },
   { alt: 'Party attendees candid', src: '/events/A7206546-events.webp', width: 1620, height: 1080, color: '#080808' },
