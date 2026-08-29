@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import ImageGallery from '@/components/ImageGallery';
 import { live, withHd } from '@/lib/galleries';
 import {
@@ -52,7 +53,7 @@ function Live() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Concert Photography</h1>
+      <GalleryHeading path="/live" title="Concert Photography" />
       <p className="sr-only">
         Live music and concert photography by Anthony Freay, shot at venues across New York City
         and beyond. This gallery features artists including Tyler, the Creator, Daniel Caesar,

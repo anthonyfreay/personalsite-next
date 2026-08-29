@@ -93,6 +93,54 @@
   color: var(--mainColorDark);
 }
 
+/*
+  The gallery name, centred in the navbar.
+
+  Absolutely positioned rather than a flex child on purpose: the wordmark and
+  the nav links are different widths, so a flex item between them would centre
+  on the leftover space and sit visibly off-centre. Anchoring to 50% of the bar
+  puts it at the true middle regardless of what flanks it.
+
+  pointer-events: none so the label never intercepts a click meant for the
+  wordmark or the links, whose boxes it sits between.
+*/
+.galleryTitle {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  /* Same treatment as the wordmark: 1.8rem, undecorated, uppercase. */
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  color: var(--mainColorDark);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/*
+  At the wordmark's own size the longest label ("LIVE MUSIC") would collide
+  with the brand on a narrow desktop window, so step it down before that
+  happens rather than letting the two run together.
+*/
+@media only screen and (max-width: 1000px) {
+  .galleryTitle {
+    font-size: 1.4rem;
+  }
+}
+
+/*
+  Below this the wordmark and the centred title start to touch - "LIVE MUSIC"
+  is the longest label and runs into "ANTHONY FREAY" at around 680px even at
+  the reduced size. Rather than shrinking the type until it no longer matches
+  the wordmark, hand off here: GalleryHeading becomes visible and shows the
+  title above the grid instead. The two breakpoints are complementary, so
+  exactly one is shown at any width.
+*/
+@media only screen and (max-width: 800px) {
+  .galleryTitle {
+    display: none;
+  }
+}
+
 /* Hamburger toggle — hidden on desktop */
 .toggle {
   display: none;
@@ -176,6 +224,7 @@
   .navContainer {
     display: none;
   }
+
 
   .mobileMenu {
     position: absolute;

@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import EventsClient from './EventsClient';
 import { events as allImages } from '@/lib/galleries';
 import {
@@ -47,7 +48,7 @@ export default function Events() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Event Photography</h1>
+      <GalleryHeading path="/events" title="Event Photography" />
       <p className="sr-only">
         Event photography by Anthony Freay, a New York City-based photographer specializing
         in candid moments at parties, birthdays, and gatherings. These images document real

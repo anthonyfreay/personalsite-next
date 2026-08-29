@@ -1,3 +1,4 @@
+import GalleryHeading from '@/components/GalleryHeading';
 import PlacesClient from './PlacesClient';
 import { places as allImages } from '@/lib/galleries';
 import {
@@ -47,7 +48,7 @@ export default function Places() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <h1 className="sr-only">Travel & Landscape Photography</h1>
+      <GalleryHeading path="/places" title="Travel & Landscape Photography" />
       <p className="sr-only">
         Travel and landscape photography by Anthony Freay, a New York City-based photographer.
         This gallery spans destinations from the Oregon Coast and San Francisco to the Galapagos
