@@ -42,6 +42,12 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const repoRoot = path.join(__dirname, '..');
 
 const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events'];
+// The galleries assume one frame shape. A stray 4:3 or 16:9 export breaks the
+// masonry column rhythm and the /work tiles, so sources are gated on it here
+// rather than discovered later on the page. The tolerance absorbs Lightroom's
+// rounding (a 3:2 crop lands anywhere in 1.4997-1.5004), not a different crop.
+const ASPECT = 3 / 2;
+const ASPECT_TOLERANCE = 0.01;
 const BASE_LONG_EDGE = 675;
 const HD_LONG_EDGE = 1620;
 const QUALITY = 82;
@@ -72,6 +78,28 @@ function fail(message) {
 /** `A7401031-color.webp` -> `A7401031 color`; a starting point, not an answer. */
 const humanise = (slug) =>
   slug.replace(/[-_]+/g, ' ').replace(/\s+/g, ' ').trim();
+
+/**
+ * Is this 3:2, in either orientation? Compared on the long/short ratio so
+ * portrait and landscape are judged the same way.
+ */
+function aspectOf(width, height) {
+  return Math.max(width, height) / Math.min(width, height);
+}
+
+const isThreeByTwo = (ratio) => Math.abs(ratio - ASPECT) <= ASPECT_TOLERANCE;
+
+/** `1.3333 (4:3)` - the ratio plus the nearest common shape, for the message. */
+function describeAspect(ratio) {
+  const named = [
+    [1, '1:1'], [5 / 4, '5:4'], [4 / 3, '4:3'], [1.43, '1.43:1'],
+    [3 / 2, '3:2'], [16 / 9, '16:9'], [1.85, '1.85:1'], [2.39, '2.39:1'],
+  ];
+  const [, name] = named.reduce((best, cur) =>
+    Math.abs(cur[0] - ratio) < Math.abs(best[0] - ratio) ? cur : best
+  );
+  return `${ratio.toFixed(4)} (~${name})`;
+}
 
 /** Collect image files from any mix of files and directories. */
 function collectSources(inputs) {
@@ -133,6 +161,17 @@ function formatRow(e) {
   );
 }
 
+/** A source that is not 3:2. Rejects the one photo, not the whole run. */
+class RejectedAspect extends Error {
+  constructor(slug, width, height, ratio) {
+    super(
+      `${slug}: ${width}x${height} is ${describeAspect(ratio)}; ` +
+        `galleries take 3:2 only. Re-crop the export and try again.`
+    );
+    this.slug = slug;
+  }
+}
+
 async function derive(sourceFile, gallery, altOverride) {
   const slug = path.basename(sourceFile).replace(SOURCE_EXT, '');
   const publicDir = path.join(repoRoot, 'public', gallery);
@@ -145,6 +184,11 @@ async function derive(sourceFile, gallery, altOverride) {
   const image = sharp(sourceFile).rotate(); // honour EXIF orientation, then drop it
   const meta = await image.metadata();
   if (!meta.width || !meta.height) fail(`Cannot read dimensions: ${sourceFile}`);
+
+  const ratio = aspectOf(meta.width, meta.height);
+  if (!isThreeByTwo(ratio)) {
+    throw new RejectedAspect(slug, meta.width, meta.height, ratio);
+  }
 
   // Long-edge constrained, so portrait and landscape get equal treatment.
   const landscape = meta.width >= meta.height;
@@ -358,6 +402,7 @@ ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
   const already = existingSources(gallery);
   const entries = [];
   const replaced = [];
+  const rejected = [];
   let skipped = 0;
 
   console.log(`\n${c.bold(`Adding ${sources.length} photo(s) to /${gallery}`)}\n`);
@@ -375,6 +420,15 @@ ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
       continue;
     }
     if (dryRun) {
+      const m = await sharp(file).rotate().metadata();
+      const ratio = aspectOf(m.width, m.height);
+      if (!isThreeByTwo(ratio)) {
+        console.log(
+          `  ${c.red('reject')}  ${slug}  ${c.dim(`${m.width}x${m.height} is ${describeAspect(ratio)}, not 3:2`)}`
+        );
+        rejected.push(slug);
+        continue;
+      }
       console.log(`  ${c.dim(isKnown ? 'would replace' : 'would add')}  ${slug}`);
       continue;
     }
@@ -382,7 +436,17 @@ ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
     // On replace, keep the alt text that is already there. It is hand-written
     // SEO surface and regenerating it from the filename would silently undo it.
     const keptAlt = isKnown ? existingAlt(gallery, src) : null;
-    const entry = await derive(file, gallery, alt ?? keptAlt);
+    let entry;
+    try {
+      entry = await derive(file, gallery, alt ?? keptAlt);
+    } catch (err) {
+      // One bad export should not throw away the work already done on the
+      // others, so the run carries on and reports at the end.
+      if (!(err instanceof RejectedAspect)) throw err;
+      console.log(`  ${c.red('reject')}  ${err.message}`);
+      rejected.push(err.slug);
+      continue;
+    }
 
     if (isKnown) {
       replaceInManifest(gallery, entry);
@@ -406,13 +470,16 @@ ${c.bold('Galleries')}  ${GALLERIES.join(', ')}
   const parts = [`${entries.length} added`];
   if (replaced.length) parts.push(`${replaced.length} replaced`);
   if (skipped) parts.push(`${skipped} skipped`);
-  console.log(`\n${c.green('✓')} ${parts.join(', ')}\n`);
+  if (rejected.length) parts.push(c.red(`${rejected.length} rejected (not 3:2)`));
+  const mark = rejected.length ? c.red('✗') : c.green('✓');
+  console.log(`\n${mark} ${parts.join(', ')}\n`);
   if (entries.length && !alt) {
     console.log(
       `${c.yellow('Next:')} edit the alt text in ${c.bold(`src/lib/galleries/${gallery}.js`)} —\n` +
         `it is indexed, and becomes the image sitemap title and the hover caption on /live.\n`
     );
   }
+  if (rejected.length) process.exitCode = 1;
 }
 
 main().catch((err) => fail(err.stack || err.message));

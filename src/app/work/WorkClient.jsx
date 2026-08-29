@@ -14,12 +14,12 @@ import styles from './WorkClient.module.css';
   Array order is the tile order on the page.
 */
 const covers = [
-  { path: '/live', image: 'live/A7400474-music.webp', alt: 'Live music and concert photography' },
+  { path: '/live', image: 'live/A7400474-live.webp', alt: 'Live music and concert photography' },
   { path: '/bw', image: 'covers/bw_cover.jpg', alt: 'Black and white photography' },
   { path: '/people', image: 'covers/people_cover.jpg', alt: 'Portrait and lifestyle photography' },
-  { path: '/places', image: 'places/A7406615-scapes.webp', alt: 'Travel and landscape photography' },
+  { path: '/places', image: 'places/A7406615-places.webp', alt: 'Travel and landscape photography' },
   { path: '/cars', image: 'covers/cars_cover.jpg', alt: 'Automotive photography' },
-  { path: '/events', image: 'events/A7404835-color.webp', alt: 'Event and celebration photography' },
+  { path: '/events', image: 'events/A7404835-events.webp', alt: 'Event and celebration photography' },
 ];
 
 const categories = covers.map((cover) => ({

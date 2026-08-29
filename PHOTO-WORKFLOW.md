@@ -19,9 +19,13 @@ Galleries: `bw` · `live` · `people` · `cars` · `places` · `events`
 
 ## Add a new photo
 
-**1. Export from Lightroom.** Full resolution, JPEG, sRGB, quality 90+. No resizing, no watermark, no sharpening for screen — the script handles all of it.
+**1. Export from Lightroom.** Full resolution, JPEG, sRGB, quality 90+, **cropped 3:2** (either orientation). No resizing, no watermark, no sharpening for screen — the script handles all of it.
 
-The **filename becomes the URL**, so name it before exporting. Keep the existing convention (`A7406517-color`, `DSC05585-bw`); avoid spaces.
+The galleries are built on one frame shape: anything that is not 3:2 is rejected, and the photo is not derived or registered. Re-crop and re-export.
+
+The **filename becomes the URL**, so name it before exporting. The convention is `<camera-stem>-<gallery>` — the suffix is the gallery the photo belongs to (`A7406517-cars`, `DSC05585-bw`, `A7400474-live`); avoid spaces.
+
+Slugs used to carry a topic suffix instead (`-music`, `-scapes`, `-color`, `-portrait`), which drifted from the folder the photo actually lived in. Those were renamed; `next.config.js` redirects the old image URLs so nothing that was indexed 404s. Do not reintroduce them.
 
 **2. Run the script.**
 
@@ -35,7 +39,7 @@ npm run add-photos -- events shot.jpg --alt "Cake"      # one photo, with captio
 Edit `src/lib/galleries/<gallery>.js`:
 
 ```js
-{ alt: 'Tyler, the Creator', src: '/live/DSC05584-music.webp', width: 1080, height: 1620, color: '#1a0f0f' },
+{ alt: 'Tyler, the Creator', src: '/live/DSC05584-live.webp', width: 1080, height: 1620, color: '#1a0f0f' },
 ```
 
 For `/live`, alt should be **just the artist name** — it is shown on hover.
@@ -126,7 +130,7 @@ The grid does not pay for the larger file: Next downscales `-hd` to the tile siz
 And the manifest entry:
 
 ```js
-{ alt: '…', src: '/live/DSC05584-music.webp', width: 1080, height: 1620, color: '#1a0f0f' }
+{ alt: '…', src: '/live/DSC05584-live.webp', width: 1080, height: 1620, color: '#1a0f0f' }
 ```
 
 - `width`/`height` are the **`-hd`** dimensions. Tiles reserve this aspect ratio, which is what keeps CLS at 0.
@@ -198,6 +202,8 @@ The hero slideshow uses its own tiers and is **not** handled by this script. Mas
 ---
 
 ## Troubleshooting
+
+**"NxM is 1.3334 (~4:3); galleries take 3:2 only"** — the export is the wrong shape. Re-crop to 3:2 in Lightroom and re-export; the script will not crop for you, because deciding what leaves the frame is not its call. Other photos in the same run still go through, and the run exits non-zero.
 
 **"source is only NxM; -hd wants 1620"** — the export was too small. Re-export at full resolution; the script will not upscale.
 
