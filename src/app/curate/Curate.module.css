@@ -192,3 +192,47 @@
 .removed .badge {
   background: var(--accentColor3, #e87461);
 }
+
+/*
+  Swap selection. The checkbox sits opposite the position badge so the two never
+  collide, and above the hit button so a click selects rather than unregisters.
+*/
+.selectBox {
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  z-index: 1;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border-radius: 0.25rem;
+  border: 1px solid rgb(255 255 255 / 0.7);
+  background: rgb(0 0 0 / 0.45);
+  color: #fff;
+  font-size: 0.8rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.selectBox[aria-pressed='true'] {
+  background: var(--accentColor1, #54c6eb);
+  border-color: var(--accentColor1, #54c6eb);
+  color: #04212b;
+}
+
+/*
+  An outline pulled inside the box, not an inset box-shadow: a shadow paints
+  below the element's content and the photo fills the button edge to edge, so
+  the ring would never be seen. The negative offset also keeps it off the
+  neighbouring masonry column, which a positive outline would overlap.
+*/
+.selected .hit {
+  outline: 3px solid var(--accentColor1, #54c6eb);
+  outline-offset: -3px;
+}
+
+/* Two already picked: every other selector is out of play. */
+.selectBox:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
