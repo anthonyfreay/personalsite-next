@@ -29,7 +29,13 @@
   line-height: 1;
 }
 
-/* A single short display line, set apart from the nav - the secondary face. */
+/*
+  A single short display line, set apart from the nav.
+
+  The one remaining use of the display italic. Mixed case and a sentence, which
+  is where the slant earns itself - every uppercase title moved to the upright
+  Subhead cut in --fontFamilyTitle.
+*/
 .lead {
   font-family: var(--fontFamilySecondary);
   font-weight: 400;
@@ -71,5 +77,5 @@
 
 .primaryLinks a:hover,
 .galleryLinks a:hover {
-  color: var(--accentColor1);
+  color: var(--colorInteractive);
 }

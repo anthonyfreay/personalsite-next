@@ -25,9 +25,17 @@
   resize: vertical;
 }
 
+/*
+  The interactive cyan, replacing a #007bff that was a Bootstrap default and
+  not in the palette at all. The button is the primary action on the page, so
+  it takes the interactive colour rather than the hover one.
+
+  White label: 5.03:1 on this cyan, over the 4.5:1 minimum. The old blue only
+  managed 3.98:1 under the same white.
+*/
 .submit {
-  background-color: #007bff;
-  color: white;
+  background-color: var(--colorInteractive);
+  color: #ffffff;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
@@ -37,7 +45,7 @@
 }
 
 .submit:hover {
-  background-color: #0056b3;
+  background-color: #10607a;
 }
 
 .submit:disabled {

@@ -28,8 +28,7 @@
   --color-brand-light: #F5F5F5;
   --color-brand-dark: #090909;
   --color-brand-text: #0e0e0e;
-  --color-accent-1: #54c6eb;
-  --color-accent-2: #2ecc71;
+  --color-accent-1: #147899;
   --color-accent-3: #e87461;
 
   --font-sans: helvetica-neue-lt-pro, Arial, sans-serif;
@@ -56,17 +55,61 @@
     --mainColorLight: #F5F5F5;
     --mainColorDark: #090909;
     --textColor: #0e0e0e;
-    --accentColor1: #54c6eb;
-    --accentColor2: #2ecc71;
+    /*
+      Palette. These are raw values - prefer the semantic tokens below, which
+      say what a colour means rather than which component first used it.
+
+      accentColor1 was #54c6eb, which measured 1.9:1 on --mainColorLight and
+      failed the 4.5:1 minimum everywhere it was used - which was every nav
+      link on the site. Darkened along its own hue (195) rather than replaced:
+      4.61:1 on --mainColorLight, and 5.03:1 under white, so the one value
+      works both as a link colour and as a filled button.
+    */
+    --accentColor1: #147899;
     --accentColor3: #e87461;
+
+    /*
+      Accents by meaning, not by component.
+
+      Previously each accent belonged to one component - cyan for nav links,
+      green for footer links, coral for hover - so they never appeared together
+      and read as three unrelated systems rather than one palette. Green left
+      with the footer.
+
+      Interactive is the darkened cyan - see the note on --accentColor1. It
+      carries the nav links, the mobile menu, the 404 link list and the contact
+      form's submit button, so all of them clear contrast from one value.
+    */
+    --colorInteractive: var(--accentColor1);
+    --colorHover: var(--accentColor3);
+    --colorCurrent: var(--mainColorDark);
     --fontFamily: helvetica-neue-lt-pro, Arial, sans-serif;
 
     /*
-      The secondary face, for gallery titles. The Typekit kit ships exactly one
-      garamond-premier-pro face - italic, weight 400 - so it is only ever used
-      at that weight and style. Asking for roman or bold gets a synthesised
-      face, which is why the two properties are set alongside the family
-      everywhere this is used rather than left to inherit.
+      The title face: Garamond Premier Pro's Subhead optical cut, Medium 500.
+
+      The kit ships four Garamond faces, not the one this comment used to
+      claim: Text italic 400, Text Semibold 600 upright, Caption roman 400, and
+      the Subhead cut at 400/500/600. Verified against the served
+      use.typekit.net/waf4zxp.css - nothing had to be added to the kit for
+      this.
+
+      Subhead is the cut Adobe drew for roughly 14-24pt, which is where the
+      gallery titles actually sit (1.45rem). The Text cut is drawn for 10pt
+      body copy and tightens up at title size; the Display cut is drawn for
+      24pt and over and goes thin here.
+
+      Titles are set upright and tracked rather than italic. Italic caps are
+      the weakest use of an italic - the slant reads as emphasis and the caps
+      remove the letterform variety the italic exists for.
+    */
+    --fontFamilyTitle: garamond-premier-pro-subhead, serif;
+    --fontWeightTitle: 500;
+
+    /*
+      The display italic, Text cut 400. Demoted, not deleted: its one remaining
+      job is the 404 line, which is mixed case and a sentence - where the
+      letterforms earn their slant. Do not use it for uppercase titles.
     */
     --fontFamilySecondary: garamond-premier-pro, serif;
 
