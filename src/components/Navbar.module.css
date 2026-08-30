@@ -75,13 +75,28 @@
   opacity: 0.8;
 }
 
+/*
+  Sticky, not fixed: the bar keeps its place in flow, so the galleries below it
+  need no compensating top offset and nothing can end up hidden underneath it on
+  first paint.
+
+  `position: relative` was load-bearing and sticky preserves it -- the centred
+  gallery title and the mobile dropdown are both absolutely positioned against
+  this box, and sticky is a positioned ancestor just as relative was.
+
+  The z-index sits above the galleries but well below the lightbox, which
+  portals to the body at 9999: a navbar floating over an open lightbox would be
+  worse than one that scrolls away.
+*/
 .navbar {
   display: flex;
   align-items: center;
   padding: 5px 10px;
   background-color: var(--mainColorLight);
   color: var(--mainColorDark);
-  position: relative;
+  position: sticky;
+  top: 0;
+  z-index: 50;
 }
 
 .brand {
