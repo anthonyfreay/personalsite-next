@@ -12,8 +12,12 @@ const nextConfig = {
   },
   async redirects() {
     return [
-      { source: '/resume', destination: '/resume_anthony_freay.pdf', permanent: false },
-      { source: '/resume/', destination: '/resume_anthony_freay.pdf', permanent: false },
+      // /resume is the URL that gets shared and printed on things, so it is the
+      // one the site links to - never the versioned filename, which is free to
+      // change underneath it. Permanent (308) so the redirect is cached and the
+      // link equity consolidates onto the PDF.
+      { source: '/resume', destination: '/resume_anthony_freay.pdf', permanent: true },
+      { source: '/resume/', destination: '/resume_anthony_freay.pdf', permanent: true },
       // Google crawled /index.html while the old create-react-app template was
       // still being served from public/. That file is gone, so consolidate the
       // URL onto / rather than letting it start returning 404s.

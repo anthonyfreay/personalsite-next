@@ -21,6 +21,10 @@ const routes = [
   '/bw',
   '/places',
   '/contact',
+  // The PDF, not the /resume shortcut that redirects to it: a sitemap should
+  // list the URL that returns 200, or Search Console reports it as "Page with
+  // redirect" and drops it.
+  '/resume_anthony_freay.pdf',
 ];
 
 // Map each route to the source that determines its content.
@@ -35,6 +39,7 @@ const routeSources = {
   '/events': 'src/app/events',
   '/sports': 'src/app/sports',
   '/contact': 'src/app/contact',
+  '/resume_anthony_freay.pdf': 'public/resume_anthony_freay.pdf',
 };
 
 // Gallery routes are driven by their manifest, so a change there should move
