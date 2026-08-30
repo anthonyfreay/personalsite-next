@@ -531,7 +531,12 @@
     transition-duration: 0.01ms;
   }
 
-  .toggleIcon {
+  /*
+    Matched to the specificity of the rules that set the rotation, otherwise
+    this loses to them and the reset never lands.
+  */
+  .toggleMenu.toggleIconHidden,
+  .toggleClose.toggleIconHidden {
     transform: none;
   }
 }
