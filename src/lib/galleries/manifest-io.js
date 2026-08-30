@@ -13,7 +13,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 
-export const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events'];
+export const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events', 'sports'];
 
 const MANIFEST_DIR = path.join(process.cwd(), 'src', 'lib', 'galleries');
 

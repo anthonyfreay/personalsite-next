@@ -14,6 +14,7 @@ import { images as people } from './people.js';
 import { images as cars } from './cars.js';
 import { images as places } from './places.js';
 import { images as events } from './events.js';
+import { images as sports } from './sports.js';
 
 /**
  * Add the high-resolution variant path for an image list.
@@ -35,6 +36,7 @@ export {
   cars,
   places,
   events,
+  sports,
 };
 
 /** Route path -> image list, for consumers that iterate every gallery. */
@@ -45,4 +47,5 @@ export const galleriesByRoute = {
   '/places': places,
   '/cars': cars,
   '/events': events,
+  '/sports': sports,
 };

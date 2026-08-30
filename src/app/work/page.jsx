@@ -46,9 +46,10 @@ export default function Work() {
       <h1 className="sr-only">Photography Portfolio</h1>
       <p className="sr-only">
         The photography portfolio of Anthony Freay, a New York City-based photographer.
-        Browse six collections: live music and concert photography, black and white work,
-        portraits of people, travel and landscape scenes from places around the world,
-        automotive photography, and candid event coverage.
+        Browse seven collections: live music and concert photography, candid event
+        coverage, portraits of people, sports photography from football, tennis and
+        cycling, automotive photography, black and white work, and travel and landscape
+        scenes from places around the world.
       </p>
       <WorkClient />
     </>

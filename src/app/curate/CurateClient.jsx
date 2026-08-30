@@ -39,6 +39,7 @@ const LAYOUT = {
   cars: 'masonry',
   places: 'masonry',
   events: 'masonry',
+  sports: 'masonry',
 };
 
 // ImageGallery's fallback for entries that predate the width/height fields.

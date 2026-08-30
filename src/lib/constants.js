@@ -11,15 +11,20 @@ export const GA_MEASUREMENT_ID = 'G-5RYLFVDX71';
   `label` is the one name a route has. The footer, the /work tile captions, the
   404 list, the h1 and the navbar's centred title all render it, each
   uppercasing in its own CSS - so a gallery reads the same wherever it appears.
+
+  Gallery order is by prominence, not by age: the strongest three lead, and the
+  /work grid is three columns wide so each row is one tier. Changing this array
+  moves the navbar, the footer, the 404 list and the tiles together.
 */
 export const ROUTES = [
   { path: '/', label: 'Home' },
   { path: '/work', label: 'Work' },
   { path: '/live', label: 'Live' },
-  { path: '/bw', label: 'B & W' },
-  { path: '/people', label: 'People' },
-  { path: '/places', label: 'Places' },
-  { path: '/cars', label: 'Cars' },
   { path: '/events', label: 'Events' },
+  { path: '/people', label: 'People' },
+  { path: '/sports', label: 'Sports' },
+  { path: '/cars', label: 'Cars' },
+  { path: '/bw', label: 'B & W' },
+  { path: '/places', label: 'Places' },
   { path: '/contact', label: 'Contact' },
 ];
