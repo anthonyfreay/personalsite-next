@@ -185,7 +185,22 @@ export default function Navbar() {
         aria-label="Toggle navigation"
         aria-expanded={open}
       >
-        {open ? <X size={24} /> : <Menu size={24} />}
+        <span className={styles.toggleIcons}>
+          <Menu
+            size={24}
+            aria-hidden="true"
+            className={`${styles.toggleIcon} ${styles.toggleMenu} ${
+              open ? styles.toggleIconHidden : ''
+            }`}
+          />
+          <X
+            size={24}
+            aria-hidden="true"
+            className={`${styles.toggleIcon} ${styles.toggleClose} ${
+              open ? '' : styles.toggleIconHidden
+            }`}
+          />
+        </span>
       </button>
 
       <div className={`${styles.mobileMenu} ${open ? styles.mobileMenuOpen : ''}`}>

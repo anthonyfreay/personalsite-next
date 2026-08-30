@@ -171,6 +171,34 @@
   opacity: 0.8;
 }
 
+/*
+  Both icons are rendered and stacked, so the swap can cross-fade instead of
+  cutting. A grid with one cell puts them on top of each other without taking
+  the second out of flow, so the button keeps the size of one icon.
+*/
+.toggleIcons {
+  display: grid;
+  place-items: center;
+}
+
+.toggleIcon {
+  grid-area: 1 / 1;
+  transition: opacity 0.2s ease-out, transform 0.25s ease-out;
+}
+
+.toggleIconHidden {
+  opacity: 0;
+}
+
+/* The bars rotate out as the cross rotates in, so the two halves meet. */
+.toggleMenu.toggleIconHidden {
+  transform: rotate(-90deg);
+}
+
+.toggleClose.toggleIconHidden {
+  transform: rotate(90deg);
+}
+
 /* Nav links — inline on desktop */
 .navContainer {
   display: flex;
@@ -291,27 +319,33 @@
   text-decoration: underline;
 }
 
-/* Mobile menu dropdown */
+/*
+  Mobile menu sheet.
+
+  Hidden outright on desktop; below the breakpoint it stays in the DOM at zero
+  height so opening and closing can both be transitions. Toggling `display`
+  cannot animate - the old version set display and the open class in the same
+  frame, so the panel had no start state to move from and simply appeared.
+*/
 .mobileMenu {
   display: none;
   background-color: var(--mainColorLight);
 }
 
-.mobileMenuOpen {
-  display: flex;
-}
-
 .mobileMenuInner {
   display: flex;
   flex-direction: column;
-  transform: translateY(-100%);
+  /* Own the clipping, so the row track can be 0fr without the links spilling. */
+  min-height: 0;
+  overflow: hidden;
   opacity: 0;
-  transition: transform 0.25s ease-in-out, opacity 0.15s ease-in-out;
+  transition: opacity 0.18s ease-out;
 }
 
 .mobileMenuInner.mobileMenuExpanded {
-  transform: translateY(0);
   opacity: 1;
+  /* Fade in after the sheet has started opening, so the links arrive with it. */
+  transition: opacity 0.25s ease-out 0.05s;
 }
 
 .mobileNavItem {
@@ -348,7 +382,19 @@
   }
 
 
+  /*
+    A one-cell grid whose row track animates from 0fr to 1fr: that measures the
+    content itself, so the sheet slides to exactly the height its links need
+    without a hardcoded max-height guess that would either clip the list or
+    make short menus open slowly through empty space.
+
+    visibility keeps the closed sheet out of the tab order the way display did,
+    and is transitioned (not eased) so it flips at the end of the collapse
+    rather than at its start.
+  */
   .mobileMenu {
+    display: grid;
+    grid-template-rows: 0fr;
     position: absolute;
     top: 100%;
     left: 0;
@@ -357,10 +403,13 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 100;
     overflow: hidden;
+    visibility: hidden;
+    transition: grid-template-rows 0.28s ease, visibility 0.28s;
   }
 
   .mobileMenuOpen {
-    display: block;
+    grid-template-rows: 1fr;
+    visibility: visible;
   }
 
   .homeNavbar {
@@ -467,4 +516,27 @@
 
 .mobileGalleryItem:hover {
   color: var(--colorHover);
+}
+
+/*
+  Reduced motion: the sheet still needs to open and close, but it should do so
+  without the travel - so the state change is instant and only the fade, which
+  is not motion, is kept short.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .mobileMenu,
+  .mobileMenuInner,
+  .mobileMenuInner.mobileMenuExpanded,
+  .toggleIcon {
+    transition-duration: 0.01ms;
+  }
+
+  /*
+    Matched to the specificity of the rules that set the rotation, otherwise
+    this loses to them and the reset never lands.
+  */
+  .toggleMenu.toggleIconHidden,
+  .toggleClose.toggleIconHidden {
+    transform: none;
+  }
 }
