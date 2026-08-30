@@ -128,10 +128,11 @@
     than the wordmark: it sits between them, and at the wordmark's size it
     read as a second brand competing with the real one.
   */
-  font-family: var(--fontFamilySecondary);
-  font-size: 1.3rem; /* .navItem */
-  font-weight: 400;
-  font-style: italic;
+  font-family: var(--fontFamilyTitle);
+  font-size: 1.45rem;
+  font-weight: var(--fontWeightTitle);
+  font-style: normal;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--mainColorDark);
   white-space: nowrap;
@@ -181,16 +182,112 @@
 .navItem {
   margin: 0 10px;
   font-size: 1.3rem;
-  color: var(--accentColor1);
+  color: var(--colorInteractive);
   text-decoration: none;
 }
 
 .navItem:hover {
-  color: var(--accentColor3);
+  color: var(--colorHover);
 }
 
 .activeNavLink {
-  color: var(--mainColorDark);
+  color: var(--colorCurrent);
+  text-decoration: underline;
+}
+
+/*
+  The Work dropdown - the gallery-to-gallery navigation that came out of the
+  retired footer.
+
+  The link and its disclosure share a hover target, so the menu opens from
+  either. The button exists so the menu is reachable without a mouse; the link
+  still goes to /work on its own.
+*/
+.workMenu {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/*
+  The trigger is a <button> so it works on touch, but it has to sit in the bar
+  as one of the nav links, so it inherits .navItem and drops the UA button
+  chrome and font.
+*/
+.workTrigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  font-size: 1.3rem;
+  line-height: inherit;
+  cursor: pointer;
+}
+
+.workChevron {
+  transition: transform 0.2s ease-out;
+}
+
+.workTrigger[aria-expanded='true'] .workChevron {
+  transform: rotate(180deg);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 11rem;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0;
+  background-color: var(--mainColorLight);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+  z-index: 120;
+
+  /*
+    Animated rather than toggled on `display`, so the panel can transition -
+    but `visibility` still takes it out of the tab order while closed, which
+    opacity alone would not.
+  */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.15s ease-out, transform 0.15s ease-out, visibility 0.15s;
+}
+
+.dropdownOpen {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/*
+  The galleries are set in the title face, matching the centred gallery title
+  they navigate to.
+*/
+.dropdownItem {
+  padding: 0.5rem 1.25rem;
+  font-family: var(--fontFamilyTitle);
+  font-weight: var(--fontWeightTitle);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--textColor);
+  text-decoration: none;
+  transition: color 0.2s ease-out;
+}
+
+.dropdownItem:hover {
+  color: var(--colorHover);
+}
+
+/* The page you are on, stated the same way the nav links state it. */
+.dropdownItemCurrent {
+  color: var(--colorCurrent);
   text-decoration: underline;
 }
 
@@ -221,16 +318,27 @@
   display: block;
   padding: 12px 20px;
   font-size: 1.1rem;
-  color: var(--accentColor1);
+  color: var(--colorInteractive);
   text-decoration: none;
 }
 
 .mobileNavItem:hover {
-  color: var(--accentColor3);
+  color: var(--colorHover);
 }
 
 /* Mobile: collapse nav links, show hamburger and dropdown */
-@media only screen and (max-width: 668px) {
+/*
+  The site's single content breakpoint.
+
+  This used to sit at 668px while the gallery title handed off at 800px, which
+  left a dead band: between 669 and 800px the bar showed the wordmark, WORK and
+  CONTACT and no title at all. Aligning the hamburger with the title handoff
+  closes it, so one width governs the whole site.
+
+  The 470px block below is not a second content breakpoint - it only rescales
+  the home hero navbar, which has no title and no hamburger.
+*/
+@media only screen and (max-width: 800px) {
   .toggle {
     display: block;
   }
@@ -332,4 +440,31 @@
   background-color: #f5f5f5;
   color: #090909;
   transition: background-color 0.8s ease-in-out, color 0.8s ease-in-out;
+}
+/*
+  The galleries inside the hamburger sheet. Indented under WORK and CONTACT
+  rather than given a disclosure of their own - on a phone the sheet has the
+  room, and these are what the menu is mostly opened for.
+*/
+.mobileGalleries {
+  display: flex;
+  flex-direction: column;
+  padding: 0.25rem 0 0.5rem;
+  border-top: 1px solid #dcd8d0;
+}
+
+.mobileGalleryItem {
+  display: block;
+  padding: 10px 20px 10px 32px;
+  font-family: var(--fontFamilyTitle);
+  font-weight: var(--fontWeightTitle);
+  font-size: 1rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--textColor);
+  text-decoration: none;
+}
+
+.mobileGalleryItem:hover {
+  color: var(--colorHover);
 }

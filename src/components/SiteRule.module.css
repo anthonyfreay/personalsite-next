@@ -1,0 +1,98 @@
+/*
+  One quiet line under the photographs, replacing the footer.
+
+  Deliberately not a block: a hairline rule and a single row of text, so the
+  images keep the last word on the page.
+*/
+.rule {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-top: 4rem;
+  padding: 1.5rem 1.25rem;
+  border-top: 1px solid #dcd8d0;
+  background-color: var(--mainColorLight);
+}
+
+/*
+  The only genuinely new thing the line says - it carried over from the contact
+  bio, where it was the one piece of information the footer never had.
+*/
+.status {
+  font-family: var(--fontFamilyAlt);
+  font-size: 0.95rem;
+  color: #57554e;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 1.375rem;
+}
+
+.textLink {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--textColor);
+  text-decoration: none;
+  border-bottom: 1px solid var(--textColor);
+  padding-bottom: 2px;
+  transition: color 0.2s ease-out, border-color 0.2s ease-out;
+}
+
+.textLink:hover {
+  color: var(--colorHover);
+  border-bottom-color: var(--colorHover);
+}
+
+/* The current page is stated by weight of colour, not by an accent. */
+.current {
+  color: var(--colorCurrent);
+  border-bottom-color: var(--colorCurrent);
+}
+
+/*
+  Icons.jsx paints itself with the Tailwind utilities the home navbar needs, so
+  the colour is set on the anchors here rather than fought with upstream.
+*/
+.icons a {
+  color: #57554e;
+  transition: color 0.2s ease-out;
+}
+
+.icons a:hover {
+  color: var(--colorHover);
+}
+
+.icons {
+  gap: 1rem;
+}
+
+.copyright {
+  font-family: ui-monospace, Menlo, monospace;
+  font-size: 0.6875rem;
+  color: #9a978d;
+}
+
+/*
+  Mobile: the line stacks to two rows - status above, links and icons below.
+  That is the whole responsive story, against the two breakpoints the old
+  footer needed to reflow a green block that ran roughly a third of a phone
+  viewport.
+*/
+@media only screen and (max-width: 800px) {
+  .rule {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.875rem;
+    margin-top: 3rem;
+  }
+
+  .links {
+    flex-wrap: wrap;
+    gap: 1.125rem;
+  }
+}

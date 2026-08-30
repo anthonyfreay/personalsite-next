@@ -7,16 +7,17 @@
   accessibility tree and leave the page with no announced or indexed h1. The
   navbar's copy is aria-hidden, so exactly one of them is ever announced.
 
-  Below 668px the navbar has no room for it (wordmark + hamburger), so the
-  heading becomes visible here.
+  Below 800px the navbar has no room for it (wordmark + hamburger), so the
+  heading becomes visible here. That is the site's single breakpoint.
 */
-/* Matches the navbar treatment: the secondary face, undecorated uppercase. */
+/* Matches the navbar treatment: the title face, upright and tracked. */
 .heading {
   text-align: center;
-  font-family: var(--fontFamilySecondary);
+  font-family: var(--fontFamilyTitle);
   font-size: 1.5rem;
-  font-weight: 400;
-  font-style: italic;
+  font-weight: var(--fontWeightTitle);
+  font-style: normal;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--textColor);
   padding: 1.25rem 10px 1rem;

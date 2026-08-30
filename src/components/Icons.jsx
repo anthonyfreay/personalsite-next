@@ -2,7 +2,12 @@
 
 import { FaRegEnvelope, FaInstagram, FaLinkedinIn, FaGithub, FaRegFileAlt } from 'react-icons/fa';
 
-export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) {
+/*
+  `showResume` drops the résumé icon for callers that already carry a résumé
+  text link beside it - SiteRule does. Defaults on, so the home navbar keeps
+  all five.
+*/
+export default function Icons({ iconSize = 25, className = '', gap = 'gap-6', showResume = true }) {
   const emailSubject = encodeURIComponent('Website Inquiry - Anthony Freay');
 
   return (
@@ -37,16 +42,18 @@ export default function Icons({ iconSize = 25, className = '', gap = 'gap-6' }) 
       >
         <FaLinkedinIn size={iconSize} />
       </a>
-      <a
-        href="/resume_anthony_freay.pdf"
-        aria-label="View Résumé"
-        title="Résumé"
-        className="hover:text-accent-1 transition-colors"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <FaRegFileAlt size={iconSize} />
-      </a>
+      {showResume && (
+        <a
+          href="/resume"
+          aria-label="View Résumé"
+          title="Résumé"
+          className="hover:text-accent-1 transition-colors"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <FaRegFileAlt size={iconSize} />
+        </a>
+      )}
       <a
         href="https://github.com/anthonyfreay"
         aria-label="Visit GitHub Profile"

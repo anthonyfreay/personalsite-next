@@ -1,6 +1,6 @@
 import './globals.css';
 import Navbar from '@/components/Navbar';
-import Footer from '@/components/Footer';
+import SiteRule from '@/components/SiteRule';
 import { SITE_TITLE, SITE_DESCRIPTION, SITE_URL, DEFAULT_IMAGE_ABS } from '@/lib/constants';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
@@ -98,7 +98,7 @@ export default function RootLayout({ children }) {
         <div className="flex flex-col min-h-screen">
           <Navbar />
           <main className="flex-1">{children}</main>
-          <Footer />
+          <SiteRule />
         </div>
         <Analytics />
         <SpeedInsights />
