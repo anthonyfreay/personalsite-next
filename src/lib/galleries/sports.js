@@ -39,4 +39,13 @@ export const images = [
   { alt: 'Crowd blurred past a "You Got This" sign in Central Park', src: '/sports/A7406996-sports.webp', width: 1620, height: 1080, color: '#383838' },
   { alt: 'A runner grinning past the orange barriers in the park', src: '/sports/A7406813-sports.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'The field strung out under autumn trees on the marathon route', src: '/sports/A7407143-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Ball tossed for a serve on Arthur Ashe, opponent waiting across the net', src: '/sports/A7405079-sports.webp', width: 1080, height: 1620, color: '#286898' },
+  { alt: 'The court framed between silhouetted heads in a packed US Open stand', src: '/sports/A7403878-sports.webp', width: 1620, height: 1080, color: '#080808' },
+  { alt: 'Backhand met at shoulder height, ball hanging in the frame', src: '/sports/A7404880-sports.webp', width: 1080, height: 1620, color: '#385848' },
+  { alt: 'A player collecting herself between points', src: '/sports/A7404251-sports.webp', width: 1080, height: 1620, color: '#486888' },
+  { alt: 'Braced wide across the baseline, cropped to the legs', src: '/sports/A7404454-sports.webp', width: 1620, height: 1080, color: '#385848' },
+  { alt: 'Racket dropped below the ball on the follow-through', src: '/sports/A7405036-sports.webp', width: 1080, height: 1620, color: '#384838' },
+  { alt: 'Rising into a serve in a pink long-sleeve', src: '/sports/A7404517-sports.webp', width: 1080, height: 1620, color: '#186898' },
+  { alt: 'Stadium seating pulled into diagonal streaks by camera movement', src: '/sports/A7403857-sports.webp', width: 1080, height: 1620, color: '#584858' },
+  { alt: 'A crowd dissolved into vertical smears of colour', src: '/sports/A7403866-sports.webp', width: 1080, height: 1620, color: '#181818' },
 ];
