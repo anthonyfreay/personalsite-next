@@ -40,10 +40,12 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
             onClick={() => openLightbox(index)}
           >
             <GalleryImage
-              // The 1080px -hd source: a tile is up to 450 CSS px, which a
-              // retina display needs 900px to fill - more than the 450px base
-              // has. Next downscales -hd to whatever each device needs.
-              src={image.hdSrc}
+              // The 675px base file, not -hd. With the optimizer off there is
+              // no downscaling step, so whatever is named here is what every
+              // tile downloads - and -hd would ship 14MB of /live to a phone
+              // showing 191px tiles. 675 slightly undershoots a 450 CSS px
+              // retina tile; the lightbox still opens the full -hd.
+              src={image.src}
               alt={image.alt}
               width={image.width ?? 1080}
               height={image.height ?? 1620}

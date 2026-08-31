@@ -1,6 +1,17 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
+    // The optimizer is off deliberately. Enabling it (a92b8b5) gave the
+    // galleries real srcsets, but 232 photos across ten deviceSizes and two
+    // formats generates transformations in the thousands, which exhausted the
+    // Vercel quota and made every uncached /_next/image return
+    // 402 OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED in production.
+    //
+    // Nothing here needs the optimizer: add-photos already emits exactly two
+    // sizes per photo, and the grid renders the 675px `src` while the lightbox
+    // uses `-hd`. Re-enabling this means paying per transformation, so check
+    // the Vercel usage page before flipping it back.
+    unoptimized: true,
     formats: ['image/avif', 'image/webp'],
     // Next's default ladder steps 828 -> 1080, which is a poor fit for the
     // galleries: a masonry tile is ~438 CSS px, so a retina display needs

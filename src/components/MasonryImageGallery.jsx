@@ -42,7 +42,9 @@ const MasonryImageGallery = memo(({ images = [] }) => {
             onClick={() => openLightbox(index)}
           >
             <GalleryImage
-              src={image.hdSrc}
+              // The 675px base file - see the note in ImageGallery. The
+              // optimizer is off, so this is what the tile actually downloads.
+              src={image.src}
               alt={image.alt}
               width={image.width}
               height={image.height}

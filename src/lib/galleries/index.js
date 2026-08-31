@@ -20,8 +20,9 @@ import { images as sports } from './sports.js';
  * Add the high-resolution variant path for an image list.
  *
  * Every gallery image ships as a base file plus an `-hd` sibling
- * (e.g. `/bw/x.webp` and `/bw/x-hd.webp`). The grid renders from `hdSrc` so
- * tiles stay sharp on high-DPR displays, and the lightbox uses it at full size.
+ * (e.g. `/bw/x.webp` and `/bw/x-hd.webp`). The grid renders the base `src` and
+ * only the lightbox uses `hdSrc`, at full size: with `images.unoptimized` there
+ * is no downscaling step, so an `-hd` tile would be downloaded at full weight.
  */
 export const withHd = (images) =>
   images.map((image) => ({

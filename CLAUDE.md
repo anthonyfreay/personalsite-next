@@ -50,6 +50,19 @@ Image arrays are duplicated in two places and must be kept in sync manually when
 
 `next.config.js` sets `images.unoptimized: true` — Next/Image does no server-side optimization, so images must already be sized/compressed appropriately in `public/`.
 
+This has been flipped once and reverted, so it is worth stating why. Enabling
+the optimizer gives the galleries real srcsets and makes the `sizes` attributes
+meaningful, but 232 photos over ten `deviceSizes` and two `formats` generates
+thousands of Vercel image transformations — enough to exhaust the quota and
+return `402 OPTIMIZED_IMAGE_REQUEST_PAYMENT_REQUIRED` for every uncached
+`/_next/image` in production. It is a billing decision, not just a config one.
+
+Because there is no downscaling step, **the grid renders the 675px base `src`
+and only the lightbox uses `hdSrc`** — pointing a tile at `-hd` ships the full
+1620px file to every visitor (41MB of `/events`, 14MB of `/live`). The `sizes`
+attributes on the galleries are inert while this is off; they are kept so the
+optimizer path still works if it is ever paid for.
+
 ### Site metadata
 
 Global `<head>` metadata, Vercel Analytics/Speed Insights, and Google Analytics are wired in `src/app/layout.jsx`. Shared constants (site name/title/description/URL, nav `ROUTES`, GA id) live in `src/lib/constants.js` — `Navbar` and route metadata should source from here rather than hardcoding. Each gallery `page.jsx` additionally defines its own `metadata` (title/description/OG/Twitter) and an inline JSON-LD `ImageGallery`/`Photograph` schema block.
