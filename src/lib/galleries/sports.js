@@ -7,8 +7,8 @@
 //
 // Order matters and is deliberate: landscape and portrait shots alternate so
 // the CSS columns get a mix of tile heights rather than a run of one shape.
-// Today that is nearly all portrait, so the columns come out even on their own;
-// the masonry layout is here for the horizontal frames still to be shot.
+// The list is still mostly portrait, with a few landscape frames spaced through
+// it so no one column runs away from the others.
 
 export const images = [
   { alt: 'Following through on a serve at the US Open', src: '/sports/A7404155-sports.webp', width: 1080, height: 1620, color: '#285878' },
@@ -21,4 +21,22 @@ export const images = [
   { alt: 'Rider out of the saddle, tattooed forearm on the hoods', src: '/sports/A7401783-sports.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Sevilla stretching for a loose ball', src: '/sports/DSC08170-sports.webp', width: 1080, height: 1620, color: '#384818' },
   { alt: 'Sevilla breaking forward, seen from the stands', src: '/sports/DSC08089-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Serve struck from above the baseline at the US Open', src: '/sports/A7404195-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A pass played out of the France half, seen from high in the stand', src: '/sports/DSC02677-sports.webp', width: 1620, height: 1080, color: '#587838' },
+  { alt: 'Ball tossed for a serve into hard shadow at the US Open', src: '/sports/A7404363-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Long lens blur of a forehand under a sponsor board', src: '/sports/A7402762-sports.webp', width: 1080, height: 1620, color: '#58b8e8' },
+  { alt: 'A player between points beneath the Rolex clock at the US Open', src: '/sports/A7404645-sports.webp', width: 1080, height: 1620, color: '#587858' },
+  { alt: 'Sevilla in possession as Rangers close down the middle', src: '/sports/DSC08192-sports.webp', width: 1079, height: 1620, color: '#384818' },
+  { alt: 'Ball kid sprinting the tramlines, dragged into colour by a slow shutter', src: '/sports/A7404511-sports.webp', width: 1080, height: 1620, color: '#688848' },
+  { alt: 'Walking back to the baseline in black and white', src: '/sports/A7404674-sports.webp', width: 1080, height: 1620, color: '#888888' },
+  { alt: 'A number 10 running into open grass at Sevilla', src: '/sports/DSC08299-sports.webp', width: 1080, height: 1620, color: '#283818' },
+  { alt: 'Marathon runner mid-stride, race bib against a purple vest', src: '/sports/A7406671-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A runner holding her line in the closing miles, in black and white', src: '/sports/A7406696-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Elite runner in blue and teal on the marathon course', src: '/sports/A7406699-sports.webp', width: 1080, height: 1620, color: '#182828' },
+  { alt: 'Alone on First Avenue as spectators lean over the barrier', src: '/sports/A7406713-sports.webp', width: 1080, height: 1620, color: '#181818' },
+  { alt: 'Two leaders running shoulder to shoulder through Manhattan', src: '/sports/A7406748-sports.webp', width: 1080, height: 1620, color: '#181818' },
+  { alt: 'A runner working through a city block in the elite pack', src: '/sports/A7406758-sports.webp', width: 1080, height: 1620, color: '#181818' },
+  { alt: 'Crowd blurred past a "You Got This" sign in Central Park', src: '/sports/A7406996-sports.webp', width: 1620, height: 1080, color: '#383838' },
+  { alt: 'A runner grinning past the orange barriers in the park', src: '/sports/A7406813-sports.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'The field strung out under autumn trees on the marathon route', src: '/sports/A7407143-sports.webp', width: 1080, height: 1620, color: '#080808' },
 ];
