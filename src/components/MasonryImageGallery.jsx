@@ -6,7 +6,7 @@ import Lightbox from 'yet-another-react-lightbox';
 import 'yet-another-react-lightbox/styles.css';
 import styles from './MasonryImageGallery.module.css';
 
-const MasonryImageGallery = memo(({ images = [] }) => {
+const MasonryImageGallery = memo(({ images = [], spanWideOnMobile = false }) => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -38,7 +38,9 @@ const MasonryImageGallery = memo(({ images = [] }) => {
         {images.map((image, index) => (
           <div
             key={image.src}
-            className={`${styles.tile} cursor-pointer`}
+            className={`${styles.tile} ${
+              spanWideOnMobile && image.width > image.height ? styles.wide : ''
+            } cursor-pointer`}
             onClick={() => openLightbox(index)}
           >
             <GalleryImage

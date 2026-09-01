@@ -43,6 +43,28 @@
   .masonryGrid {
     column-count: 2;
   }
+
+  /*
+    Opt-in, via the `spanWideOnMobile` prop, and only at two columns.
+
+    A gallery that is overwhelmingly one shape (sports: 32 portrait, 4
+    landscape) renders every portrait at an identical height, so the two
+    columns read as a strict grid with aligned rows. The first landscape is
+    196px shorter than a portrait, and from that tile down its column runs
+    permanently out of phase with the other - which looks like a bug rather
+    than like masonry.
+
+    `column-span: all` fixes the cause rather than the symptom: a spanner
+    splits the multicol flow, so the columns re-balance after every landscape
+    instead of carrying the offset to the bottom of the page. A wide photo
+    shown wide also reads as deliberate.
+
+    Not on by default: /places is 16 landscapes in 35, and spanning those
+    would make half the gallery full-bleed.
+  */
+  .wide {
+    column-span: all;
+  }
 }
 
 /*
