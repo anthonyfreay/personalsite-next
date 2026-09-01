@@ -9,7 +9,7 @@ export default function SportsClient() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="w-full flex-1">
-        <MasonryImageGallery images={images} />
+        <MasonryImageGallery images={images} spanWideOnMobile />
       </div>
     </div>
   );
