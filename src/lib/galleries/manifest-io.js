@@ -83,6 +83,10 @@ export async function loadGallery(gallery) {
     src,
     hdSrc: src.replace(/(\.\w+)$/, '-hd$1'),
     alt: str(line, 'alt') ?? '',
+    // Optional: overrides the hover label where it differs from the alt text.
+    // Parsed so curate shows what a tile actually says rather than assuming
+    // the label is the alt.
+    caption: str(line, 'caption'),
     color: str(line, 'color'),
     width: num(line, 'width'),
     height: num(line, 'height'),

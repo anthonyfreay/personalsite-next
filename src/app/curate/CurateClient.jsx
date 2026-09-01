@@ -397,8 +397,15 @@ export default function CurateClient({ galleries }) {
               </button>
 
               <span className={styles.badge}>{isRemoved ? '—' : position + 1}</span>
+              {/*
+                The alt text is what is being edited, so it is what is shown.
+                An entry whose hover label differs carries it alongside, rather
+                than curate implying the tile reads as its alt.
+              */}
               <span className={styles.caption} title={image.alt}>
-                {image.alt || 'no alt text'}
+                {image.caption
+                  ? `${image.caption} — ${image.alt || 'no alt text'}`
+                  : image.alt || 'no alt text'}
               </span>
             </div>
           );

@@ -55,17 +55,23 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
               sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"
             />
             {/*
-              `image.alt &&` is load-bearing: the caption paints a dark
-              gradient behind its text, so an entry with an intentionally empty
-              alt (the crowd frames on /live, which name no artist) would
-              otherwise fade in an empty shadow bar on hover.
+              The hover label and the alt text are different jobs, and on /live
+              they stopped wanting the same string: alt describes the frame for
+              screen readers and the image sitemap, while the label names the
+              subject. They agree for an artist portrait, so `caption` is
+              optional and falls back to `alt` -- only entries that need to
+              differ carry one (the crowd frames, labelled "Crowd Work").
 
-              aria-hidden: this duplicates the image's alt text, which screen
-              readers already announce. Purely a visual affordance.
+              The guard is load-bearing either way: the caption paints a dark
+              gradient behind its text, so an empty label would fade in an
+              empty shadow bar on hover.
+
+              aria-hidden: for the fallback case this duplicates the alt text,
+              which screen readers already announce. Purely a visual affordance.
             */}
-            {captionOnHover && image.alt && (
+            {captionOnHover && (image.caption ?? image.alt) && (
               <span className={styles.hoverCaption} aria-hidden="true">
-                {image.alt}
+                {image.caption ?? image.alt}
               </span>
             )}
           </div>
