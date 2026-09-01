@@ -84,12 +84,17 @@ function buildImageEntries(route) {
   const images = galleriesByRoute[route];
   if (!images) return '';
   return images
-    .map(
-      (image) => `    <image:image>
-      <image:loc>${SITE_URL}${image.src}</image:loc>
-      <image:title>${escapeXml(image.alt)}</image:title>
-    </image:image>`
-    )
+    .map((image) => {
+      // A deliberately empty alt (crowd and atmosphere frames on /live, which
+      // name no artist) would otherwise emit an empty <image:title>. Omit the
+      // element rather than advertising a blank title.
+      const title = image.alt
+        ? `\n      <image:title>${escapeXml(image.alt)}</image:title>`
+        : '';
+      return `    <image:image>
+      <image:loc>${SITE_URL}${image.src}</image:loc>${title}
+    </image:image>`;
+    })
     .join('\n');
 }
 
