@@ -13,7 +13,7 @@ npm run add-photos -- --check                         # verify manifests match d
 npm run add-photos -- <gallery> <folder> --dry-run    # preview, write nothing
 ```
 
-Galleries: `bw` · `live` · `people` · `cars` · `places` · `events`
+Galleries: `bw` · `live` · `people` · `cars` · `places` · `events` · `sports`
 
 ---
 
@@ -31,7 +31,7 @@ Slugs used to carry a topic suffix instead (`-music`, `-scapes`, `-color`, `-por
 
 ```bash
 npm run add-photos -- live ~/Desktop/lr-export          # a folder
-npm run add-photos -- events shot.jpg --alt "Cake"      # one photo, with caption
+npm run add-photos -- events shot.jpg --alt "Cake"      # one photo, with alt text
 ```
 
 **3. Write the alt text.** It defaults to a humanised filename, which is not good enough — it is indexed, and becomes the image sitemap title, the JSON-LD `Photograph` name, and the hover caption on `/live`.
@@ -43,6 +43,34 @@ Edit `src/lib/galleries/<gallery>.js`:
 ```
 
 For `/live`, alt should be **just the artist name** — it is shown on hover.
+
+### When the label is not the description (`caption`)
+
+`/live` tiles reveal a label on hover, and for an artist portrait that is the
+same string as the alt text, so one field serves both. Where they differ — a
+crowd or atmosphere frame that names no artist — add an optional `caption`:
+
+```js
+{ alt: 'Hand raised in the crowd under pink and blue light', caption: 'Crowd Work', src: '/live/A7400768-live.webp', width: 1080, height: 1620, color: '#7828b8' },
+```
+
+| field | drives |
+|---|---|
+| `alt` | the `<img>` accessible name, and the image sitemap `<image:title>` |
+| `caption` | the hover label only |
+
+`caption` is optional and falls back to `alt`, so an entry that does not need
+one carries nothing extra.
+
+Resist the temptation to put the label in `alt` instead. It is the shorter
+edit, but a screen reader would then announce a category rather than a
+photograph, and every crowd frame would share one identical sitemap title —
+which image search treats as low value. Alt describes the frame; caption names
+what the viewer is looking at.
+
+An empty `alt` suppresses the hover label entirely and omits the sitemap
+title, which is supported but rarely what you want: it also makes the photo
+invisible to screen readers.
 
 **4. Check and preview.**
 
@@ -57,7 +85,17 @@ npm run dev
 
 New photos are appended, so they land at the end of the gallery. To place one elsewhere, move its line in the manifest — the array order is the render order.
 
-Ordering matters visually: the masonry galleries (`cars`, `places`, `events`) fill CSS columns top-to-bottom, so a run of same-shaped photos gives one column a very different length. Alternating landscape and portrait keeps it balanced.
+Ordering matters visually, and differently per breakpoint. Above 900px the
+masonry galleries (`cars`, `places`, `events`, `sports`) fill four CSS columns
+top-to-bottom, so a run of same-shaped photos leaves one column much longer
+than the others — alternating landscape and portrait keeps it balanced.
+
+Below 900px those four switch to a two-column row grid where a landscape spans
+the full width (`spanWideOnMobile` in `src/lib/galleries/layout.js`). Rows
+always stay full there, so ordering only affects rhythm: a run of consecutive
+landscapes reads as a stack of full-bleed frames. An odd number of portraits
+in a gallery leaves exactly one half-empty cell, which nothing in the ordering
+can remove.
 
 ---
 
