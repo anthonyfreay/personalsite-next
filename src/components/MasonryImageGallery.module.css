@@ -45,25 +45,53 @@
   }
 
   /*
-    Opt-in, via the `spanWideOnMobile` prop, and only at two columns.
+    Opt-in two-column layout for galleries that are overwhelmingly one shape,
+    via the `spanWideOnMobile` prop. Only /sports uses it.
 
-    A gallery that is overwhelmingly one shape (sports: 32 portrait, 4
-    landscape) renders every portrait at an identical height, so the two
-    columns read as a strict grid with aligned rows. The first landscape is
-    196px shorter than a portrait, and from that tile down its column runs
-    permanently out of phase with the other - which looks like a bug rather
-    than like masonry.
+    Why this is a grid and not multi-column. /sports is 32 portrait tiles and
+    4 landscape. Every portrait renders at an identical height, so the two
+    columns read as a strict grid with aligned rows - and one 196px-shorter
+    landscape puts its column out of phase with the other for the rest of the
+    page.
 
-    `column-span: all` fixes the cause rather than the symptom: a spanner
-    splits the multicol flow, so the columns re-balance after every landscape
-    instead of carrying the offset to the bottom of the page. A wide photo
-    shown wide also reads as deliberate.
+    `column-span: all` was tried first and is the wrong tool. A spanner splits
+    the multicol flow into independently balanced segments, so a segment with
+    an odd number of tiles balances 2/1 and leaves a full tile-sized hole in
+    the short column. Multi-column balances heights and has no concept of a
+    row, so there is no way to ask it for what this needs.
 
-    Not on by default: /places is 16 landscapes in 35, and spanning those
-    would make half the gallery full-bleed.
+    Grid has rows natively: portraits take one cell, landscapes span both, and
+    auto-placement fills every cell in order. Aligned rows, no holes, and the
+    wide frames still read as deliberate. It works here precisely because the
+    portraits share one aspect ratio, which is why it is not the default -
+    with mixed shapes a grid row is as tall as its tallest tile and the
+    whitespace is worse than the raggedness it fixes.
   */
-  .wide {
-    column-span: all;
+  .alignedMobile {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    /*
+      `dense` is required, not cosmetic. A landscape spans both columns, and
+      plain auto-placement will not put a two-cell item into a one-cell gap -
+      it pushes it to the next row and leaves the odd cell empty. Dense lets a
+      later portrait back-fill that cell, so every row is full.
+
+      The cost is that visual order can differ slightly from DOM order, since
+      a back-filled tile appears earlier than it sits in the manifest. The
+      lightbox is unaffected: each tile closes over its own DOM index, so
+      click -> slide mapping stays correct.
+    */
+    grid-auto-flow: dense;
+  }
+
+  /* `gap` owns the spacing here; the multicol tile margin would double it. */
+  .alignedMobile .tile {
+    margin: 0;
+  }
+
+  .alignedMobile .wide {
+    grid-column: 1 / -1;
   }
 }
 

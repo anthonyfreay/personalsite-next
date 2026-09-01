@@ -34,7 +34,11 @@ const MasonryImageGallery = memo(({ images = [], spanWideOnMobile = false }) => 
         the server cannot know - it rendered 4 columns and the client
         re-rendered to 2 below 900px, costing 0.082 CLS at hydration.
       */}
-      <div className={styles.masonryGrid}>
+      <div
+        className={`${styles.masonryGrid} ${
+          spanWideOnMobile ? styles.alignedMobile : ''
+        }`}
+      >
         {images.map((image, index) => (
           <div
             key={image.src}
