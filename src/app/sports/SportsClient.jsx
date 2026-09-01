@@ -2,6 +2,7 @@
 
 import MasonryImageGallery from '@/components/MasonryImageGallery';
 import { sports, withHd } from '@/lib/galleries';
+import { layoutOptions } from '@/lib/galleries/layout';
 
 const images = withHd(sports);
 
@@ -9,7 +10,7 @@ export default function SportsClient() {
   return (
     <div className="flex flex-col min-h-screen">
       <div className="w-full flex-1">
-        <MasonryImageGallery images={images} spanWideOnMobile />
+        <MasonryImageGallery images={images} {...layoutOptions('sports')} />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import GalleryImage from '@/components/GalleryImage';
 import gridStyles from '@/components/ImageGallery.module.css';
 import masonryStyles from '@/components/MasonryImageGallery.module.css';
+import { GALLERY_LAYOUT, layoutOptions } from '@/lib/galleries/layout';
 import styles from './Curate.module.css';
 
 /**
@@ -25,22 +26,19 @@ import styles from './Curate.module.css';
  */
 
 /*
-  Which component each route renders, so the preview can use the same one.
+  Which component each route renders, and with which options, so the preview
+  can use the same ones.
 
-  Not derived from anything -- it mirrors the split described in CLAUDE.md, and
-  the only way to keep it honest is to import the very stylesheets the real
-  galleries use (below) rather than restating their rules here. If a route
-  changes component, this map is the single line to update.
+  Both come from `@/lib/galleries/layout` rather than a copy kept here. The
+  copy is exactly how this drifted before: /sports gained a mobile row grid
+  and curate carried on previewing it as multicol masonry, so the tool used to
+  order the gallery no longer showed the gallery. Importing the real
+  stylesheets (below) keeps the rules honest; importing the real config keeps
+  the choice of rules honest too.
 */
-const LAYOUT = {
-  bw: 'grid',
-  live: 'grid',
-  people: 'grid',
-  cars: 'masonry',
-  places: 'masonry',
-  events: 'masonry',
-  sports: 'masonry',
-};
+const LAYOUT = Object.fromEntries(
+  Object.entries(GALLERY_LAYOUT).map(([name, { component }]) => [name, component]),
+);
 
 // ImageGallery's fallback for entries that predate the width/height fields.
 const FALLBACK_WIDTH = 1080;
@@ -222,9 +220,22 @@ export default function CurateClient({ galleries }) {
     entries in true masonry means scrolling a very tall page; the uniform grid
     trades fidelity for reach.
   */
+  const options = layoutOptions(gallery);
+
+  /*
+    Compact mode is the one deliberate departure from production: it squares
+    every tile off so a photo can be dragged across 58 entries without
+    scrolling a very tall page. Production mode takes the real container
+    classes, including the per-route ones, so the preview reflows exactly as
+    the live route does at every breakpoint.
+  */
   const containerClass = compact
     ? styles.compactGrid
-    : `${layoutStyles.masonryGrid ?? ''} ${layoutStyles.gallery ?? ''}`.trim();
+    : [
+        layoutStyles.masonryGrid,
+        layoutStyles.gallery,
+        options.spanWideOnMobile ? masonryStyles.alignedMobile : '',
+      ].filter(Boolean).join(' ');
 
   const visible = hideRemoved ? kept : images;
 
@@ -326,6 +337,11 @@ export default function CurateClient({ galleries }) {
               key={image.src}
               className={[
                 layoutStyles.tile,
+                // Landscape tiles span both columns below 900px on routes that
+                // opt in, exactly as they do on the live gallery.
+                !compact && options.spanWideOnMobile && image.width > image.height
+                  ? masonryStyles.wide
+                  : '',
                 styles.editTile,
                 isRemoved ? styles.removed : '',
                 isSelected ? styles.selected : '',
@@ -347,7 +363,10 @@ export default function CurateClient({ galleries }) {
                 }
               >
                 <GalleryImage
-                  src={image.hdSrc}
+                  // The base file, matching what the real grids render since
+                  // image optimization was turned off. Previewing -hd here
+                  // would show a sharper tile than production serves.
+                  src={image.src}
                   alt=""
                   width={image.width ?? FALLBACK_WIDTH}
                   height={image.height ?? FALLBACK_HEIGHT}
