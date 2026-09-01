@@ -18,19 +18,29 @@ export const GALLERY_LAYOUT = {
   bw: { component: 'grid', options: {} },
   live: { component: 'grid', options: {} },
   people: { component: 'grid', options: {} },
-  cars: { component: 'masonry', options: {} },
-  places: { component: 'masonry', options: {} },
-  events: { component: 'masonry', options: {} },
   /*
-    /sports is 32 portrait tiles and 4 landscape, all portraits at one
-    identical height. Below 900px that renders as a strict two-column grid
-    whose rows align, so a single shorter landscape throws its column out of
-    phase for the rest of the page. `spanWideOnMobile` swaps the multicol
-    masonry for a row grid there and gives landscapes the full width.
+    Every masonry route uses the mobile row grid.
 
-    Deliberately not the default: /places is 16 landscapes in 35, where a row
-    grid would make every row as tall as its tallest tile.
+    Below 900px multicol renders two columns whose tiles are nearly all one
+    height, so the rows line up and read as a grid - and a single shorter
+    landscape then throws its column out of phase for the rest of the page.
+    `spanWideOnMobile` swaps multicol for a real row grid and gives landscapes
+    the full width, which fixes the phase and shows the wide frames wide.
+
+    It is safe everywhere because `add-photos` accepts 3:2 only, so every tile
+    in every gallery is 3:2: a row holds either two identical portraits or one
+    spanning landscape, and a mixed-height row cannot occur. An earlier version
+    of this file kept the option off for cars/places/events on the grounds that
+    a row would be as tall as its tallest tile - that was wrong about the
+    content.
+
+    The real cost is height. A landscape that used to sit half-width inside a
+    column now takes a row of its own, so /places (16 landscapes in 35) and
+    /events (14 in 58) scroll noticeably longer on a phone.
   */
+  cars: { component: 'masonry', options: { spanWideOnMobile: true } },
+  places: { component: 'masonry', options: { spanWideOnMobile: true } },
+  events: { component: 'masonry', options: { spanWideOnMobile: true } },
   sports: { component: 'masonry', options: { spanWideOnMobile: true } },
 };
 
