@@ -54,9 +54,16 @@ const ImageGallery = memo(({ images, captionOnHover = false }) => {
               eager={index < 8}
               sizes="(max-width: 640px) 50vw, (max-width: 1023px) 33vw, 450px"
             />
-            {captionOnHover && (
-              // aria-hidden: this duplicates the image's alt text, which screen
-              // readers already announce. Purely a visual affordance.
+            {/*
+              `image.alt &&` is load-bearing: the caption paints a dark
+              gradient behind its text, so an entry with an intentionally empty
+              alt (the crowd frames on /live, which name no artist) would
+              otherwise fade in an empty shadow bar on hover.
+
+              aria-hidden: this duplicates the image's alt text, which screen
+              readers already announce. Purely a visual affordance.
+            */}
+            {captionOnHover && image.alt && (
               <span className={styles.hoverCaption} aria-hidden="true">
                 {image.alt}
               </span>
