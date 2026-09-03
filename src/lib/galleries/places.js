@@ -46,5 +46,5 @@ export const images = [
   { alt: 'Kids in Galapagos', src: '/places/A7401603-places.webp', width: 1080, height: 1620, color: '#181818' },
   { alt: 'Travel photography moment', src: '/places/A7401638-places.webp', width: 1080, height: 720, color: '#98c8e8' },
   { alt: 'Father and child crossing a snowy Manhattan sidewalk', src: '/places/A7409942-places.webp', width: 1620, height: 1080, color: '#e8e8e8' },
-  { alt: 'A7409533 events', src: '/places/A7409533-places.webp', width: 1080, height: 1620, color: '#082848' },
+  { alt: 'The Eiffel Tower lit at dusk beyond a footbridge over the Seine', src: '/places/A7409533-places.webp', width: 1080, height: 1620, color: '#082848' },
 ];
