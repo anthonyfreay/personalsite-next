@@ -236,3 +236,29 @@
   opacity: 0.25;
   cursor: default;
 }
+
+/*
+  A tile staged to move to another gallery.
+
+  Deliberately distinct from .removed rather than reusing it: a removal and a
+  send have different outcomes, and a tile that merely looked "not staying"
+  would not say which. The badge carries the destination; this just has to read
+  as pending and not-quite-here.
+*/
+.outgoing .hit {
+  /*
+    Dimmed enough to read as pending, but not so far that the photo stops being
+    recognisable. An earlier 0.45 turned dark frames into featureless grey
+    blocks against the light page -- you could see two tiles were leaving but
+    not which two, which is the one thing the state needs to communicate.
+  */
+  opacity: 0.8;
+  outline: 2px solid #1d4ed8;
+  outline-offset: -2px;
+}
+
+.outgoing .badge {
+  background: #1d4ed8;
+  color: #fff;
+  font-variant-numeric: normal;
+}

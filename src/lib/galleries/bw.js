@@ -30,4 +30,7 @@ export const images = [
   { alt: 'Taxi Driver', src: '/bw/DSC08988-bw.webp', color: '#080808' },
   { alt: 'Ice in my Veins', src: '/bw/DSC02743-bw.webp', color: '#e8e8e8' },
   { alt: 'Goldlink', src: '/bw/DSC02678-bw.webp', color: '#f8f8f8' },
+  { alt: 'A runner holding her line in the closing miles, in black and white', src: '/bw/A7406696-bw.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Walking back to the baseline in black and white', src: '/bw/A7404674-bw.webp', width: 1080, height: 1620, color: '#888888' },
+  { alt: 'A7409160 bw', src: '/bw/A7409160-bw.webp', width: 1620, height: 1080, color: '#080808' },
 ];

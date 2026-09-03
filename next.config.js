@@ -1,3 +1,14 @@
+/*
+  Photos moved between galleries by /curate.
+
+  A move renames the file to the target gallery's suffix, so the old URL would
+  404 -- and gallery image URLs are in the sitemap and indexed. The data lives
+  in JSON rather than being written into this file because /curate appends to
+  it at runtime, and rewriting JS source from a route handler is a good way to
+  corrupt a config.
+*/
+const movedImages = require('./src/lib/galleries/moved-images.json');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -58,6 +69,16 @@ const nextConfig = {
           permanent: true,
         }))
       ),
+      // One 308 per moved photo, both sizes. Permanent so the redirect is
+      // cached and the link equity follows the photo to its new gallery.
+      ...movedImages.flatMap(({ from, to }) => [
+        { source: from, destination: to, permanent: true },
+        {
+          source: from.replace(/(\.\w+)$/, '-hd$1'),
+          destination: to.replace(/(\.\w+)$/, '-hd$1'),
+          permanent: true,
+        },
+      ]),
     ];
   },
 };

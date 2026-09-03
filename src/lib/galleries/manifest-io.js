@@ -10,12 +10,14 @@
 // spacing, hand-written alt text and all. Re-serialising from parsed objects
 // would reformat the whole file and bury the real change in noise.
 
-import { readFile, writeFile } from 'node:fs/promises';
+import { readFile, writeFile, rename, access } from 'node:fs/promises';
 import path from 'node:path';
 
 export const GALLERIES = ['bw', 'live', 'people', 'cars', 'places', 'events', 'sports'];
 
 const MANIFEST_DIR = path.join(process.cwd(), 'src', 'lib', 'galleries');
+const PUBLIC_DIR = path.join(process.cwd(), 'public');
+const MOVED_FILE = path.join(MANIFEST_DIR, 'moved-images.json');
 
 const ARRAY_OPEN = 'export const images = [';
 const ARRAY_CLOSE = '];';
@@ -128,5 +130,140 @@ export async function saveGalleryOrder(gallery, order) {
     kept: kept.length,
     removed: entries.length - kept.length,
     removedSrcs: entries.map((e) => e.src).filter((src) => !seen.has(src)),
+  };
+}
+
+/*
+ * ---------------------------------------------------------------------------
+ * Moving a photo between galleries
+ * ---------------------------------------------------------------------------
+ *
+ * The filename encodes the gallery it belongs to (`A7400768-live.webp` in
+ * public/live), so a move is a rename as well as a manifest edit. That changes
+ * a URL which is in the sitemap and may be indexed, so every move also records
+ * a redirect. Doing less than all three leaves something inconsistent:
+ *
+ *   files       both sizes renamed and moved into the target directory
+ *   manifests   the entry line leaves the source array and is appended to the
+ *               target array, with its `src` rewritten and `caption` dropped
+ *   redirects   the old URL 308s to the new one, for both sizes
+ */
+
+const HD = /(\.\w+)$/;
+const hd = (p) => p.replace(HD, '-hd$1');
+const exists = (p) => access(p).then(() => true, () => false);
+
+/**
+ * The slug a photo takes in `target`.
+ *
+ * Slugs end in the gallery name by convention, so the suffix is swapped rather
+ * than stacked -- `A7400768-live` becomes `A7400768-bw`, not
+ * `A7400768-live-bw`. A legacy slug that carries no suffix just gains one.
+ */
+export function retarget(src, source, target) {
+  const ext = path.extname(src);
+  const stem = path.basename(src, ext);
+  const base = stem.endsWith(`-${source}`) ? stem.slice(0, -(source.length + 1)) : stem;
+  return `/${target}/${base}-${target}${ext}`;
+}
+
+/** Rewrite an entry line for its new home: new src, and no /live-only caption. */
+function rewriteLine(line, fromSrc, toSrc) {
+  return line
+    .replace(`'${fromSrc}'`, `'${toSrc}'`)
+    .replace(/\s*caption:\s*'(?:[^'\\]|\\.)*',/, '');
+}
+
+/**
+ * Apply `order` to `gallery` and move `moves` out of it, in one operation.
+ *
+ * `moves` is [{ src, to }]. Moved entries must not also appear in `order` --
+ * the caller decides an entry's fate once.
+ *
+ * Validation happens before anything is written, and the file renames are
+ * rolled back if a later one fails, so a rejected save leaves the tree as it
+ * was rather than half-moved.
+ */
+export async function saveGallery(gallery, order, moves = []) {
+  const source = await readManifest(gallery);
+  const bySrc = new Map(source.entries.map((e) => [e.src, e]));
+
+  // --- validate every move before touching disk ---
+  const planned = [];
+  const claimed = new Set();
+
+  for (const { src, to } of moves) {
+    if (!isGallery(to)) throw new Error(`Unknown gallery: ${to}`);
+    if (to === gallery) throw new Error(`${src}: already in ${gallery}`);
+    const entry = bySrc.get(src);
+    if (!entry) throw new Error(`${gallery}: unknown image ${src}`);
+    if (order.includes(src)) throw new Error(`${src}: both kept and moved`);
+    if (claimed.has(src)) throw new Error(`${src}: moved twice`);
+    claimed.add(src);
+
+    const toSrc = retarget(src, gallery, to);
+    for (const rel of [toSrc, hd(toSrc)]) {
+      if (await exists(path.join(PUBLIC_DIR, rel))) {
+        throw new Error(`${rel} already exists in /${to}`);
+      }
+    }
+    for (const rel of [src, hd(src)]) {
+      if (!(await exists(path.join(PUBLIC_DIR, rel)))) {
+        throw new Error(`${rel} is missing on disk`);
+      }
+    }
+    planned.push({ entry, to, fromSrc: src, toSrc });
+  }
+
+  // --- rename files, rolling back if any step fails ---
+  const renamed = [];
+  try {
+    for (const { fromSrc, toSrc } of planned) {
+      for (const [from, to] of [[fromSrc, toSrc], [hd(fromSrc), hd(toSrc)]]) {
+        await rename(path.join(PUBLIC_DIR, from), path.join(PUBLIC_DIR, to));
+        renamed.push([from, to]);
+      }
+    }
+  } catch (error) {
+    for (const [from, to] of renamed.reverse()) {
+      await rename(path.join(PUBLIC_DIR, to), path.join(PUBLIC_DIR, from)).catch(() => {});
+    }
+    throw error;
+  }
+
+  // --- append to each target manifest ---
+  const byTarget = new Map();
+  for (const plan of planned) {
+    if (!byTarget.has(plan.to)) byTarget.set(plan.to, []);
+    byTarget.get(plan.to).push(plan);
+  }
+
+  for (const [target, plans] of byTarget) {
+    const t = await readManifest(target);
+    const appended = plans.map((p) => rewriteLine(p.entry.line, p.fromSrc, p.toSrc));
+    const lines = [...t.head, ...t.entries.map((e) => e.line), ...appended, ...t.tail];
+    await writeFile(t.file, lines.join('\n'), 'utf8');
+  }
+
+  // --- rewrite the source manifest without the moved entries ---
+  const result = await saveGalleryOrder(gallery, order);
+
+  // --- record the redirects ---
+  if (planned.length) {
+    const current = JSON.parse(await readFile(MOVED_FILE, 'utf8'));
+    current.push(...planned.map((p) => ({ from: p.fromSrc, to: p.toSrc })));
+    await writeFile(MOVED_FILE, `${JSON.stringify(current, null, 2)}\n`, 'utf8');
+  }
+
+  // saveGalleryOrder counts anything absent from `order` as removed, which
+  // would fold the moves into the unregistered tally. A move is not a removal.
+  const movedSrcs = new Set(planned.map((p) => p.fromSrc));
+  const removedSrcs = result.removedSrcs.filter((src) => !movedSrcs.has(src));
+
+  return {
+    ...result,
+    removed: removedSrcs.length,
+    removedSrcs,
+    moved: planned.map((p) => ({ from: p.fromSrc, to: p.toSrc, gallery: p.to })),
   };
 }

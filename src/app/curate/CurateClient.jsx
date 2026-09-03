@@ -15,10 +15,16 @@ import styles from './Curate.module.css';
  * kept entries are sent; the route handler rewrites the file to exactly that
  * order.
  *
- * Selecting two tiles enables Swap, which exchanges their positions. Dragging
- * is the wrong tool for trading two photos that are screens apart -- it means
- * hauling one tile the whole way and displacing everything in between, where a
- * swap moves exactly the two and leaves the rest of the order untouched.
+ * Selecting tiles enables two actions. Swap, at exactly two, exchanges their
+ * positions: dragging is the wrong tool for trading photos that are screens
+ * apart, since it means hauling one tile the whole way and displacing
+ * everything in between. Send moves any number to another gallery, appending
+ * them to the bottom of it.
+ *
+ * A send is staged, like a removal: the tiles mark as outgoing and stay
+ * reversible until Save, which writes both manifests in one request. Nothing
+ * about a move is cheap to undo once written -- it renames files and records a
+ * redirect -- so it waits for the same deliberate click as everything else.
  *
  * Drag-and-drop is the native HTML5 API rather than a library: the list is one
  * flat grid of at most a few dozen tiles, which is well inside what dragover
@@ -62,6 +68,8 @@ export default function CurateClient({ galleries }) {
   // At most two, and the tiles enforce it: with two picked, every other
   // selector is disabled rather than quietly displacing one of them.
   const [selected, setSelected] = useState([]);
+  // src -> target gallery, for tiles staged to move out on the next Save.
+  const [outgoing, setOutgoing] = useState({});
 
   const dragFrom = useRef(null);
   // Bumped to re-run the load effect for the same gallery (the Revert button).
@@ -89,6 +97,7 @@ export default function CurateClient({ galleries }) {
         setBaseline(data.images.map((image) => image.src));
         setRemoved(new Set());
         setSelected([]);
+        setOutgoing({});
         setStatus({ state: 'idle' });
       } catch (error) {
         if (active) setStatus({ state: 'error', message: error.message });
@@ -108,15 +117,23 @@ export default function CurateClient({ galleries }) {
     setGallery(name);
   }, []);
 
+  // An outgoing tile is neither kept nor removed: it leaves this gallery for
+  // another one, so it is excluded from `order` and sent under `moves`.
   const kept = useMemo(
-    () => images.filter((image) => !removed.has(image.src)),
-    [images, removed],
+    () => images.filter((image) => !removed.has(image.src) && !outgoing[image.src]),
+    [images, removed, outgoing],
+  );
+
+  const moves = useMemo(
+    () => Object.entries(outgoing).map(([src, to]) => ({ src, to })),
+    [outgoing],
   );
 
   const dirty = useMemo(() => {
+    if (moves.length) return true;
     const next = kept.map((image) => image.src);
     return next.length !== baseline.length || next.some((src, i) => src !== baseline[i]);
-  }, [kept, baseline]);
+  }, [kept, baseline, moves]);
 
   // Leaving with unsaved edits loses them silently otherwise -- the manifest is
   // only touched on Save.
@@ -136,12 +153,12 @@ export default function CurateClient({ galleries }) {
     });
   }, []);
 
+  // Uncapped: Send takes any number. Swap gates itself on exactly two rather
+  // than the selection refusing a third, which would make Send single-file.
   const toggleSelected = useCallback((src) => {
-    setSelected((current) => {
-      if (current.includes(src)) return current.filter((value) => value !== src);
-      if (current.length === 2) return current;
-      return [...current, src];
-    });
+    setSelected((current) =>
+      current.includes(src) ? current.filter((value) => value !== src) : [...current, src]
+    );
   }, []);
 
   /*
@@ -160,6 +177,34 @@ export default function CurateClient({ galleries }) {
     });
     setSelected([]);
   }, [selected]);
+
+  /*
+    Stage the selected tiles for another gallery. Marking one for removal and
+    for a move at once is contradictory, so a send clears any removal on those
+    same tiles rather than leaving both flags set.
+  */
+  const sendTo = useCallback((target) => {
+    if (!target || selected.length === 0) return;
+    setOutgoing((current) => {
+      const next = { ...current };
+      selected.forEach((src) => { next[src] = target; });
+      return next;
+    });
+    setRemoved((current) => {
+      const next = new Set(current);
+      selected.forEach((src) => next.delete(src));
+      return next;
+    });
+    setSelected([]);
+  }, [selected]);
+
+  const cancelSend = useCallback((src) => {
+    setOutgoing((current) => {
+      const next = { ...current };
+      delete next[src];
+      return next;
+    });
+  }, []);
 
   const moveTo = useCallback((from, to) => {
     if (from === to) return;
@@ -188,7 +233,7 @@ export default function CurateClient({ galleries }) {
       const response = await fetch('/api/curate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ gallery, order: kept.map((image) => image.src) }),
+        body: JSON.stringify({ gallery, order: kept.map((image) => image.src), moves }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error ?? 'Failed to save');
@@ -196,14 +241,18 @@ export default function CurateClient({ galleries }) {
       setBaseline(kept.map((image) => image.src));
       setRemoved(new Set());
       setSelected([]);
+      setOutgoing({});
+      const sent = data.moved?.length
+        ? `, ${data.moved.length} sent to ${[...new Set(data.moved.map((m) => `/${m.gallery}`))].join(', ')}`
+        : '';
       setStatus({
         state: 'saved',
-        message: `${data.kept} kept, ${data.removed} unregistered`,
+        message: `${data.kept} kept, ${data.removed} unregistered${sent}`,
       });
     } catch (error) {
       setStatus({ state: 'error', message: error.message });
     }
-  }, [gallery, kept]);
+  }, [gallery, kept, moves]);
 
   const layout = LAYOUT[gallery];
   const layoutStyles = layout === 'masonry' ? masonryStyles : gridStyles;
@@ -245,8 +294,9 @@ export default function CurateClient({ galleries }) {
         <div>
           <h1 className={styles.title}>Curate</h1>
           <p className={styles.subtitle}>
-            Drag to reorder, or select two tiles and swap them. Click a tile to unregister
-            it. Nothing is written until you save.
+            Drag to reorder, or select two tiles and swap them. Select any number and
+            send them to another gallery, where they land at the bottom. Click a tile to
+            unregister it. Nothing is written until you save.
           </p>
         </div>
 
@@ -272,6 +322,29 @@ export default function CurateClient({ galleries }) {
           >
             Swap
           </button>
+
+          {/*
+            Resets to its placeholder after each send, so the control never
+            reads as though a target is still armed.
+          */}
+          <select
+            className={styles.select}
+            value=""
+            onChange={(event) => sendTo(event.target.value)}
+            disabled={selected.length === 0}
+            aria-label={`Send ${selected.length} selected to another gallery`}
+          >
+            <option value="">
+              {selected.length ? `Send ${selected.length} to…` : 'Send to…'}
+            </option>
+            {galleries
+              .filter((name) => name !== gallery)
+              .map((name) => (
+                <option key={name} value={name}>
+                  /{name}
+                </option>
+              ))}
+          </select>
 
           <button
             type="button"
@@ -318,7 +391,11 @@ export default function CurateClient({ galleries }) {
         {status.state === 'saved' && `Saved — ${status.message}`}
         {status.state === 'idle' && (
           dirty
-            ? `${kept.length} kept, ${removed.size} marked for removal — unsaved`
+            ? [
+                `${kept.length} kept`,
+                `${removed.size} marked for removal`,
+                moves.length ? `${moves.length} to send` : '',
+              ].filter(Boolean).join(', ') + ' — unsaved'
             : `${kept.length} photos · ${layout} layout`
         )}
       </p>
@@ -327,6 +404,7 @@ export default function CurateClient({ galleries }) {
         {visible.map((image) => {
           const index = images.indexOf(image);
           const isRemoved = removed.has(image.src);
+          const sendingTo = outgoing[image.src];
           const position = kept.indexOf(image);
           const isSelected = selected.includes(image.src);
           // Deselecting stays available, or a full pair would be a dead end.
@@ -344,6 +422,7 @@ export default function CurateClient({ galleries }) {
                   : '',
                 styles.editTile,
                 isRemoved ? styles.removed : '',
+                sendingTo ? styles.outgoing : '',
                 isSelected ? styles.selected : '',
               ].filter(Boolean).join(' ')}
               draggable
@@ -354,12 +433,16 @@ export default function CurateClient({ galleries }) {
               <button
                 type="button"
                 className={styles.hit}
-                onClick={() => toggleRemoved(image.src)}
+                onClick={() =>
+                  sendingTo ? cancelSend(image.src) : toggleRemoved(image.src)
+                }
                 aria-pressed={isRemoved}
                 aria-label={
-                  isRemoved
-                    ? `Restore ${image.alt || image.src}`
-                    : `Mark ${image.alt || image.src} for removal`
+                  sendingTo
+                    ? `Keep ${image.alt || image.src} in /${gallery}`
+                    : isRemoved
+                      ? `Restore ${image.alt || image.src}`
+                      : `Mark ${image.alt || image.src} for removal`
                 }
               >
                 <GalleryImage
@@ -396,7 +479,13 @@ export default function CurateClient({ galleries }) {
                 {isSelected ? '✓' : ''}
               </button>
 
-              <span className={styles.badge}>{isRemoved ? '—' : position + 1}</span>
+              {/*
+                An outgoing tile has no position left in this gallery, so the
+                badge names where it is going instead of a number.
+              */}
+              <span className={styles.badge}>
+                {sendingTo ? `→ ${sendingTo}` : isRemoved ? '—' : position + 1}
+              </span>
               {/*
                 The alt text is what is being edited, so it is what is shown.
                 An entry whose hover label differs carries it alongside, rather

@@ -154,6 +154,34 @@ A removed photo leaves a 404 at a URL Google may have indexed. For a photo that 
 
 ---
 
+## Move a photo to another gallery
+
+Use `/curate`: select one or more tiles, pick a target from **Send to…**, and
+Save. They append to the bottom of the target gallery.
+
+A move is three changes kept in step, which is why it is worth doing through
+the tool rather than by hand:
+
+| | |
+|---|---|
+| files | both sizes renamed to the target's suffix and moved into its folder |
+| manifests | the entry leaves the source array and is appended to the target, `src` rewritten and `caption` dropped |
+| redirects | the old URL 308s to the new one, both sizes, via `src/lib/galleries/moved-images.json` |
+
+The redirect is the part that is easy to forget by hand. Gallery image URLs are
+in the sitemap and indexed, and a rename would otherwise 404 one.
+
+Alt text travels with the photo. It is not rewritten, so check it still reads
+correctly in its new home — `/live` in particular wants the artist name, where
+other galleries want a description.
+
+Sends are staged: tiles mark as outgoing and Revert still restores them.
+Nothing is written until Save, which updates both manifests in one request. If
+anything about the move is invalid — a name collision in the target, a missing
+file — the whole save is rejected before a single file is touched.
+
+---
+
 ## What the script produces
 
 Per photo, both **long-edge constrained** so landscape and portrait get equal treatment:
