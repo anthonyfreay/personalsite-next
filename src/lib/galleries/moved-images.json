@@ -6,5 +6,29 @@
   {
     "from": "/sports/A7404674-sports.webp",
     "to": "/bw/A7404674-bw.webp"
+  },
+  {
+    "from": "/live/RX701760-live.webp",
+    "to": "/bw/RX701760-bw.webp"
+  },
+  {
+    "from": "/people/A7400648-people.webp",
+    "to": "/events/A7400648-events.webp"
+  },
+  {
+    "from": "/places/A7408301-places.webp",
+    "to": "/cars/A7408301-cars.webp"
+  },
+  {
+    "from": "/places/RX706732-places.webp",
+    "to": "/sports/RX706732-sports.webp"
+  },
+  {
+    "from": "/events/A7409533-events.webp",
+    "to": "/places/A7409533-places.webp"
+  },
+  {
+    "from": "/sports/A7402789-sports.webp",
+    "to": "/bw/A7402789-bw.webp"
   }
 ]
