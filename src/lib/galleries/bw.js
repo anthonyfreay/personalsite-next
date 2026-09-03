@@ -26,7 +26,7 @@ export const images = [
   { alt: 'Skating sideways', src: '/bw/A7405342-bw.webp', color: '#181818' },
   { alt: 'Save the kids', src: '/bw/DSC07973-bw.webp', color: '#080808' },
   { alt: 'J Balvin', src: '/bw/RX709059-Edit-bw.webp', color: '#080808' },
-  { alt: 'A performer under a single spotlight while phone screens glow in the dark crowd', src: '/bw/RX701760-bw.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'Gracie Abrams under a single spotlight while phone screens glow in the dark crowd', src: '/bw/RX701760-bw.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Taxi Driver', src: '/bw/DSC08988-bw.webp', color: '#080808' },
   { alt: 'Harbour along Oregon Coast', src: '/bw/A7204510-bw.webp', color: '#080808' },
   { alt: 'Walking back to the baseline in black and white', src: '/bw/A7404674-bw.webp', width: 1080, height: 1620, color: '#888888' },
