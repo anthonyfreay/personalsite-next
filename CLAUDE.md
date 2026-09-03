@@ -75,6 +75,7 @@ Global `<head>` metadata, Vercel Analytics/Speed Insights, and Google Analytics 
 
 - `/resume` and `/resume/` → `/resume_anthony_freay.pdf`, defined in `next.config.js`.
 - Non-www → www canonicalization for `anthonyfreay.com`, defined in `vercel.json` (Vercel-level redirect, not Next.js).
+- Photos moved between galleries by `/curate` are renamed, so their old URLs redirect via `src/lib/galleries/moved-images.json`, which `next.config.js` expands into one 308 per photo per size. It is JSON rather than inline rules because the curate route handler appends to it at runtime.
 
 ### Styling
 

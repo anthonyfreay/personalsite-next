@@ -71,4 +71,6 @@ export const images = [
   { alt: 'Party moment by photographer', src: '/events/A7207913-events.webp', width: 1620, height: 1080, color: '#080808' },
   { alt: 'Party attendee portrait', src: '/events/A7206542-events.webp', width: 1080, height: 1620, color: '#685848' },
   { alt: 'All The Way Down', src: '/events/A7207740-events.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A7407857 events', src: '/events/A7407857-events.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A7409533 events', src: '/events/A7409533-events.webp', width: 1080, height: 1620, color: '#082848' },
 ];

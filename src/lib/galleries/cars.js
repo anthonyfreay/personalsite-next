@@ -33,4 +33,7 @@ export const images = [
   { alt: 'Black and white car portrait', src: '/cars/A7406721-cars.webp', width: 1080, height: 720, color: '#181818' },
   { alt: 'Automotive detail by Anthony Freay', src: '/cars/A7406778-cars.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Classic car in color', src: '/cars/A7200461-cars.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A7402122 cars', src: '/cars/A7402122-cars.webp', width: 1620, height: 1080, color: '#080808' },
+  { alt: 'A7406689 cars', src: '/cars/A7406689-cars.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A7409701 cars', src: '/cars/A7409701-cars.webp', width: 1080, height: 1620, color: '#080808' },
 ];

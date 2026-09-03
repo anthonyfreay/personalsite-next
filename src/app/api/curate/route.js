@@ -1,7 +1,8 @@
 // Dev-only endpoint behind the /curate UI.
 //
 // GET  ?gallery=live   -> that gallery's entries in render order
-// POST { gallery, order } -> rewrite the manifest to that order
+// POST { gallery, order, moves } -> rewrite the manifest to that order, and
+//                                   move `moves` ([{src, to}]) into other galleries
 //
 // Writing source files from an HTTP handler is only ever acceptable on a
 // developer's own machine, so every method refuses outside `next dev`. The
@@ -9,7 +10,7 @@
 // handler is compiled either way -- this makes the deployed copy inert.
 
 import { NextResponse } from 'next/server';
-import { GALLERIES, isGallery, loadGallery, saveGalleryOrder } from '@/lib/galleries/manifest-io';
+import { GALLERIES, isGallery, loadGallery, saveGallery } from '@/lib/galleries/manifest-io';
 
 export const dynamic = 'force-dynamic';
 
@@ -38,7 +39,7 @@ export async function POST(request) {
     return badRequest('Body must be JSON');
   }
 
-  const { gallery, order } = body ?? {};
+  const { gallery, order, moves = [] } = body ?? {};
   if (!isGallery(gallery)) return badRequest(`Unknown gallery: ${gallery}`);
   if (!Array.isArray(order)) return badRequest('order must be an array of src strings');
   if (order.some((src) => typeof src !== 'string')) return badRequest('order must contain only strings');
@@ -47,8 +48,13 @@ export async function POST(request) {
   // rather than something a stray click can do.
   if (order.length === 0) return badRequest('Refusing to empty a gallery');
 
+  if (!Array.isArray(moves)) return badRequest('moves must be an array');
+  if (moves.some((m) => typeof m?.src !== 'string' || typeof m?.to !== 'string')) {
+    return badRequest('each move must be { src, to }');
+  }
+
   try {
-    return NextResponse.json(await saveGalleryOrder(gallery, order));
+    return NextResponse.json(await saveGallery(gallery, order, moves));
   } catch (error) {
     return badRequest(error.message);
   }

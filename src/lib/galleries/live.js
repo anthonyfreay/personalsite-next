@@ -44,4 +44,13 @@ export const images = [
   { alt: 'Lauv', src: '/live/DSC06611-live.webp', color: '#080808' },
   { alt: 'Olu', src: '/live/RX703590-live.webp', color: '#080808' },
   { alt: 'Nicki Minaj', src: '/live/RX709090-live.webp', color: '#080808' },
+  { alt: 'A7400272 live', src: '/live/A7400272-live.webp', width: 1620, height: 1080, color: '#080808' },
+  { alt: 'A7400330 live', src: '/live/A7400330-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A7401198 live', src: '/live/A7401198-live.webp', width: 1620, height: 1080, color: '#180808' },
+  { alt: 'DSC00863 live', src: '/live/DSC00863-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'DSC00954 live', src: '/live/DSC00954-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'DSC03409 live', src: '/live/DSC03409-live.webp', width: 1620, height: 1080, color: '#080808' },
+  { alt: 'RX701709 live', src: '/live/RX701709-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'RX701760 live', src: '/live/RX701760-live.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'RX701804 live', src: '/live/RX701804-live.webp', width: 1620, height: 1080, color: '#180808' },
 ];
