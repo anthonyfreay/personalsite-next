@@ -71,6 +71,23 @@ export default function CurateClient({ galleries }) {
   // src -> target gallery, for tiles staged to move out on the next Save.
   const [outgoing, setOutgoing] = useState({});
 
+  /*
+    The site navbar is sticky at top: 0, so the toolbar has to start below it.
+    Measured rather than hardcoded: the height is a product of the navbar's own
+    padding and type, and a stale constant here would silently tuck the
+    controls underneath it -- exactly the thing this is meant to fix.
+  */
+  const [navOffset, setNavOffset] = useState(0);
+  useEffect(() => {
+    const nav = document.querySelector('nav');
+    if (!nav) return undefined;
+    const sync = () => setNavOffset(nav.getBoundingClientRect().height);
+    sync();
+    const observer = new ResizeObserver(sync);
+    observer.observe(nav);
+    return () => observer.disconnect();
+  }, []);
+
   const dragFrom = useRef(null);
   // Bumped to re-run the load effect for the same gallery (the Revert button).
   const [reloads, setReloads] = useState(0);
@@ -300,6 +317,15 @@ export default function CurateClient({ galleries }) {
           </p>
         </div>
 
+      </header>
+
+      {/*
+        Sticky, because Swap and Send act on a selection made anywhere in the
+        gallery -- with 58 events tiles the controls were a long scroll away
+        from the photo you had just picked. The title and instructions above
+        are read once and are free to scroll off.
+      */}
+      <div className={styles.toolbar} style={{ top: navOffset }}>
         <div className={styles.actions}>
           <select
             className={styles.select}
@@ -383,22 +409,22 @@ export default function CurateClient({ galleries }) {
             {status.state === 'saving' ? 'Saving…' : 'Save'}
           </button>
         </div>
-      </header>
 
-      <p className={styles.status} role="status">
-        {status.state === 'error' && <span className={styles.error}>{status.message}</span>}
-        {status.state === 'loading' && 'Loading…'}
-        {status.state === 'saved' && `Saved — ${status.message}`}
-        {status.state === 'idle' && (
-          dirty
-            ? [
-                `${kept.length} kept`,
-                `${removed.size} marked for removal`,
-                moves.length ? `${moves.length} to send` : '',
-              ].filter(Boolean).join(', ') + ' — unsaved'
-            : `${kept.length} photos · ${layout} layout`
-        )}
-      </p>
+        <p className={styles.status} role="status">
+          {status.state === 'error' && <span className={styles.error}>{status.message}</span>}
+          {status.state === 'loading' && 'Loading…'}
+          {status.state === 'saved' && `Saved — ${status.message}`}
+          {status.state === 'idle' && (
+            dirty
+              ? [
+                  `${kept.length} kept`,
+                  `${removed.size} marked for removal`,
+                  moves.length ? `${moves.length} to send` : '',
+                ].filter(Boolean).join(', ') + ' — unsaved'
+              : `${kept.length} photos · ${layout} layout`
+          )}
+        </p>
+      </div>
 
       <div className={containerClass}>
         {visible.map((image) => {

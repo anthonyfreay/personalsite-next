@@ -25,13 +25,34 @@
 }
 
 .header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1rem;
   margin-bottom: 0.75rem;
   padding: 0 1.5rem;
+}
+
+/*
+  The controls, pinned under the site navbar.
+
+  Swap and Send act on a selection made anywhere in the gallery, and /events is
+  58 tiles, so the buttons were routinely a long scroll away from the photo
+  just picked. Only the controls and the status line stick; the title and the
+  instructions above them scroll off, because sticking the whole header cost
+  108px of a viewport that is meant to be showing photographs.
+
+  `top` is set inline from the measured navbar height rather than hardcoded --
+  see the ResizeObserver in CurateClient. The z-index sits below the navbar's
+  50 so it tucks under rather than over it.
+*/
+.toolbar {
+  position: sticky;
+  z-index: 40;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 0.75rem;
+  padding: 0.6rem 1.5rem;
+  background: var(--mainColorLight);
+  border-bottom: 1px solid rgb(0 0 0 / 8%);
 }
 
 .title {
@@ -83,12 +104,14 @@
   cursor: default;
 }
 
+/* Inside the toolbar now, so it no longer carries the page inset itself. */
 .status {
   font-size: 0.8125rem;
   opacity: 0.7;
-  margin-bottom: 1.25rem;
   min-height: 1.2em;
-  padding: 0 1.5rem;
+  /* margin-left: auto pushes it to the far end of the toolbar row, so the
+     controls stay grouped on the left and the counts read as a readout. */
+  margin-left: auto;
 }
 
 .error {
