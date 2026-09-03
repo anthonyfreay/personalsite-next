@@ -7,7 +7,7 @@
 
 export const images = [
   { alt: 'Couple leaning together on a tree-lined city street', src: '/people/A7403286-people.webp', width: 1079, height: 1620, color: '#181818' },
-  { alt: 'A7408423 people', src: '/people/A7408423-people.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A woman sitting back on a subway bench beneath the New York City subway map', src: '/people/A7408423-people.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Arize in Studio', src: '/people/A7201581-Edit-people.webp', color: '#f8f8f8' },
   { alt: 'Natalie Freay celebrating her enagement', src: '/people/A7404306-people.webp', color: '#081808' },
   { alt: 'Graduate and friend cheering under the Washington Square Arch', src: '/people/A7409449-people.webp', width: 1080, height: 1620, color: '#c8b8a8' },
@@ -25,8 +25,8 @@ export const images = [
   { alt: 'Couple laughing together on a brick-lined block', src: '/people/A7403218-people.webp', width: 1080, height: 1620, color: '#181818' },
   { alt: 'Cyclist on the drops on a park road', src: '/people/A7401749-people.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Em in Williamsburg', src: '/people/DSC01179-Edit-people.webp', color: '#484848' },
-  { alt: 'A7408315 people', src: '/people/A7408315-people.webp', width: 1080, height: 1620, color: '#080808' },
-  { alt: 'A7401916 people', src: '/people/A7401916-people.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A woman waiting alone on an empty subway platform', src: '/people/A7408315-people.webp', width: 1080, height: 1620, color: '#080808' },
+  { alt: 'A cyclist in a black Pas Normal Studios kit holding a helmet at their hip', src: '/people/A7401916-people.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Natalie at Liberty State Park', src: '/people/A7200334-people.webp', color: '#181818' },
   { alt: 'Ben over Rio Grande', src: '/people/DSC07716-Edit-people.webp', color: '#a8b8c8' },
   { alt: 'Woman looking back over the rooftops of Paris', src: '/people/A7409817-people.webp', width: 1080, height: 1620, color: '#080808' },
