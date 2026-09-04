@@ -60,10 +60,9 @@ export const images = [
   { alt: 'Celebration attendee portrait', src: '/events/A7404555-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Friends together at a birthday dinner', src: '/events/A7400472-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Valentine\'s table set with candles and paper hearts', src: '/events/A7400370-events.webp', width: 1080, height: 1620, color: '#080808' },
-  { alt: 'Event photography detail', src: '/events/A7400937-events.webp', width: 1620, height: 1080, color: '#080808' },
   { alt: 'Party gathering photography', src: '/events/A7405908-Enhanced-NR-events.webp', width: 1080, height: 1620, color: '#f8f8f8' },
-  { alt: 'Bottles of Kistler Hyde Vineyard Chardonnay', src: '/events/A7400954-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Burrata plated across a run of patterned bowls', src: '/events/A7407848-events.webp', width: 1620, height: 1080, color: '#d8d8c8' },
+  { alt: 'Bottles of Kistler Hyde Vineyard Chardonnay', src: '/events/A7400954-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Couple at a black-tie dinner', src: '/events/A7401165-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'Party moment candid shot', src: '/events/A7405960-events.webp', width: 1080, height: 1620, color: '#181818' },
   { alt: 'Maddie Miller Bday Cake', src: '/events/A7407589-events.webp', width: 1620, height: 1080, color: '#080808' },
@@ -71,6 +70,5 @@ export const images = [
   { alt: 'Party attendee portrait', src: '/events/A7206542-events.webp', width: 1080, height: 1620, color: '#685848' },
   { alt: 'All The Way Down', src: '/events/A7207740-events.webp', width: 1080, height: 1620, color: '#080808' },
   { alt: 'A chef reaching across rows of blue and white plates of salmon crudo in an open kitchen', src: '/events/A7407857-events.webp', width: 1080, height: 1620, color: '#080808' },
-  { alt: 'Party moment by photographer', src: '/events/A7207913-events.webp', width: 1620, height: 1080, color: '#080808' },
   { alt: 'Three guests posing together at a party under warm hanging lights', src: '/events/A7400648-events.webp', width: 1080, height: 1620, color: '#080808' },
 ];
